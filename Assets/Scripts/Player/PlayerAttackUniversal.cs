@@ -6,6 +6,12 @@ public class PlayerAttackUniversal : CharacterAttackUniversal
 {
     private float radius = 1f;
     private float damage = 15f;
+    private HealthController healthController;
+
+    private void Awake() 
+    {
+        healthController = GetComponentInParent<HealthController>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -32,6 +38,17 @@ public class PlayerAttackUniversal : CharacterAttackUniversal
             }
 
             Instantiate(hitFx, hitPos, Quaternion.identity);
+
+            if (gameObject.CompareTag("LeftArm") || gameObject.CompareTag("LeftLeg"))
+            {
+                hit[0].GetComponent<HealthController>().ApplyDamage(damage, true);
+                // healthController.ApplyDamage(damage, true);
+            }
+            else
+            {
+                hit[0].GetComponent<HealthController>().ApplyDamage(damage, false);
+                // healthController.ApplyDamage(damage, false);
+            }
 
             gameObject.SetActive(false);
         }

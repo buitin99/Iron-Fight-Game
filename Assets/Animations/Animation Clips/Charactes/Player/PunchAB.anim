@@ -17755,6 +17755,13 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
+    functionName: TagLeftArm
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.05
     functionName: LeftHandPunchOn
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -17763,6 +17770,13 @@ AnimationClip:
     messageOptions: 0
   - time: 0.31666666
     functionName: LeftHandPunchOff
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.35
+    functionName: UnTagLeftArm
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

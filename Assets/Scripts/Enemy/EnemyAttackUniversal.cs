@@ -6,7 +6,12 @@ public class EnemyAttackUniversal : CharacterAttackUniversal
 {
     private float radius = 1f;
     private float damage = 10f;
+    private EnemyHealth enemyHealth;
 
+    private void Awake() 
+    {
+        enemyHealth = GetComponentInParent<EnemyHealth>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -18,7 +23,7 @@ public class EnemyAttackUniversal : CharacterAttackUniversal
 
         if (hit.Length > 0)
         {
-            Debug.Log(hit[0].gameObject.name);
+            // Debug.Log(hit[0].gameObject.name);
             Vector3 hitPos = hit[0].transform.position;
             hitPos.y += 1.3f;
 
@@ -32,6 +37,8 @@ public class EnemyAttackUniversal : CharacterAttackUniversal
             }
 
             Instantiate(hitFx, hitPos, Quaternion.identity);
+
+           
 
             gameObject.SetActive(false);
         }

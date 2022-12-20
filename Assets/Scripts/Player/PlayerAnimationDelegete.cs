@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimationDelegete : CharacterAnimationDelegete
@@ -65,4 +63,26 @@ public class PlayerAnimationDelegete : CharacterAnimationDelegete
             rightLegAttackPoint.SetActive(false);
         }
     }
+
+    void TagLeftArm()
+    {
+        leftHandAttackPoint.tag = "LeftArm";
+    }
+
+    void UnTagLeftArm()
+    {
+        leftHandAttackPoint.tag = "Untagged";
+    }
+
+    void TagLeftLeg()
+    {
+        leftLegAttackPoint.tag = "LeftLeg";
+    }
+
+    void UnTagLeftLeg()
+    {
+        leftLegAttackPoint.tag = "Untagged";
+    }
+
+    
 }

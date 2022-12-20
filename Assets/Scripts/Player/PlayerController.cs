@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations.Rigging;
 
 public enum ComboState 
 {
@@ -20,7 +21,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private PlayerInputActions playerInputActions;
-     private Animator                   animator;
+    private Animator                   animator;
     private Vector2                     inputMove;
     private CharacterController         characterController;
     private InputAction.CallbackContext ctx;
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private int                         kickAHash;
     private int                         kickBHash;
     private int                         flipHash;
+    private int                         deadHash;
 
     [SerializeField]
     private float                       speed = 10f;
@@ -43,6 +45,12 @@ public class PlayerController : MonoBehaviour
     private float                       default_Combo_Timer = 0.4f;
     private float                       current_Combo_Timer;
     private ComboState                  current_Combo_State;
+    private bool                        chuongFlag;
+    private float                       chuongTimer = 3f;
+
+    public Rig                          handRig;
+    public ParticleSystem               chuongVFX;
+
 
 
     private void Awake() 
@@ -58,6 +66,7 @@ public class PlayerController : MonoBehaviour
         kickAHash           = Animator.StringToHash("KickA");
         kickBHash           = Animator.StringToHash("KickB");
         flipHash            = Animator.StringToHash("Flip");
+        deadHash            = Animator.StringToHash("Dead");
     }
 
     // Start is called before the first frame update
@@ -75,6 +84,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Move.canceled  += GetDirectionMove;
         playerInputActions.Player.Fire.started   += PunchAnimation;
         playerInputActions.Player.Punch.started  += FlipAnimation;
+        playerInputActions.Player.Chuong.started += ChuongHandle;
     }
 
     // Update is called once per frame
@@ -84,7 +94,7 @@ public class PlayerController : MonoBehaviour
         Move();
         RotationLook();
         HandleAnimation();
-        HandleGravity();
+        HandleGravity(); 
     }
 
     private void RotationLook()
@@ -200,11 +210,43 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void PlayerDead()
+    {
+        animator.SetTrigger(deadHash);
+    }
+
+    private void ChuongHandle(InputAction.CallbackContext ctx)
+    {
+        chuongVFX.Play();
+        ChuongAnimation();
+    }
+
+    private void ChuongAnimation()
+    {
+        while(handRig.weight <= 0.9)
+        {
+            handRig.weight = handRig.weight = Mathf.Lerp(handRig.weight, 1f, 20f*Time.deltaTime);
+        }
+        playerInputActions.Player.Fire.started   -= PunchAnimation;
+        StartCoroutine(ChuongAnimationOff());
+    }
+
+    IEnumerator ChuongAnimationOff()
+    {
+        yield return new WaitForSeconds(chuongTimer);
+        while(handRig.weight >= 0.2)
+        {
+            handRig.weight = handRig.weight = Mathf.Lerp(handRig.weight, -1f, 20f*Time.deltaTime);
+        }
+        playerInputActions.Player.Fire.started   += PunchAnimation;
+    }
+
     private void OnDisable() 
     {
         playerInputActions.Player.Move.performed -= GetDirectionMove;
         playerInputActions.Player.Move.canceled  -= GetDirectionMove;
-        playerInputActions.Player.Fire.started   -= PunchAnimation;
         playerInputActions.Player.Punch.started  -= FlipAnimation;
+        playerInputActions.Player.Fire.started   -= PunchAnimation;
+        playerInputActions.Player.Chuong.started -= ChuongHandle;
     }
 }

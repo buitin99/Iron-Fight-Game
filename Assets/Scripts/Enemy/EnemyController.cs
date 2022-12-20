@@ -20,6 +20,13 @@ public class EnemyController : MonoBehaviour
     private Scanner      scanner = new Scanner();
     private GameObject   fieldOfView;
 
+    private int          knockDownHash;
+    private int          hitHash;
+    private int          standUpHash;
+
+    private float        standUpTimer = 2f;
+
+
     public Vector3       standPos;
     public Vector3[]     patrolList; 
     public State         state;
@@ -27,29 +34,33 @@ public class EnemyController : MonoBehaviour
     [Range(0, 360)]
     public float         detectionAngle;
     public float         viewDistance;
+
     private void Awake() 
     {
-        agent        = GetComponent<NavMeshAgent>();
-        animator     = GetComponent<Animator>();
-        velocityHash = Animator.StringToHash("Velocity");
+        agent         = GetComponent<NavMeshAgent>();
+        animator      = GetComponent<Animator>();
+        velocityHash  = Animator.StringToHash("Velocity");
+        knockDownHash = Animator.StringToHash("KnockDown");
+        hitHash       = Animator.StringToHash("Hit");
+        standUpHash   = Animator.StringToHash("StandUp");
     }
 
     private void OnEnable() 
     {
-        scanner.OnDetectedTarget.AddListener(HandleWhenDetected);
+        // scanner.OnDetectedTarget.AddListener(HandleWhenDetected);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        fieldOfView = scanner.CreataFieldOfView(rootScanner, rootScanner.position, detectionAngle, viewDistance);
+        // fieldOfView = scanner.CreataFieldOfView(rootScanner, rootScanner.position, detectionAngle, viewDistance);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Patrol();
-        HandleAnimation();
+        // Patrol();
+        // HandleAnimation();
     }
 
     private void Patrol()
@@ -101,4 +112,30 @@ public class EnemyController : MonoBehaviour
     {
 
     }
+
+    public void EnemyKnockDown()
+    {
+        animator.SetTrigger(knockDownHash);
+    }
+
+    public void EnemyHit()
+    {
+        animator.SetTrigger(hitHash);
+    }
+
+    void EnemyStandUp()
+    {
+        StartCoroutine(StandUpAfterTime());
+    }
+
+    IEnumerator StandUpAfterTime()
+    {
+        yield return new WaitForSeconds(standUpTimer);
+        animator.SetTrigger(standUpHash);
+    }
+
+   private void OnTriggerEnter(Collider other) 
+   {
+        Debug.Log(123);
+   }
 }
