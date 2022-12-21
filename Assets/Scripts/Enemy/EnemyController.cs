@@ -8,6 +8,14 @@ public enum State
     IDLE,
     PATROL
 }
+
+public enum EnemyComboState
+{
+    NONE,
+    ATTACKA,
+    ATTACKB,
+    ATTACKC
+}
 public class EnemyController : MonoBehaviour
 {
     private Animator     animator;
@@ -17,14 +25,23 @@ public class EnemyController : MonoBehaviour
     private float        idleTime;
     private float        speed = 5;
     private NavMeshAgent agent;
-    private Scanner      scanner = new Scanner();
+    public Scanner       scanner = new Scanner();
     private GameObject   fieldOfView;
 
     private int          knockDownHash;
     private int          hitHash;
     private int          standUpHash;
+    private int          laserHitHash;
+    private int          attackA;
+    private int          attackB;
+    private int          attackC;
 
     private float        standUpTimer = 2f;
+
+    private bool                        activeTimerToReset;
+    private float                       default_Combo_Timer = 0.4f;
+    private float                       current_Combo_Timer;
+    private EnemyComboState             current_Combo_State;
 
 
     public Vector3       standPos;
@@ -34,6 +51,8 @@ public class EnemyController : MonoBehaviour
     [Range(0, 360)]
     public float         detectionAngle;
     public float         viewDistance;
+    public LayerMask     layerMask;
+    public LayerMask     playerLayer;
 
     private void Awake() 
     {
@@ -43,17 +62,22 @@ public class EnemyController : MonoBehaviour
         knockDownHash = Animator.StringToHash("KnockDown");
         hitHash       = Animator.StringToHash("Hit");
         standUpHash   = Animator.StringToHash("StandUp");
+        laserHitHash  = Animator.StringToHash("LaserHit");
+        attackA       = Animator.StringToHash("AttackA");
+        attackB       = Animator.StringToHash("AttackB");
+        attackC       = Animator.StringToHash("AttackC");
+
     }
 
     private void OnEnable() 
     {
-        // scanner.OnDetectedTarget.AddListener(HandleWhenDetected);
+        scanner.OnDetectedTarget.AddListener(HandleWhenDetected);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        // fieldOfView = scanner.CreataFieldOfView(rootScanner, rootScanner.position, detectionAngle, viewDistance);
+        fieldOfView = scanner.CreataFieldOfView(rootScanner, rootScanner.position, detectionAngle, viewDistance);
     }
 
     // Update is called once per frame
@@ -61,6 +85,8 @@ public class EnemyController : MonoBehaviour
     {
         // Patrol();
         // HandleAnimation();
+        scanner.Scan();
+        ResetComboState();
     }
 
     private void Patrol()
@@ -110,7 +136,8 @@ public class EnemyController : MonoBehaviour
 
     public void HandleWhenDetected(List<RaycastHit> hitList)
     {
-
+        // animator.SetTrigger(attackA);
+        // Debug.Log(12312312);
     }
 
     public void EnemyKnockDown()
@@ -134,8 +161,64 @@ public class EnemyController : MonoBehaviour
         animator.SetTrigger(standUpHash);
     }
 
-   private void OnTriggerEnter(Collider other) 
-   {
-        Debug.Log(123);
-   }
+    private void OnTriggerEnter(Collider other) 
+    {
+        if ((layerMask & (1 << other.gameObject.layer)) != 0)
+        {
+            animator.SetTrigger(laserHitHash);
+        }
+    }
+
+    private void OnTriggerStay(Collider other) 
+    {
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            PunchAnimation(); 
+        }
+    }
+    private void PunchAnimation()
+    {
+        // if (current_Combo_State == EnemyComboState.ATTACKC)
+        //         return;
+
+            current_Combo_State++;
+            activeTimerToReset = true;
+            current_Combo_Timer = default_Combo_Timer;
+
+            if (current_Combo_State == EnemyComboState.ATTACKA)
+            {
+                animator.SetTrigger(attackA);
+            }
+
+            if (current_Combo_State == EnemyComboState.ATTACKB)
+            {
+                animator.SetTrigger(attackB);
+            }
+
+            if (current_Combo_State == EnemyComboState.ATTACKC)
+            {
+                animator.SetTrigger(attackC);
+            }   
+    }
+
+    private void ResetComboState()
+    {
+        if (activeTimerToReset)
+        {
+            current_Combo_Timer -= Time.deltaTime;
+
+            if (current_Combo_Timer <= 0f)
+            {
+                current_Combo_State = EnemyComboState.NONE;
+
+                activeTimerToReset = false;
+                current_Combo_Timer = default_Combo_Timer;
+            }
+        }
+    }
+
+    private void OnDisable() 
+    {
+        scanner.OnDetectedTarget.RemoveListener(HandleWhenDetected);
+    }
 }

@@ -12,9 +12,8 @@ using UnityEditor;
 #endif
 public class Scanner
 {
-    public LayerMask layerMaskTarget, obstacle, layerMaskSubTarget;
+    public LayerMask layerMaskTarget, Obstacle, layerMaskSubTarget;
     public Material materialFieldOfView;
-    public Color color, colorWhenDecteced;
     private Mesh mesh;
     private MeshFilter meshFilterFOV;
     private float fov, ViewDistence;
@@ -23,39 +22,31 @@ public class Scanner
     public UnityEvent<List<RaycastHit>> OnDetectedTarget;
     public UnityEvent<Transform> OnDetectedSubTarget;
     public UnityEvent OnNotDetectedTarget;
-    private MaterialPropertyBlock  materialPropertyBlock;
-    private MeshRenderer meshRendererFOV;
-    private bool isDectect;
-    private RaycastHit hit, subHit;
-    
-    
+
     public GameObject CreataFieldOfView(Transform detector, Vector3 pos, float angel, float distance) {
         //creata field of view
         _detector = detector;
         mesh = new Mesh();
         GameObject FieldOfView = new GameObject("FieldOfView");
-        FieldOfView.layer = LayerMask.NameToLayer("Fov");
         FieldOfView.transform.SetParent(_detector);
         FieldOfView.transform.position = pos;
         FieldOfView.transform.rotation = _detector.rotation;
-        meshRendererFOV = FieldOfView.AddComponent<MeshRenderer>();
+        MeshRenderer meshRendererFOV = FieldOfView.AddComponent<MeshRenderer>();
         meshFilterFOV =  FieldOfView.AddComponent<MeshFilter>();
         meshRendererFOV.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshRendererFOV.material = materialFieldOfView;
-        materialPropertyBlock = new MaterialPropertyBlock();
-        materialPropertyBlock.SetColor("_BaseColor", color);
-        meshRendererFOV.SetPropertyBlock(materialPropertyBlock);
         meshFilterFOV.mesh = mesh;
         fov = angel;
         ViewDistence = distance;
         return FieldOfView;
     }
 
+
     public void Scan() {
         // remove all element in list detect
         listHit.RemoveAll(el => true);
 
-        int rayCount = 50;
+        int rayCount = 25;
         float angelIncrease = fov/rayCount;
 
         //init vetex, uv, triangle
@@ -78,7 +69,7 @@ public class Scanner
             float rangeScan = ViewDistence;
             RaycastHit hit;
 
-            if(Physics.Raycast(origin, out hit, ViewDistence, obstacle)) {
+            if(Physics.Raycast(origin, out hit, ViewDistence, Obstacle)) {
                 vertex = Vector3.zero +  (dir * hit.distance);
                 rangeScan = hit.distance;
             }
@@ -102,21 +93,15 @@ public class Scanner
             ScanSubTarget(origin, rangeScan, ref detectSubTarget);
         }
 
-        if(listHit.Count > 0) {
+        if (listHit.Count > 0)
+        {
             OnDetectedTarget?.Invoke(listHit);
-            if(!isDectect) {
-                materialPropertyBlock.SetColor("_BaseColor", colorWhenDecteced);
-                meshRendererFOV.SetPropertyBlock(materialPropertyBlock);
-                isDectect = true;
-            }
-        } else {
-            OnNotDetectedTarget?.Invoke();
-            if(isDectect) {
-                materialPropertyBlock.SetColor("_BaseColor", color);
-                meshRendererFOV.SetPropertyBlock(materialPropertyBlock);
-                isDectect = false;
-            }
         }
+        else
+        {
+            OnNotDetectedTarget?.Invoke();
+        }
+
         
         mesh.vertices = vertices;
         mesh.uv = uv;
@@ -124,7 +109,8 @@ public class Scanner
     }
 
     private void ScanTarget(Ray origin, float range) {
-        Vector3 end = origin.GetPoint(range - 0.2f);
+        RaycastHit hit;
+        Vector3 end = origin.GetPoint(range - 0.5f);
         if(Physics.Linecast(origin.origin, end, out hit, layerMaskTarget)) {
             listHit.Add(hit);
         }
@@ -132,9 +118,10 @@ public class Scanner
 
     private void ScanSubTarget(Ray origin, float range, ref bool detected) {
         if(!detected) {
-            Vector3 end = origin.GetPoint(range - 0.2f);
-            if(Physics.Linecast(origin.origin, end, out subHit, layerMaskSubTarget)) {
-                OnDetectedSubTarget?.Invoke(subHit.transform);
+            RaycastHit hit;
+            Vector3 end = origin.GetPoint(range - 0.5f);
+            if(Physics.Linecast(origin.origin, end, out hit, layerMaskSubTarget)) {
+                OnDetectedSubTarget?.Invoke(hit.transform);
                 detected = true;
             }
         }
@@ -150,7 +137,6 @@ public class Scanner
         int hitIndex = Array.IndexOf(distences, minDistence);
         return listRaycast[hitIndex].transform;
     }
-
 
 #if UNITY_EDITOR
     public void EditorGizmo(Transform transform, float angle, float radius) {

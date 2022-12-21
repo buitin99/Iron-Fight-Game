@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private int                         kickBHash;
     private int                         flipHash;
     private int                         deadHash;
+    private int                         chuongLaserHash;
 
     [SerializeField]
     private float                       speed = 10f;
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     public Rig                          handRig;
     public ParticleSystem               chuongVFX;
+    public GameObject                   chuongObject;
+
 
 
 
@@ -67,6 +70,7 @@ public class PlayerController : MonoBehaviour
         kickBHash           = Animator.StringToHash("KickB");
         flipHash            = Animator.StringToHash("Flip");
         deadHash            = Animator.StringToHash("Dead");
+        chuongLaserHash     = Animator.StringToHash("Chuong");
     }
 
     // Start is called before the first frame update
@@ -85,6 +89,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Fire.started   += PunchAnimation;
         playerInputActions.Player.Punch.started  += FlipAnimation;
         playerInputActions.Player.Chuong.started += ChuongHandle;
+        playerInputActions.Player.ChuongLaserBame.started += ChuongLaserAnimation;
     }
 
     // Update is called once per frame
@@ -219,9 +224,15 @@ public class PlayerController : MonoBehaviour
     {
         chuongVFX.Play();
         ChuongAnimation();
+        chuongObject.SetActive(true);
     }
 
-    private void ChuongAnimation()
+    private void ChuongLaserAnimation(InputAction.CallbackContext ctx)
+    {
+        animator.SetTrigger(chuongLaserHash);
+    }
+
+    public void ChuongAnimation()
     {
         while(handRig.weight <= 0.9)
         {
@@ -239,6 +250,7 @@ public class PlayerController : MonoBehaviour
             handRig.weight = handRig.weight = Mathf.Lerp(handRig.weight, -1f, 20f*Time.deltaTime);
         }
         playerInputActions.Player.Fire.started   += PunchAnimation;
+        chuongObject.SetActive(false);
     }
 
     private void OnDisable() 
@@ -248,5 +260,6 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Punch.started  -= FlipAnimation;
         playerInputActions.Player.Fire.started   -= PunchAnimation;
         playerInputActions.Player.Chuong.started -= ChuongHandle;
+        playerInputActions.Player.ChuongLaserBame.started -= ChuongLaserAnimation;
     }
 }
