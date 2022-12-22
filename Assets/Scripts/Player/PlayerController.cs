@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Animations.Rigging;
@@ -21,7 +20,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private PlayerInputActions playerInputActions;
-    private Animator                   animator;
+    private Animator                    animator;
     private Vector2                     inputMove;
     private CharacterController         characterController;
     private InputAction.CallbackContext ctx;
@@ -35,11 +34,11 @@ public class PlayerController : MonoBehaviour
     private int                         kickBHash;
     private int                         flipHash;
     private int                         deadHash;
+    private int                         hitHash;
     private int                         chuongLaserHash;
 
     [SerializeField]
     private float                       speed = 10f;
-    private Vector3                     direction;
     private float                       fallingVelocity;
     private float                       gravity = - 9.81f;
     private bool                        activeTimerToReset;
@@ -48,11 +47,14 @@ public class PlayerController : MonoBehaviour
     private ComboState                  current_Combo_State;
     private bool                        chuongFlag;
     private float                       chuongTimer = 3f;
+    public Vector3                      direction;
+
 
     public Rig                          handRig;
     public ParticleSystem               chuongVFX;
     public GameObject                   chuongObject;
-
+    public LayerMask                    enemyLayerMask;
+    public LayerMask                    enemyGun;
 
 
 
@@ -71,6 +73,7 @@ public class PlayerController : MonoBehaviour
         flipHash            = Animator.StringToHash("Flip");
         deadHash            = Animator.StringToHash("Dead");
         chuongLaserHash     = Animator.StringToHash("Chuong");
+        hitHash             = Animator.StringToHash("Hit");
     }
 
     // Start is called before the first frame update
@@ -251,6 +254,19 @@ public class PlayerController : MonoBehaviour
         }
         playerInputActions.Player.Fire.started   += PunchAnimation;
         chuongObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other) 
+    {
+        if ((enemyLayerMask & (1 << other.gameObject.layer)) != 0)
+        {
+            animator.SetTrigger(hitHash);
+        }
+
+        if ((enemyGun & (1 << other.gameObject.layer)) != 0)
+        {
+            Debug.Log("12312sdasdas");
+        }
     }
 
     private void OnDisable() 

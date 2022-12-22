@@ -65,10 +65,10 @@ public class HealthController : MonoBehaviour
             }
             else
             {  
-                if (Random.Range(0, 3) > 1)
-                {
+                // if (Random.Range(0, 3) > 1)
+                // {
                     enemyController.EnemyHit();
-                }
+                // }
             }
         }
     }

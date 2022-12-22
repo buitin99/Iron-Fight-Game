@@ -35,6 +35,7 @@ public class EnemyController : MonoBehaviour
     private int          attackA;
     private int          attackB;
     private int          attackC;
+    private int          right90;
 
     private float        standUpTimer = 2f;
 
@@ -42,8 +43,7 @@ public class EnemyController : MonoBehaviour
     private float                       default_Combo_Timer = 0.4f;
     private float                       current_Combo_Timer;
     private EnemyComboState             current_Combo_State;
-
-
+    private Vector3      direction;
     public Vector3       standPos;
     public Vector3[]     patrolList; 
     public State         state;
@@ -53,6 +53,8 @@ public class EnemyController : MonoBehaviour
     public float         viewDistance;
     public LayerMask     layerMask;
     public LayerMask     playerLayer;
+    public GameObject    playerRotation;
+    public GameObject    bullet;
 
     private void Awake() 
     {
@@ -66,7 +68,6 @@ public class EnemyController : MonoBehaviour
         attackA       = Animator.StringToHash("AttackA");
         attackB       = Animator.StringToHash("AttackB");
         attackC       = Animator.StringToHash("AttackC");
-
     }
 
     private void OnEnable() 
@@ -85,8 +86,10 @@ public class EnemyController : MonoBehaviour
     {
         // Patrol();
         // HandleAnimation();
-        scanner.Scan();
-        ResetComboState();
+        ResetComboState();  
+
+     
+        // direction = playerRotation.GetComponent<PlayerController>().direction;
     }
 
     private void Patrol()
@@ -102,9 +105,11 @@ public class EnemyController : MonoBehaviour
                 case State.PATROL:
                     if (agent.remainingDistance <= agent.stoppingDistance)
                     {
+                        // animator.SetLayerWeight(2, 1);
                         idleTime += Time.deltaTime;
                         if (idleTime > 2)
-                        {
+                        {   
+                            animator.SetLayerWeight(1, 1);
                             patrolIndex++;
                             if (patrolIndex >= patrolList.Length)
                             {
@@ -167,6 +172,7 @@ public class EnemyController : MonoBehaviour
         {
             animator.SetTrigger(laserHitHash);
         }
+       
     }
 
     private void OnTriggerStay(Collider other) 
@@ -175,6 +181,10 @@ public class EnemyController : MonoBehaviour
         {
             PunchAnimation(); 
         }
+
+        Vector3 dir = playerRotation.transform.position - transform.position;
+
+        RotationLook(dir);
     }
     private void PunchAnimation()
     {
@@ -190,15 +200,24 @@ public class EnemyController : MonoBehaviour
                 animator.SetTrigger(attackA);
             }
 
-            if (current_Combo_State == EnemyComboState.ATTACKB)
-            {
-                animator.SetTrigger(attackB);
-            }
+            // if (current_Combo_State == EnemyComboState.ATTACKB)
+            // {
+            //     animator.SetTrigger(attackB);
+            // }
 
-            if (current_Combo_State == EnemyComboState.ATTACKC)
-            {
-                animator.SetTrigger(attackC);
-            }   
+            // if (current_Combo_State == EnemyComboState.ATTACKC)
+            // {
+            //     animator.SetTrigger(attackC);
+            // }   
+    }
+
+    public void ShootOn()
+    {
+        bullet.SetActive(true);
+    }
+    public void ShootOff()
+    {
+        bullet.SetActive(false);
     }
 
     private void ResetComboState()
@@ -215,6 +234,12 @@ public class EnemyController : MonoBehaviour
                 current_Combo_Timer = default_Combo_Timer;
             }
         }
+    }
+
+    private void RotationLook(Vector3 direction)
+    {
+        Quaternion rotLook = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotLook, 40f * Time.deltaTime);
     }
 
     private void OnDisable() 
