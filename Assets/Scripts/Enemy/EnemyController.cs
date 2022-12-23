@@ -54,8 +54,6 @@ public class EnemyController : MonoBehaviour
     public LayerMask     layerMask;
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
-    public GameObject    bullet;
-
     private void Awake() 
     {
         agent         = GetComponent<NavMeshAgent>();
@@ -87,8 +85,6 @@ public class EnemyController : MonoBehaviour
         // Patrol();
         // HandleAnimation();
         ResetComboState();  
-
-     
         // direction = playerRotation.GetComponent<PlayerController>().direction;
     }
 
@@ -209,15 +205,6 @@ public class EnemyController : MonoBehaviour
             // {
             //     animator.SetTrigger(attackC);
             // }   
-    }
-
-    public void ShootOn()
-    {
-        bullet.SetActive(true);
-    }
-    public void ShootOff()
-    {
-        bullet.SetActive(false);
     }
 
     private void ResetComboState()

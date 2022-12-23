@@ -265,7 +265,7 @@ public class PlayerController : MonoBehaviour
 
         if ((enemyGun & (1 << other.gameObject.layer)) != 0)
         {
-            Debug.Log("12312sdasdas");
+            animator.SetTrigger(hitHash);
         }
     }
 
