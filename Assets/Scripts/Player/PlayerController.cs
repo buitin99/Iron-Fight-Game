@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private int                         deadHash;
     private int                         hitHash;
     private int                         chuongLaserHash;
+    private int                         chuongRocketHash;
 
     [SerializeField]
     private float                       speed = 10f;
@@ -47,21 +48,22 @@ public class PlayerController : MonoBehaviour
     private ComboState                  current_Combo_State;
     private bool                        chuongFlag;
     private float                       chuongTimer = 3f;
+    private Missile                     missile;
+
     public Vector3                      direction;
-
-
     public Rig                          handRig;
     public ParticleSystem               chuongVFX;
     public GameObject                   chuongObject;
     public LayerMask                    enemyLayerMask;
     public LayerMask                    enemyGun;
-
-
+    public GameObject                   iniRocketPos;
+    public GameObject                   rocket;
 
     private void Awake() 
     {
         characterController = GetComponent<CharacterController>();
         playerInputActions  = new PlayerInputActions();
+        missile             = GetComponentInChildren<Missile>();
         velocityHash        = Animator.StringToHash("Velocity");
         chuongAHash         = Animator.StringToHash("ChuongA");
         chuongBHash         = Animator.StringToHash("ChuongB");
@@ -74,6 +76,7 @@ public class PlayerController : MonoBehaviour
         deadHash            = Animator.StringToHash("Dead");
         chuongLaserHash     = Animator.StringToHash("Chuong");
         hitHash             = Animator.StringToHash("Hit");
+        chuongRocketHash    = Animator.StringToHash("Rocket");
     }
 
     // Start is called before the first frame update
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Punch.started  += FlipAnimation;
         playerInputActions.Player.Chuong.started += ChuongHandle;
         playerInputActions.Player.ChuongLaserBame.started += ChuongLaserAnimation;
+        playerInputActions.Player.ChuongRocket.started += ChuongRocket;
     }
 
     // Update is called once per frame
@@ -235,6 +239,11 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger(chuongLaserHash);
     }
 
+    private void ChuongRocket(InputAction.CallbackContext ctx)
+    {
+        // Instantiate(rocket, iniRocketPos.transform.position, rocket.transform.rotation);
+    }
+
     public void ChuongAnimation()
     {
         while(handRig.weight <= 0.9)
@@ -261,13 +270,18 @@ public class PlayerController : MonoBehaviour
         if ((enemyLayerMask & (1 << other.gameObject.layer)) != 0)
         {
             animator.SetTrigger(hitHash);
-        }
+        }    
+    }
 
+    private void OnCollisionEnter(Collision other) 
+    {
         if ((enemyGun & (1 << other.gameObject.layer)) != 0)
         {
             animator.SetTrigger(hitHash);
         }
     }
+
+
 
     private void OnDisable() 
     {

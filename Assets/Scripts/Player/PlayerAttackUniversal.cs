@@ -16,7 +16,7 @@ public class PlayerAttackUniversal : CharacterAttackUniversal
     // Update is called once per frame
     void Update()
     {
-        DetectCollision();
+        // DetectCollision();
     }
     public override void DetectCollision()
     {
@@ -37,7 +37,7 @@ public class PlayerAttackUniversal : CharacterAttackUniversal
                 hitPos.x -= 0.3f;
             }
 
-            Instantiate(hitFx, hitPos, Quaternion.identity);
+            // Instantiate(hitFx, hitPos, Quaternion.identity);
 
             if (gameObject.CompareTag("LeftArm") || gameObject.CompareTag("LeftLeg"))
             {
@@ -52,5 +52,14 @@ public class PlayerAttackUniversal : CharacterAttackUniversal
 
             gameObject.SetActive(false);
         }
-    }   
+    }
+
+    private void OnCollisionEnter(Collision other) 
+    {
+            Debug.Log(12312312);
+        if ((collisionLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            GetComponent<HealthController>().ApplyDamage(damage, false);
+        }
+    }  
 }

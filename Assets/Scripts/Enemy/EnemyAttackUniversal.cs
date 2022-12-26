@@ -15,7 +15,7 @@ public class EnemyAttackUniversal : CharacterAttackUniversal
     // Update is called once per frame
     void Update()
     {
-        DetectCollision();
+        // DetectCollision();
     }
     public override void DetectCollision()
     {
@@ -36,7 +36,7 @@ public class EnemyAttackUniversal : CharacterAttackUniversal
                 hitPos.x -= 0.3f;
             }
 
-            Instantiate(hitFx, hitPos, Quaternion.identity);
+            // Instantiate(hitFx, hitPos, Quaternion.identity);
 
            
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Enemy", menuName = "Enemy/Enemy")]
-public class Enemy : ScriptableObject
+public class EnemySO : ScriptableObject
 {
     public float heath = 100;
     public float moneyBonus = 100;

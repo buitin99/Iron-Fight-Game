@@ -5,16 +5,17 @@ using UnityEngine;
 public class HealthController : MonoBehaviour
 {
     public float health = 100f;
-    private EnemyController enemyController;
+    private MeleeEnemyController            enemy;
     private PlayerController playerController;
     private bool             playerDead;
+    private bool             isKnockDown;
     public bool              isPlayer;
 
     private void Awake() 
     {
         if (!isPlayer)
         {
-            enemyController  = GetComponent<EnemyController>();
+            enemy  = GetComponent<MeleeEnemyController>();
         }
         else
         {
@@ -56,20 +57,21 @@ public class HealthController : MonoBehaviour
 
         if (!isPlayer)
         {
-            if (knockDown)
-            {
-                if (Random.Range(0, 2) > 0)
+                if (knockDown)
                 {
-                    enemyController.EnemyKnockDown();
+                    // if (Random.Range(0, 2) > 0)
+                    // {
+                        enemy.EnemyKnockDown();
+                        
+                    // }
+                }
+                else
+                {  
+                    // if (Random.Range(0, 3) > 1)
+                    // {
+                        enemy.EnemyHited();
+                    // }
                 }
             }
-            else
-            {  
-                // if (Random.Range(0, 3) > 1)
-                // {
-                    enemyController.EnemyHit();
-                // }
-            }
-        }
     }
 }

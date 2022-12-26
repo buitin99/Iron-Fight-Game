@@ -71,6 +71,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChuongRocket"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f8958a4-a1b9-4c28-afd0-cbdcb690a4f1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -291,6 +300,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ChuongLaserBame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f303e420-909b-410c-a9d5-27ced2f1af44"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChuongRocket"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -883,6 +903,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Punch = m_Player.FindAction("Punch", throwIfNotFound: true);
         m_Player_Chuong = m_Player.FindAction("Chuong", throwIfNotFound: true);
         m_Player_ChuongLaserBame = m_Player.FindAction("ChuongLaserBame", throwIfNotFound: true);
+        m_Player_ChuongRocket = m_Player.FindAction("ChuongRocket", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -959,6 +980,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Punch;
     private readonly InputAction m_Player_Chuong;
     private readonly InputAction m_Player_ChuongLaserBame;
+    private readonly InputAction m_Player_ChuongRocket;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -968,6 +990,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Punch => m_Wrapper.m_Player_Punch;
         public InputAction @Chuong => m_Wrapper.m_Player_Chuong;
         public InputAction @ChuongLaserBame => m_Wrapper.m_Player_ChuongLaserBame;
+        public InputAction @ChuongRocket => m_Wrapper.m_Player_ChuongRocket;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -992,6 +1015,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ChuongLaserBame.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChuongLaserBame;
                 @ChuongLaserBame.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChuongLaserBame;
                 @ChuongLaserBame.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChuongLaserBame;
+                @ChuongRocket.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChuongRocket;
+                @ChuongRocket.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChuongRocket;
+                @ChuongRocket.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnChuongRocket;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1011,6 +1037,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ChuongLaserBame.started += instance.OnChuongLaserBame;
                 @ChuongLaserBame.performed += instance.OnChuongLaserBame;
                 @ChuongLaserBame.canceled += instance.OnChuongLaserBame;
+                @ChuongRocket.started += instance.OnChuongRocket;
+                @ChuongRocket.performed += instance.OnChuongRocket;
+                @ChuongRocket.canceled += instance.OnChuongRocket;
             }
         }
     }
@@ -1172,6 +1201,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnPunch(InputAction.CallbackContext context);
         void OnChuong(InputAction.CallbackContext context);
         void OnChuongLaserBame(InputAction.CallbackContext context);
+        void OnChuongRocket(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

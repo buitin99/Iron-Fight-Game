@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2880778542791969084}
   - component: {fileID: 2880778542791969080}
   - component: {fileID: 421064971799915401}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2880778542791969080
 Rigidbody:
@@ -128,3 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 3
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 64

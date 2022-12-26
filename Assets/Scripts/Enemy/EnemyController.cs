@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public class EnemyController : MonoBehaviour
+{
+
 public enum State
 {
     IDLE,
     PATROL
+}
+
+public enum TypePatrol
+{
+    STANDINPLACE,
+    MOVEAROUND
 }
 
 public enum EnemyComboState
@@ -16,8 +25,6 @@ public enum EnemyComboState
     ATTACKB,
     ATTACKC
 }
-public class EnemyController : MonoBehaviour
-{
     private Animator     animator;
     private int          patrolIndex = 0;
     private Transform    player;
@@ -54,6 +61,7 @@ public class EnemyController : MonoBehaviour
     public LayerMask     layerMask;
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
+    public TypePatrol typePatrol;
     private void Awake() 
     {
         agent         = GetComponent<NavMeshAgent>();
@@ -82,8 +90,8 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Patrol();
-        // HandleAnimation();
+        Patrol();
+        HandleAnimation();
         ResetComboState();  
         // direction = playerRotation.GetComponent<PlayerController>().direction;
     }

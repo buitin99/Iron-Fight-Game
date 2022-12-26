@@ -89,7 +89,6 @@ public class GunEnemyController : MonoBehaviour
         {
             animator.SetTrigger(attackHash);
             StartCoroutine(WaitForSecondToMove(2f));
-            Debug.Log(123123123123123123);
         }
     }
 
