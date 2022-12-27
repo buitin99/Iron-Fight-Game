@@ -55,23 +55,23 @@ public class HealthController : MonoBehaviour
         //     return;
         // }
 
-        if (!isPlayer)
-        {
-                if (knockDown)
-                {
-                    // if (Random.Range(0, 2) > 0)
-                    // {
-                        enemy.EnemyKnockDown();
+        // if (!isPlayer)
+        // {
+        //         if (knockDown)
+        //         {
+        //             // if (Random.Range(0, 2) > 0)
+        //             // {
+        //                 enemy.EnemyKnockDown();
                         
-                    // }
-                }
-                else
-                {  
-                    // if (Random.Range(0, 3) > 1)
-                    // {
-                        enemy.EnemyHited();
-                    // }
-                }
-            }
+        //             // }
+        //         }
+        //         else
+        //         {  
+        //             // if (Random.Range(0, 3) > 1)
+        //             // {
+        //                 enemy.EnemyHited();
+        //             // }
+        //         }
+        //     }
     }
 }

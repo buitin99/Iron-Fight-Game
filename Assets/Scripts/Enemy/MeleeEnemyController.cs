@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MeleeEnemyController : Enemy
 {
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -23,19 +27,10 @@ public class MeleeEnemyController : Enemy
         ResetComboState();
     }
 
-    public void EnemyKnockDown()
+    protected override void OnTriggerStay(Collider other)
     {
-        KnockDown();
+        base.OnTriggerStay(other);
     }
 
-    public void EnemyHited()
-    {
-        Hited();
-    }
-
-    protected override void OnTriggerEnter(Collider other)
-    {
-        base.OnTriggerEnter(other);
-        
-    }
+    
 }

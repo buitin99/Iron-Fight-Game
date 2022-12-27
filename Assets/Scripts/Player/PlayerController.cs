@@ -35,8 +35,11 @@ public class PlayerController : MonoBehaviour
     private int                         flipHash;
     private int                         deadHash;
     private int                         hitHash;
+    private int                         knockDownHash;
+    private int                         standUpHash;
     private int                         chuongLaserHash;
     private int                         chuongRocketHash;
+    private float                       standUpTimer = 2f;
 
     [SerializeField]
     private float                       speed = 10f;
@@ -55,9 +58,11 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem               chuongVFX;
     public GameObject                   chuongObject;
     public LayerMask                    enemyLayerMask;
+    public LayerMask                    enemyAttackLayer;
     public LayerMask                    enemyGun;
     public GameObject                   iniRocketPos;
-    public GameObject                   rocket;
+    public GameObject                   rocket; 
+    public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
 
     private void Awake() 
     {
@@ -76,6 +81,8 @@ public class PlayerController : MonoBehaviour
         deadHash            = Animator.StringToHash("Dead");
         chuongLaserHash     = Animator.StringToHash("Chuong");
         hitHash             = Animator.StringToHash("Hit");
+        knockDownHash       = Animator.StringToHash("KnockDown");
+        standUpHash       = Animator.StringToHash("StandUp");
         chuongRocketHash    = Animator.StringToHash("Rocket");
     }
 
@@ -116,6 +123,12 @@ public class PlayerController : MonoBehaviour
             Quaternion rotLook = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotLook, 40f * Time.deltaTime);
         }
+    }
+
+    private void RotationLookWhenDetectedEnemy(Vector3 direction)
+    {
+        Quaternion rotationLook = Quaternion.LookRotation(direction);
+        transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
     }
 
     private void Move()
@@ -239,9 +252,30 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger(chuongLaserHash);
     }
 
+    private void Hited()
+    {
+        animator.SetTrigger(hitHash);
+    }
+
+    private void KnockDown()
+    {
+        animator.SetTrigger(knockDownHash);
+    }
+
+    IEnumerator StandUpAfterTime()
+    {
+        yield return new WaitForSeconds(standUpTimer);
+        animator.SetTrigger(standUpHash);
+    }
+
     private void ChuongRocket(InputAction.CallbackContext ctx)
     {
         // Instantiate(rocket, iniRocketPos.transform.position, rocket.transform.rotation);
+    }
+
+    private void StandUp()
+    {
+        StartCoroutine(StandUpAfterTime());
     }
 
     public void ChuongAnimation()
@@ -265,12 +299,53 @@ public class PlayerController : MonoBehaviour
         chuongObject.SetActive(false);
     }
 
+    public void SetLayerPlayer()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Player");
+    }
+
+    public void SetRightHandAttackLayer()
+    {
+        rightHand.layer = LayerMask.NameToLayer("PlayerAttack");
+    }
+
+    public void SetLeftHandAttackLayer()
+    {
+        leftHand.layer = LayerMask.NameToLayer("PlayerAttack");
+    }
+
+    public void SetLeftHandDefaultLayer()
+    {
+        leftHand.layer = LayerMask.NameToLayer("Default");
+    }
+    
+    public void SetLayerDefault()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Default");
+    }
+
     private void OnTriggerEnter(Collider other) 
+    {
+        // if ((enemyAttackLayer & (1 << other.gameObject.layer)) != 0)
+        // {
+        //     if (Random.Range(0, 3) >= 2)
+        //     {
+        //         KnockDown();
+        //     }
+        //     else
+        //     {
+        //         Hited();
+        //     }
+        // }    
+    }
+
+    private void OnTriggerStay(Collider other) 
     {
         if ((enemyLayerMask & (1 << other.gameObject.layer)) != 0)
         {
-            animator.SetTrigger(hitHash);
-        }    
+            // animator.SetTrigger(hitHash);
+            // Debug.Log(other);
+        }
     }
 
     private void OnCollisionEnter(Collision other) 
@@ -280,8 +355,6 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger(hitHash);
         }
     }
-
-
 
     private void OnDisable() 
     {

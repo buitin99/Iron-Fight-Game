@@ -9,14 +9,10 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     [SerializeField]
     private HealthBarRennder healthBarRennder = new HealthBarRennder();
     private bool isDead;
-
     public AudioClip audioClip, deathAudioClip;
     [Range(0,1)]
     public float volumeScale;
     public UnityEvent<Vector3> OnTakeDamge;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +26,11 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         
     }
 
+    private void LateUpdate() 
+    {
+        healthBarRennder.UpdateHealthBarRotation();
+    }
+
     public void TakeDamge(Vector3 hitPoint, Vector3 force, float damage)
     {
         _health -= damage;
@@ -39,6 +40,12 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         {
             isDead = true;
         }
+    }
+
+    public void setInit(float health, float coinBonus) {
+        _health = health;
+        _coinBonus = coinBonus;
+        healthBarRennder.CreateHealthBar(transform, health);
     }
 
 }

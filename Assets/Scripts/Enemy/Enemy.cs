@@ -22,9 +22,7 @@ public enum TypePatrol
 protected enum ComboState
 {
     NONE,
-    ATTACKA,
-    ATTACKB,
-    ATTACKC
+    ATTACK
 }
 
 
@@ -44,6 +42,10 @@ protected enum ComboState
     private Vector3      direction;
     private Animator     animator;
     private bool         isFight;
+    private Vector3      posWhenDectededPlayer;
+    private Camera       cam;
+    private EnemyDamageable enemyDamageable;
+
     protected float      speed = 3;
     protected float      speedPatrol = 5;
     protected float      angularSpeed = 120;
@@ -53,14 +55,15 @@ protected enum ComboState
     protected float      speedRotation = 7;
     protected int        patrolIndex;
     protected float      IdleTime;
-    protected Vector3    pos;
+    protected Vector3    playerDirection;
 
     public Vector3       standPos;
     public Vector3[]     patrolList; 
-    public LayerMask     layerMask;
+    public LayerMask     attackLayerMask;
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
     public TypePatrol    typePatrol;
+    public bool          isMelee, isGunner, isBoss;
 
     protected virtual void Awake()
     {
@@ -73,6 +76,10 @@ protected enum ComboState
         laserHitHash  = Animator.StringToHash("LaserHit");
         attackHash    = Animator.StringToHash("Attack");
         deadHash      = Animator.StringToHash("Dead");
+        enemyDamageable = GetComponent<EnemyDamageable>();
+
+        cam = Camera.main;
+        enemyDamageable.setInit(100, 10);
     }
 
     protected virtual void OnEnable()
@@ -90,6 +97,12 @@ protected enum ComboState
 
     }
 
+    private void LateUpdate() 
+    {
+        Vector3 dirCam = cam.transform.position - transform.position;
+        dirCam.y = 0;
+    }
+
     //State
 
     protected virtual void Patrol()
@@ -103,7 +116,6 @@ protected enum ComboState
                     agent.SetDestination(standPos);
                     if (agent.remainingDistance <= agent.stoppingDistance)
                         IdleTime += Time.deltaTime;
-                        transform.rotation = LerpRotation(patrolPoint, transform.position, 10f); 
                         {
                             if (IdleTime > idleTime)
                             {
@@ -132,9 +144,14 @@ protected enum ComboState
                                 agent.SetDestination(patrolPoint);
                                 IdleTime = 0;
                             }
+                            // if (isFight)
+                            // {
+                            //     agent.isStopped = true;
+                            //     Fight(posWhenDectededPlayer);
+                            //     break;
+                            // }
+                            break;
                         }
-                    if (isFight)
-                        break;
                     break;
                 default:
                     break;
@@ -142,27 +159,20 @@ protected enum ComboState
         }
     }
 
-    protected virtual void Fight()
-    {
-        isFight = true;
-        //Logic
-    }
+    // protected virtual void Fight(Vector3 pos)
+    // {
+    //     agent.SetDestination(pos);
+    //     //Logic
+    // }
 
     //Controller
-
-    protected virtual Quaternion LerpRotation(Vector3 pos1, Vector3 pos2, float speed)
-    {
-        Vector3 dirLook = pos1 - pos2;
-        Quaternion rotLook = Quaternion.LookRotation(dirLook.normalized);
-        rotLook.x = 0;
-        rotLook.z = 0;
-        return Quaternion.Lerp(transform.rotation, rotLook, speed*Time.deltaTime);
-    }
-
     protected void RotationLook(Vector3 direction)
     {
-        Quaternion rotationLook = Quaternion.LookRotation(direction);
-        transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
+        if (gameObject.layer != LayerMask.NameToLayer("Default"))
+        {
+            Quaternion rotationLook = Quaternion.LookRotation(direction);
+            transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
+        }
     }
 
 
@@ -200,11 +210,24 @@ protected enum ComboState
         StartCoroutine(StandUpAfterTime());
     }
 
+    protected virtual void CameraShake()
+    {
+        CinemachineShake.Instance.ShakeCamera(5f, .1f);
+    }
+
     protected virtual void ComboAttack()
     {
         current_Combo_State++;
         activeTimerToReset = true;
         current_Combo_Timer = default_Combo_Timer;
+
+        if (isMelee)
+        {
+            if (current_Combo_State == ComboState.ATTACK)
+            {
+                animator.SetTrigger(attackHash);
+            }
+        }
     }
 
     protected void ResetComboState()
@@ -235,7 +258,6 @@ protected enum ComboState
     }
 
     //Layer
-
     protected virtual void SetLayerEnemy()
     {
         gameObject.layer = LayerMask.NameToLayer("Enemy");
@@ -247,23 +269,65 @@ protected enum ComboState
     }
 
     //Trigger
-
     protected virtual void OnTriggerEnter(Collider other)
     {
+        // if ((attackLayerMask & (1 << other.gameObject.layer)) != 0)
+        // {
+        //     isFight = true;
+        //     posWhenDectededPlayer = other.gameObject.transform.position;
+        // }
 
+        if (gameObject.layer != LayerMask.NameToLayer("Default"))
+        {
+            if ((attackLayerMask & (1 << other.gameObject.layer)) != 0)
+            {
+                if (isMelee)
+                {   
+                    //Health > 0
+                    if (Random.Range(0, 4) > 2)
+                    {
+                        KnockDown();
+                    }
+                    else
+                    {
+                        Hited();
+
+                    }
+                    //Health < 0
+                    // Dead();
+                }
+
+                if (isGunner)
+                {
+                    //Health > 0 
+                    Hited();
+                    //Health < 0
+                    // Dead();
+                }
+
+                if (isBoss)
+                {
+                    //Do Something
+                }
+            }
+        }
     }
 
     protected virtual void OnTriggerStay(Collider other)
-    {
+    { 
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            // ComboAttack(); 
+        }
 
+        Vector3 dir = playerRotation.transform.position - transform.position;
+        playerDirection = dir;
+        RotationLook(dir);
     }
 
     protected virtual void OnTriggerExit(Collider other)
     {
-        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            Hited();
-        }
+        RotationLook(playerDirection);
     }
 
     //Disable

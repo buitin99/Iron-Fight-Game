@@ -8,18 +8,18 @@ public class EnemyEditor : Editor
 {
     bool showToggle;
     private void OnSceneGUI() {
-        EnemyController t = target as EnemyController;
+        Enemy t = target as Enemy;
         if(t.patrolList != null) {
             CustomPatrolPoint(t);
-            if(t.typePatrol == EnemyController.TypePatrol.STANDINPLACE) {
+            if(t.typePatrol == Enemy.TypePatrol.STANDINPLACE) {
                 CustomStandPoint(t);
             }
         }
     }
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
-        EnemyController enemyBehaviour = target as EnemyController;
-        if(enemyBehaviour.typePatrol == EnemyController.TypePatrol.STANDINPLACE) {
+        Enemy enemyBehaviour = target as Enemy;
+        if(enemyBehaviour.typePatrol == Enemy.TypePatrol.STANDINPLACE) {
             EditorGUI.BeginChangeCheck();
             Vector3 standPos = EditorGUILayout.Vector3Field("Stand Position",enemyBehaviour.standPos);
             
@@ -31,7 +31,7 @@ public class EnemyEditor : Editor
         }
     }
 
-    private void CustomPatrolPoint(EnemyController t) {
+    private void CustomPatrolPoint(Enemy t) {
         Vector3[] listPoint = t.patrolList;
 
         // for each line segment we need two indices into the points array:
@@ -59,7 +59,7 @@ public class EnemyEditor : Editor
                 
             //Draw a list of indexed dotted line segments
 
-            if(t.typePatrol == EnemyController.TypePatrol.MOVEAROUND) {
+            if(t.typePatrol == Enemy.TypePatrol.MOVEAROUND) {
                 // Draw arrow dir if type patrol is move around
                 Handles.color = Color.blue;
                 Handles.DrawDottedLines(listPoint, segmentIndices, 3);
@@ -97,7 +97,7 @@ public class EnemyEditor : Editor
         }
     }
 
-    private void CustomStandPoint(EnemyController t) {
+    private void CustomStandPoint(Enemy t) {
         Handles.Label(t.standPos,"Stand Pos","TextField");
         Handles.color = Color.blue;
         Handles.DrawDottedLine(t.standPos, t.transform.position,2);
