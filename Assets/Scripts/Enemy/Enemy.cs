@@ -44,6 +44,8 @@ protected enum ComboState
     private EnemyDamageable enemyDamageable;
     private SoundManager soundManager;
     private float       health = 100;
+
+    private bool        isDead;
     protected Vector3    playerDirection;
 
     public Vector3       standPos;
@@ -81,11 +83,28 @@ protected enum ComboState
 
     protected virtual void Update()
     {
-        if(agent.remainingDistance <= agent.stoppingDistance) {
-            agent.SetDestination(playerRotation.transform.position);
+        if (!isDead)
+        {
+            HandleAnimation();
+            ResetComboState();
+            EnemyFollowPlayer();
+            EnemyRotation();
         }
-        HandleAnimation();
-        ResetComboState();
+        
+    }
+
+    
+    // protected void RotationLook(Vector3 direction)
+    // {
+    //     if (gameObject.layer != LayerMask.NameToLayer("Default"))
+    //     {
+    //         Quaternion rotationLook = Quaternion.LookRotation(direction);
+    //         transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
+    //     }
+    // }
+
+    protected virtual void EnemyRotation()
+    {
         if(agent.velocity.x > 0) {
             turnRight = true;
             turnLeft =  false;
@@ -112,15 +131,12 @@ protected enum ComboState
 
     }
 
-    
-    // protected void RotationLook(Vector3 direction)
-    // {
-    //     if (gameObject.layer != LayerMask.NameToLayer("Default"))
-    //     {
-    //         Quaternion rotationLook = Quaternion.LookRotation(direction);
-    //         transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
-    //     }
-    // }
+    protected virtual void EnemyFollowPlayer()
+    {
+        if(agent.remainingDistance <= agent.stoppingDistance) {
+            agent.SetDestination(playerRotation.transform.position);
+        }
+    }
 
 
     //Animator
@@ -295,6 +311,7 @@ protected enum ComboState
                     else
                     {
                         Dead();
+                        isDead = true;
                     }
                     
                 }

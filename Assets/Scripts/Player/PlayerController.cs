@@ -63,7 +63,12 @@ public class PlayerController : MonoBehaviour
     public GameObject                   iniRocketPos;
     public GameObject                   rocket; 
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
+    public AudioClip    hitAudioClip, knockoutAudioClip, deadAudioClip;
+    [Range(0,1)] public float volumeScale;
     private bool turnRight, turnLeft;
+    private float health = 100f;
+    private bool  isDead, isKnockDown;
+    private SoundManager soundManager;
 
     private void Awake() 
     {
@@ -85,6 +90,8 @@ public class PlayerController : MonoBehaviour
         knockDownHash       = Animator.StringToHash("KnockDown");
         standUpHash       = Animator.StringToHash("StandUp");
         chuongRocketHash    = Animator.StringToHash("Rocket");
+
+        soundManager = SoundManager.Instance;
     }
 
     // Start is called before the first frame update
@@ -110,14 +117,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ResetComboState();
-    
-
-        HandleGravity(); 
-
-        Move();
-        RotationLook();
-        HandleAnimation();
+        if (!isDead && !isKnockDown)
+        {
+            Move();
+            HandleAnimation();
+            ResetComboState();
+            RotationLook();
+            HandleGravity(); 
+        }
+      
     }
 
     private void RotationLook()
@@ -149,10 +157,6 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        // if (current_Combo_State != ComboState.FLIP)
-        // {
-            
-        // }
         Vector3 motionMove = direction*speed*Time.deltaTime;
         Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
         characterController.Move(motionMove + motionFall);
@@ -282,6 +286,7 @@ public class PlayerController : MonoBehaviour
 
     private void KnockDown()
     {
+        isKnockDown = true;
         animator.SetTrigger(knockDownHash);
     }
 
@@ -299,6 +304,11 @@ public class PlayerController : MonoBehaviour
     private void StandUp()
     {
         StartCoroutine(StandUpAfterTime());
+    }
+
+    private void Dead()
+    {
+        animator.SetTrigger(deadHash);
     }
 
     protected virtual void CameraShake()
@@ -382,14 +392,27 @@ public class PlayerController : MonoBehaviour
         {
             if ((enemyAttackLayer & (1 << other.gameObject.layer)) != 0)
             {
-                if (Random.Range(0, 3) >= 2)
+                if (health > 0)
                 {
-                    KnockDown();
+                    if (Random.Range(0, 3) >= 2)
+                    {
+                        KnockDown();
+                        health -= 10;
+                    }
+                    else
+                    {
+                        Hited();
+                        PlayHitSound();
+                        health -= 5;
+                    }
                 }
-                else
+                else if (health <= 0)
                 {
-                    Hited();
+                    Dead();
+                    PlaySoundDead();
+                    isDead = true;
                 }
+
             }
         }
             
@@ -410,6 +433,27 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger(hitHash);
         }
+    }
+
+    public void SetIsKnockDownFalse()
+    {
+        isKnockDown = false;
+    }
+
+    //Audio
+    private void PlayHitSound()
+    {
+        soundManager.PlayOneShot(hitAudioClip, volumeScale);
+    }
+
+    private void PlaySoundDead()
+    {
+        soundManager.PlayOneShot(deadAudioClip, volumeScale);
+    }
+
+    public void PlaySoundKnockDonw()
+    {
+        soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
     }
 
     private void OnDisable() 
