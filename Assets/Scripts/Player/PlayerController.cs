@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     public GameObject                   iniRocketPos;
     public GameObject                   rocket; 
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
+    private bool turnRight, turnLeft;
 
     private void Awake() 
     {
@@ -110,35 +111,51 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ResetComboState();
+    
+
+        HandleGravity(); 
+
         Move();
         RotationLook();
         HandleAnimation();
-        HandleGravity(); 
     }
 
     private void RotationLook()
     {
-        if (direction != Vector3.zero)
-        {
-            Quaternion rotLook = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotLook, 40f * Time.deltaTime);
+        if(direction.x < 0) {
+            turnLeft =  true;
+            turnRight =  false;
+        } else if(direction.x > 0) {
+            turnRight = true;
+            turnLeft =  false;
         }
-    }
 
-    private void RotationLookWhenDetectedEnemy(Vector3 direction)
-    {
-        Quaternion rotationLook = Quaternion.LookRotation(direction);
-        transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
+        if(turnRight) {
+            Quaternion rot = Quaternion.LookRotation(Vector3.right);
+            transform.rotation = Quaternion.LerpUnclamped(transform.rotation, rot, 25 * Time.deltaTime);
+            if(Vector3.Angle(transform.forward, Vector3.right) <= 0) {
+                turnRight = false;
+            }
+        }
+
+        if(turnLeft) {
+            Quaternion rot = Quaternion.LookRotation(Vector3.left);
+            transform.rotation = Quaternion.LerpUnclamped(transform.rotation, rot, 25 * Time.deltaTime);
+            if(Vector3.Angle(transform.forward, Vector3.left) <= 0) {
+                turnLeft = false;
+            }
+        }
     }
 
     private void Move()
     {
         // if (current_Combo_State != ComboState.FLIP)
         // {
-            Vector3 motionMove = direction*speed*Time.deltaTime;
-            Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
-            characterController.Move(motionMove + motionFall);
+            
         // }
+        Vector3 motionMove = direction*speed*Time.deltaTime;
+        Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
+        characterController.Move(motionMove + motionFall);
     }
 
     private void GetDirectionMove(InputAction.CallbackContext ctx) {
@@ -223,10 +240,16 @@ public class PlayerController : MonoBehaviour
     {
         if(activeTimerToReset)
         {
+            // SetRightHandDefaultLayer();
+            // SetLeftHandDefaultLayer();
+            // SetRightLegDefaultLayer();
+            // SetLeftLegDefaultLayer();
+
             current_Combo_Timer -= Time.deltaTime;
 
             if (current_Combo_Timer <= 0f)
             {
+
                 current_Combo_State = ComboState.NONE;
 
                 activeTimerToReset = false;
@@ -278,6 +301,11 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(StandUpAfterTime());
     }
 
+    protected virtual void CameraShake()
+    {
+        CinemachineShake.Instance.ShakeCamera(10f, .2f);
+    }
+
     public void ChuongAnimation()
     {
         while(handRig.weight <= 0.9)
@@ -308,6 +336,10 @@ public class PlayerController : MonoBehaviour
     {
         rightHand.layer = LayerMask.NameToLayer("PlayerAttack");
     }
+    public void SetRightHandDefaultLayer()
+    {
+        rightHand.layer = LayerMask.NameToLayer("Default");
+    }
 
     public void SetLeftHandAttackLayer()
     {
@@ -318,7 +350,27 @@ public class PlayerController : MonoBehaviour
     {
         leftHand.layer = LayerMask.NameToLayer("Default");
     }
+
+    public void SetLeftLegAttackLayer()
+    {
+        leftLeg.layer = LayerMask.NameToLayer("PlayerAttack");
+    }
     
+    public void SetLeftLegDefaultLayer()
+    {
+        leftLeg.layer = LayerMask.NameToLayer("Default");
+    }
+
+    public void SetRightLegAttackLayer()
+    {
+        rightLeg.layer = LayerMask.NameToLayer("PlayerAttack");
+    }
+    
+    public void SetRightLegDefaultLayer()
+    {
+        rightLeg.layer = LayerMask.NameToLayer("Default");
+    }
+
     public void SetLayerDefault()
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
@@ -326,17 +378,21 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        // if ((enemyAttackLayer & (1 << other.gameObject.layer)) != 0)
-        // {
-        //     if (Random.Range(0, 3) >= 2)
-        //     {
-        //         KnockDown();
-        //     }
-        //     else
-        //     {
-        //         Hited();
-        //     }
-        // }    
+        if (gameObject.layer != LayerMask.NameToLayer("Default"))
+        {
+            if ((enemyAttackLayer & (1 << other.gameObject.layer)) != 0)
+            {
+                if (Random.Range(0, 3) >= 2)
+                {
+                    KnockDown();
+                }
+                else
+                {
+                    Hited();
+                }
+            }
+        }
+            
     }
 
     private void OnTriggerStay(Collider other) 

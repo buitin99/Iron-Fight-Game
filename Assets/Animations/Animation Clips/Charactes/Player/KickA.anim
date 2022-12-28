@@ -37258,14 +37258,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.06666667
-    functionName: LeftLegKickOn
+    functionName: SetRightLegAttackLayer
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.3
-    functionName: LeftLegKickOff
+  - time: 0.26666668
+    functionName: SetRightLegDefaultLayer
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

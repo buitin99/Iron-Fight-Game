@@ -16,7 +16,8 @@ protected enum State
 public enum TypePatrol
 {
     STANDINPLACE,
-    MOVEAROUND
+    MOVEAROUND,
+    ATTACK
 }
 
 protected enum ComboState
@@ -24,7 +25,6 @@ protected enum ComboState
     NONE,
     ATTACK
 }
-
 
     private int          knockDownHash;
     private int          hitHash;
@@ -39,22 +39,11 @@ protected enum ComboState
     private float        default_Combo_Timer = 0.4f;
     private float        current_Combo_Timer;
     private ComboState   current_Combo_State;
-    private Vector3      direction;
     private Animator     animator;
-    private bool         isFight;
-    private Vector3      posWhenDectededPlayer;
     private Camera       cam;
     private EnemyDamageable enemyDamageable;
-
-    protected float      speed = 3;
-    protected float      speedPatrol = 5;
-    protected float      angularSpeed = 120;
-    protected float      acceleration = 8;
-    protected float      idleTime = 2;
-    protected float      alertTime = 10;
-    protected float      speedRotation = 7;
-    protected int        patrolIndex;
-    protected float      IdleTime;
+    private SoundManager soundManager;
+    private float       health = 100;
     protected Vector3    playerDirection;
 
     public Vector3       standPos;
@@ -64,6 +53,11 @@ protected enum ComboState
     public GameObject    playerRotation;
     public TypePatrol    typePatrol;
     public bool          isMelee, isGunner, isBoss;
+    private bool turnRight, turnLeft;
+    public GameObject    leftHand, rightHand, rightLeg;
+
+    public AudioClip    audioClip, knockoutAudioClip, deadAudioClip;
+    [Range(0,1)] public float volumeScale;
 
     protected virtual void Awake()
     {
@@ -80,100 +74,53 @@ protected enum ComboState
 
         cam = Camera.main;
         enemyDamageable.setInit(100, 10);
-    }
 
-    protected virtual void OnEnable()
-    {
-
-    }
-
-    protected virtual void Start()
-    {
-
+        soundManager = SoundManager.Instance;
+        agent.updateRotation =  false;
     }
 
     protected virtual void Update()
     {
+        if(agent.remainingDistance <= agent.stoppingDistance) {
+            agent.SetDestination(playerRotation.transform.position);
+        }
+        HandleAnimation();
+        ResetComboState();
+        if(agent.velocity.x > 0) {
+            turnRight = true;
+            turnLeft =  false;
+        } else if( agent.velocity.x < 0) {
+            turnLeft = true;
+            turnRight =  false;
+        }
 
-    }
-
-    private void LateUpdate() 
-    {
-        Vector3 dirCam = cam.transform.position - transform.position;
-        dirCam.y = 0;
-    }
-
-    //State
-
-    protected virtual void Patrol()
-    {
-        if (patrolList != null && patrolList.Length > 0)
-        {
-            Vector3 patrolPoint = patrolList[patrolIndex];
-            switch(typePatrol)
-            {
-                case TypePatrol.STANDINPLACE:
-                    agent.SetDestination(standPos);
-                    if (agent.remainingDistance <= agent.stoppingDistance)
-                        IdleTime += Time.deltaTime;
-                        {
-                            if (IdleTime > idleTime)
-                            {
-                                patrolIndex++;
-                                if (patrolIndex >= patrolList.Length)
-                                {
-                                    patrolIndex = 0;
-                                }
-                                IdleTime = 0;
-                            }  
-                        }
-                    if (isFight)
-                        break;
-                    break;
-                case TypePatrol.MOVEAROUND:
-                    if (agent.remainingDistance <= agent.stoppingDistance)
-                        {   
-                            IdleTime += Time.deltaTime;
-                            if (IdleTime > idleTime)
-                            {
-                                patrolIndex++;
-                                if (patrolIndex >= patrolList.Length)
-                                {
-                                    patrolIndex = 0;
-                                }
-                                agent.SetDestination(patrolPoint);
-                                IdleTime = 0;
-                            }
-                            // if (isFight)
-                            // {
-                            //     agent.isStopped = true;
-                            //     Fight(posWhenDectededPlayer);
-                            //     break;
-                            // }
-                            break;
-                        }
-                    break;
-                default:
-                    break;
+        if(turnRight) {
+            Quaternion rot = Quaternion.LookRotation(Vector3.right);
+            transform.rotation = Quaternion.LerpUnclamped(transform.rotation, rot, 15 * Time.deltaTime);
+            if(Vector3.Angle(transform.forward, Vector3.right) <= 0) {
+                turnRight = false;
             }
         }
-    }
 
-    // protected virtual void Fight(Vector3 pos)
-    // {
-    //     agent.SetDestination(pos);
-    //     //Logic
-    // }
-
-    //Controller
-    protected void RotationLook(Vector3 direction)
-    {
-        if (gameObject.layer != LayerMask.NameToLayer("Default"))
-        {
-            Quaternion rotationLook = Quaternion.LookRotation(direction);
-            transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
+        if(turnLeft) {
+            Quaternion rot = Quaternion.LookRotation(Vector3.left);
+            transform.rotation = Quaternion.LerpUnclamped(transform.rotation, rot, 15 * Time.deltaTime);
+            if(Vector3.Angle(transform.forward, Vector3.left) <= 0) {
+                turnLeft = false;
+            }
         }
+
     }
+
+    
+    // protected void RotationLook(Vector3 direction)
+    // {
+    //     if (gameObject.layer != LayerMask.NameToLayer("Default"))
+    //     {
+    //         Quaternion rotationLook = Quaternion.LookRotation(direction);
+    //         transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
+    //     }
+    // }
 
 
     //Animator
@@ -203,6 +150,7 @@ protected enum ComboState
     protected virtual void Dead()
     {
         animator.SetTrigger(deadHash);
+        PlaySoundDead();
     }
 
     protected virtual void StandUp()
@@ -230,6 +178,17 @@ protected enum ComboState
         }
     }
 
+    protected virtual void AttackWhenHandlePlayer(Vector3 pos)
+    {
+        agent.SetDestination(pos);
+        typePatrol = TypePatrol.ATTACK;
+    }
+
+    protected virtual void BackToPatrol()
+    {
+        typePatrol = TypePatrol.MOVEAROUND;
+    } 
+
     protected void ResetComboState()
     {
         if (activeTimerToReset)
@@ -252,11 +211,6 @@ protected enum ComboState
         animator.SetTrigger(standUpHash);
     }
 
-    IEnumerator WaitForAttackAfterTime(float timer)
-    {
-        yield return new WaitForSeconds(timer);
-    }
-
     //Layer
     protected virtual void SetLayerEnemy()
     {
@@ -268,6 +222,36 @@ protected enum ComboState
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
+    protected virtual void SetLeftHandAttack()
+    {
+        leftHand.layer = LayerMask.NameToLayer("EnemyAttack");
+    }
+
+    protected virtual void SetLeftHandDefault()
+    {
+        leftHand.layer = LayerMask.NameToLayer("Default");
+    }
+
+    protected virtual void SetRightHandAttack()
+    {
+        rightHand.layer = LayerMask.NameToLayer("EnemyAttack");
+    }
+
+    protected virtual void SetRightHandDefault()
+    {
+        rightHand.layer = LayerMask.NameToLayer("Default");
+    }
+
+    protected virtual void SetRightLegAttack()
+    {
+        rightLeg.layer = LayerMask.NameToLayer("EnemyAttack");
+    }
+
+    protected virtual void SetRightLegDefault()
+    {
+        rightLeg.layer = LayerMask.NameToLayer("Default");
+    }
+
     //Trigger
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -277,30 +261,49 @@ protected enum ComboState
         //     posWhenDectededPlayer = other.gameObject.transform.position;
         // }
 
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            AttackWhenHandlePlayer(other.transform.position);
+        }
+
         if (gameObject.layer != LayerMask.NameToLayer("Default"))
         {
             if ((attackLayerMask & (1 << other.gameObject.layer)) != 0)
             {
+                // IDamageable damageable = other.GetComponentInParent<IDamageable>();
+                // Collider closestPoint = other.ClosestPoint;
                 if (isMelee)
                 {   
-                    //Health > 0
-                    if (Random.Range(0, 4) > 2)
+
+                    if (health > 0)
                     {
-                        KnockDown();
+                        if (Random.Range(0, 4) >= 2)
+                        {
+                            health -= 20;
+                            KnockDown();
+                            PlaySound();
+                        }
+                        else
+                        {
+                            health -= 10;
+                            Hited();
+                            PlaySound();
+                        }
+                        //Health < 0
+                        // Dead();
                     }
                     else
                     {
-                        Hited();
-
+                        Dead();
                     }
-                    //Health < 0
-                    // Dead();
+                    
                 }
 
                 if (isGunner)
                 {
                     //Health > 0 
                     Hited();
+
                     //Health < 0
                     // Dead();
                 }
@@ -317,23 +320,33 @@ protected enum ComboState
     { 
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
-            // ComboAttack(); 
+            ComboAttack(); 
         }
 
         Vector3 dir = playerRotation.transform.position - transform.position;
         playerDirection = dir;
-        RotationLook(dir);
+        // RotationLook(dir);
     }
 
     protected virtual void OnTriggerExit(Collider other)
     {
-        RotationLook(playerDirection);
+        // RotationLook(playerDirection);
     }
 
-    //Disable
-    protected virtual void OnDisable()
+
+    //Audio
+    private void PlaySound()
     {
-
+        soundManager.PlayOneShot(audioClip, volumeScale);
     }
 
+    private void PlaySoundDead()
+    {
+        soundManager.PlayOneShot(deadAudioClip, volumeScale);
+    }
+
+    public void PlaySoundKnockDonw()
+    {
+        soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
+    }
 }

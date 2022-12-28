@@ -9,10 +9,15 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     [SerializeField]
     private HealthBarRennder healthBarRennder = new HealthBarRennder();
     private bool isDead;
+    private SoundManager soundManager;
     public AudioClip audioClip, deathAudioClip;
     [Range(0,1)]
     public float volumeScale;
     public UnityEvent<Vector3> OnTakeDamge;
+
+    private void Awake() {
+        soundManager = SoundManager.Instance;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +38,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     public void TakeDamge(Vector3 hitPoint, Vector3 force, float damage)
     {
+        soundManager.PlayOneShot(audioClip);
         _health -= damage;
         healthBarRennder.UpdateHealthBarValue(_health);
         OnTakeDamge?.Invoke(force);
