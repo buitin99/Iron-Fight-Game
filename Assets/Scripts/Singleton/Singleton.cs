@@ -24,5 +24,4 @@ public class Singleton<T> : MonoBehaviour where T: Component
             DontDestroyOnLoad(gameObject);
         }
     }
-
 }

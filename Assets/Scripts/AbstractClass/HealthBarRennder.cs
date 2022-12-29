@@ -34,6 +34,7 @@ public class HealthBarRennder
     }
 
     public void UpdateHealthBarValue(float health) {
+        
         sliderHealthBar.value = health;
     }
 }

@@ -5,14 +5,6 @@ using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
-
-protected enum State
-{
-    IDLE,
-    PATROL,
-    FIGHT
-}
-
 public enum TypePatrol
 {
     STANDINPLACE,
@@ -43,9 +35,7 @@ protected enum ComboState
     private Camera       cam;
     private EnemyDamageable enemyDamageable;
     private SoundManager soundManager;
-    private float       health = 100;
-
-    private bool        isDead;
+    private bool        isDead, isKnockDown;
     protected Vector3    playerDirection;
 
     public Vector3       standPos;
@@ -54,11 +44,10 @@ protected enum ComboState
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
     public TypePatrol    typePatrol;
-    public bool          isMelee, isGunner, isBoss;
     private bool turnRight, turnLeft;
     public GameObject    leftHand, rightHand, rightLeg;
 
-    public AudioClip    audioClip, knockoutAudioClip, deadAudioClip;
+    public AudioClip    knockoutAudioClip;
     [Range(0,1)] public float volumeScale;
 
     protected virtual void Awake()
@@ -83,15 +72,15 @@ protected enum ComboState
 
     protected virtual void Update()
     {
-        if (!isDead)
+        if (!isKnockDown && !isDead)
         {
             HandleAnimation();
             ResetComboState();
             EnemyFollowPlayer();
             EnemyRotation();
         }
-        
     }
+        
 
     
     // protected void RotationLook(Vector3 direction)
@@ -153,20 +142,21 @@ protected enum ComboState
         } 
     }
 
-    protected virtual void KnockDown()
+    public void KnockDown()
     {
         animator.SetTrigger(knockDownHash);
+        isKnockDown = true;
     }
 
-    protected virtual void Hited()
+    public void Hited()
     {
         animator.SetTrigger(hitHash);
     }
 
-    protected virtual void Dead()
+    public void Dead()
     {
         animator.SetTrigger(deadHash);
-        PlaySoundDead();
+        isDead = true;
     }
 
     protected virtual void StandUp()
@@ -185,12 +175,10 @@ protected enum ComboState
         activeTimerToReset = true;
         current_Combo_Timer = default_Combo_Timer;
 
-        if (isMelee)
+
+        if (current_Combo_State == ComboState.ATTACK)
         {
-            if (current_Combo_State == ComboState.ATTACK)
-            {
-                animator.SetTrigger(attackHash);
-            }
+            animator.SetTrigger(attackHash);
         }
     }
 
@@ -224,6 +212,7 @@ protected enum ComboState
     IEnumerator StandUpAfterTime()
     {
         yield return new WaitForSeconds(standUpTimer);
+        isKnockDown = false;
         animator.SetTrigger(standUpHash);
     }
 
@@ -238,99 +227,32 @@ protected enum ComboState
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
-    protected virtual void SetLeftHandAttack()
+    // leftHand, rightHand, rightLeg
+    public void LeftHandAttackTrue()
     {
-        leftHand.layer = LayerMask.NameToLayer("EnemyAttack");
+        leftHand.SetActive(true);
+    }
+    public void LeftHandAttackFalse()
+    {
+        leftHand.SetActive(false);
     }
 
-    protected virtual void SetLeftHandDefault()
+    public void RightHandAttackTrue()
     {
-        leftHand.layer = LayerMask.NameToLayer("Default");
+        rightHand.SetActive(true);
+    }
+    public void RightHandAttackFalse()
+    {
+        rightHand.SetActive(false);
     }
 
-    protected virtual void SetRightHandAttack()
+    public void RightLegAttackTrue()
     {
-        rightHand.layer = LayerMask.NameToLayer("EnemyAttack");
+        rightLeg.SetActive(true);
     }
-
-    protected virtual void SetRightHandDefault()
+    public void RightLegAttackFalse()
     {
-        rightHand.layer = LayerMask.NameToLayer("Default");
-    }
-
-    protected virtual void SetRightLegAttack()
-    {
-        rightLeg.layer = LayerMask.NameToLayer("EnemyAttack");
-    }
-
-    protected virtual void SetRightLegDefault()
-    {
-        rightLeg.layer = LayerMask.NameToLayer("Default");
-    }
-
-    //Trigger
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        // if ((attackLayerMask & (1 << other.gameObject.layer)) != 0)
-        // {
-        //     isFight = true;
-        //     posWhenDectededPlayer = other.gameObject.transform.position;
-        // }
-
-        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            AttackWhenHandlePlayer(other.transform.position);
-        }
-
-        if (gameObject.layer != LayerMask.NameToLayer("Default"))
-        {
-            if ((attackLayerMask & (1 << other.gameObject.layer)) != 0)
-            {
-                // IDamageable damageable = other.GetComponentInParent<IDamageable>();
-                // Collider closestPoint = other.ClosestPoint;
-                if (isMelee)
-                {   
-
-                    if (health > 0)
-                    {
-                        if (Random.Range(0, 4) >= 2)
-                        {
-                            health -= 20;
-                            KnockDown();
-                            PlaySound();
-                        }
-                        else
-                        {
-                            health -= 10;
-                            Hited();
-                            PlaySound();
-                        }
-                        //Health < 0
-                        // Dead();
-                    }
-                    else
-                    {
-                        Dead();
-                        isDead = true;
-                    }
-                    
-                }
-
-                if (isGunner)
-                {
-                    //Health > 0 
-                    Hited();
-
-                    //Health < 0
-                    // Dead();
-                }
-
-                if (isBoss)
-                {
-                    //Do Something
-                }
-            }
-        }
+        rightLeg.SetActive(false);
     }
 
     protected virtual void OnTriggerStay(Collider other)
@@ -342,27 +264,9 @@ protected enum ComboState
 
         Vector3 dir = playerRotation.transform.position - transform.position;
         playerDirection = dir;
-        // RotationLook(dir);
     }
 
-    protected virtual void OnTriggerExit(Collider other)
-    {
-        // RotationLook(playerDirection);
-    }
-
-
-    //Audio
-    private void PlaySound()
-    {
-        soundManager.PlayOneShot(audioClip, volumeScale);
-    }
-
-    private void PlaySoundDead()
-    {
-        soundManager.PlayOneShot(deadAudioClip, volumeScale);
-    }
-
-    public void PlaySoundKnockDonw()
+    public void PlaySoundKnockDown()
     {
         soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
     }

@@ -13894,21 +13894,28 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: SetLeftHandDefault
+    functionName: LeftHandAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: SetRightHandDefault
+    functionName: RightHandAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: SetRightLegDefault
+    functionName: RightLegAttackFalse
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: SetLayerEnemy
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

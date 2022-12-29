@@ -20554,35 +20554,28 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: SetLayerPlayer
+    functionName: RightHandAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: SetLeftHandDefaultLayer
+    functionName: LeftHandAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: SetRightHandDefaultLayer
+    functionName: RightLegAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0
-    functionName: SetLeftLegDefaultLayer
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0
-    functionName: SetRightLegDefaultLayer
+    functionName: LeftLegAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

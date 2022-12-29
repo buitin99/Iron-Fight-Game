@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isDead && !isKnockDown)
+        if (!isDead)
         {
             Move();
             HandleAnimation();
@@ -244,16 +244,9 @@ public class PlayerController : MonoBehaviour
     {
         if(activeTimerToReset)
         {
-            // SetRightHandDefaultLayer();
-            // SetLeftHandDefaultLayer();
-            // SetRightLegDefaultLayer();
-            // SetLeftLegDefaultLayer();
-
             current_Combo_Timer -= Time.deltaTime;
-
             if (current_Combo_Timer <= 0f)
             {
-
                 current_Combo_State = ComboState.NONE;
 
                 activeTimerToReset = false;
@@ -279,21 +272,23 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger(chuongLaserHash);
     }
 
-    private void Hited()
+    public void Hited()
     {
         animator.SetTrigger(hitHash);
     }
 
-    private void KnockDown()
+    public void KnockDown()
     {
-        isKnockDown = true;
         animator.SetTrigger(knockDownHash);
+        isKnockDown = true;
     }
 
     IEnumerator StandUpAfterTime()
     {
         yield return new WaitForSeconds(standUpTimer);
         animator.SetTrigger(standUpHash);
+        isKnockDown = false;
+
     }
 
     private void ChuongRocket(InputAction.CallbackContext ctx)
@@ -341,46 +336,6 @@ public class PlayerController : MonoBehaviour
     {
         gameObject.layer = LayerMask.NameToLayer("Player");
     }
-
-    public void SetRightHandAttackLayer()
-    {
-        rightHand.layer = LayerMask.NameToLayer("PlayerAttack");
-    }
-    public void SetRightHandDefaultLayer()
-    {
-        rightHand.layer = LayerMask.NameToLayer("Default");
-    }
-
-    public void SetLeftHandAttackLayer()
-    {
-        leftHand.layer = LayerMask.NameToLayer("PlayerAttack");
-    }
-
-    public void SetLeftHandDefaultLayer()
-    {
-        leftHand.layer = LayerMask.NameToLayer("Default");
-    }
-
-    public void SetLeftLegAttackLayer()
-    {
-        leftLeg.layer = LayerMask.NameToLayer("PlayerAttack");
-    }
-    
-    public void SetLeftLegDefaultLayer()
-    {
-        leftLeg.layer = LayerMask.NameToLayer("Default");
-    }
-
-    public void SetRightLegAttackLayer()
-    {
-        rightLeg.layer = LayerMask.NameToLayer("PlayerAttack");
-    }
-    
-    public void SetRightLegDefaultLayer()
-    {
-        rightLeg.layer = LayerMask.NameToLayer("Default");
-    }
-
     public void SetLayerDefault()
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
@@ -435,9 +390,46 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetIsKnockDownFalse()
+    //Animation
+    // rightHand, leftHand, rightLeg, leftLeg;
+    public void RightHandAttackTrue()
     {
-        isKnockDown = false;
+        rightHand.SetActive(true);
+    }
+
+    public void RightHandAttackFalse()
+    {
+        rightHand.SetActive(false);
+    }
+
+    public void LeftHandAttackTrue()
+    {
+        leftHand.SetActive(true);
+    }
+
+    public void LeftHandAttackFalse()
+    {
+        leftHand.SetActive(false);
+    }
+
+    public void RightLegAttackTrue()
+    {
+        rightLeg.SetActive(true);
+    }
+
+    public void RightLegAttackFalse()
+    {
+        rightLeg.SetActive(false);
+    }
+
+    public void LeftLegAttackTrue()
+    {
+        leftLeg.SetActive(true);
+    }
+
+    public void LeftLegAttackFalse()
+    {
+        leftLeg.SetActive(false);
     }
 
     //Audio
