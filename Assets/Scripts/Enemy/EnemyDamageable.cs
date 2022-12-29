@@ -1,6 +1,8 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
+using UnityEngine.AI;
 
 public class EnemyDamageable : MonoBehaviour, IDamageable
 {
@@ -8,28 +10,46 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private float _health = 1000;
     [SerializeField]
     private HealthBarRennder healthBarRennder = new HealthBarRennder();
-    private bool isDead;
     private SoundManager soundManager;
     public AudioClip audioClip, deathAudioClip;
     [Range(0,1)]
     public float volumeScale;
 
-    private Enemy enemy;
-    private void Awake() {
+    public bool        isDead = false;
+    public bool        isKnockDown = false; 
+
+    private Animator animator;
+    private int          knockDownHash;
+    private int          hitHash;
+    private int          laserHitHash;
+    private int          deadHash;
+    private float        standUpTimer = 2f;
+    private bool knockBack;
+    private NavMeshAgent agent;
+
+    private void Awake() 
+    {
         soundManager = SoundManager.Instance;
-        enemy = GetComponent<Enemy>();
+        animator = GetComponent<Animator>();
+        deadHash      = Animator.StringToHash("Dead");
+        knockDownHash = Animator.StringToHash("KnockDown");
+        hitHash       = Animator.StringToHash("Hit");
+        laserHitHash  = Animator.StringToHash("LaserHit");
+        agent = GetComponent<NavMeshAgent>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(knockBack) {
+            agent.Move(-transform.forward * 10f * Time.deltaTime);
+        }
     }
 
     private void LateUpdate() 
@@ -39,30 +59,62 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     public void TakeDamge(float damage)
     {
-        soundManager.PlayOneShot(audioClip);
         _health -= damage;
         healthBarRennder.UpdateHealthBarValue(_health);
-
+        soundManager.PlayOneShot(audioClip);
         if (_health > 0)
         {
             if (Random.Range(0, 4) >= 2)
             {
-                enemy.KnockDown();
+                KnockDown();
             }
             else
             {
-                enemy.Hited();
+                Hited();
             }
-            Debug.Log(_health);
         }
 
-        if (_health <= 0 && !isDead)
+        if (_health <= 0 && !isDead )
         {
             soundManager.PlayOneShot(deathAudioClip);
+            Dead();
             isDead = true;
-            enemy.Dead();
-            
         }
+    }
+
+    public void KnockDown()
+    {
+        agent.ResetPath();
+        isKnockDown = true;
+        knockBack = true;
+        Invoke("CancelKnockBack", 0.3f);
+        animator.SetTrigger(knockDownHash);
+    }
+
+    private void CancelKnockBack() {
+        knockBack = false;
+    }
+
+    public void Hited()
+    {
+        animator.SetTrigger(hitHash);
+
+    }
+
+    public void Dead()
+    {
+        animator.SetTrigger(deadHash);
+    }
+    
+    protected virtual void StandUp()
+    {
+        StartCoroutine(StandUpAfterTime());
+    }
+
+    IEnumerator StandUpAfterTime()
+    {
+        yield return new WaitForSeconds(standUpTimer);
+        isKnockDown = false;
     }
 
     public void setInit(float health, float coinBonus) {

@@ -5,6 +5,15 @@ using UnityEngine.Events;
 
 public class GameManager : Singleton<GameManager>
 {
+
+    public UnityEvent<int> OnNextStep = new UnityEvent<int>();
+
+    protected override void Awake() 
+    {
+        base.Awake();
+    }
+
+    
     // private float healthPlayer;
     // public int moneyCollected {get; private set;}
     // private PlayerData playerData;

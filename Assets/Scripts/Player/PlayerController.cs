@@ -33,13 +33,8 @@ public class PlayerController : MonoBehaviour
     private int                         kickAHash;
     private int                         kickBHash;
     private int                         flipHash;
-    private int                         deadHash;
-    private int                         hitHash;
-    private int                         knockDownHash;
-    private int                         standUpHash;
     private int                         chuongLaserHash;
     private int                         chuongRocketHash;
-    private float                       standUpTimer = 2f;
 
     [SerializeField]
     private float                       speed = 10f;
@@ -49,7 +44,6 @@ public class PlayerController : MonoBehaviour
     private float                       default_Combo_Timer = 0.4f;
     private float                       current_Combo_Timer;
     private ComboState                  current_Combo_State;
-    private bool                        chuongFlag;
     private float                       chuongTimer = 3f;
     private Missile                     missile;
 
@@ -57,11 +51,6 @@ public class PlayerController : MonoBehaviour
     public Rig                          handRig;
     public ParticleSystem               chuongVFX;
     public GameObject                   chuongObject;
-    public LayerMask                    enemyLayerMask;
-    public LayerMask                    enemyAttackLayer;
-    public LayerMask                    enemyGun;
-    public GameObject                   iniRocketPos;
-    public GameObject                   rocket; 
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
     public AudioClip    hitAudioClip, knockoutAudioClip, deadAudioClip;
     [Range(0,1)] public float volumeScale;
@@ -69,6 +58,7 @@ public class PlayerController : MonoBehaviour
     private float health = 100f;
     private bool  isDead, isKnockDown;
     private SoundManager soundManager;
+    private PlayerDamageable playerDamageable;
 
     private void Awake() 
     {
@@ -84,12 +74,9 @@ public class PlayerController : MonoBehaviour
         kickAHash           = Animator.StringToHash("KickA");
         kickBHash           = Animator.StringToHash("KickB");
         flipHash            = Animator.StringToHash("Flip");
-        deadHash            = Animator.StringToHash("Dead");
         chuongLaserHash     = Animator.StringToHash("Chuong");
-        hitHash             = Animator.StringToHash("Hit");
-        knockDownHash       = Animator.StringToHash("KnockDown");
-        standUpHash       = Animator.StringToHash("StandUp");
         chuongRocketHash    = Animator.StringToHash("Rocket");
+        playerDamageable = GetComponent<PlayerDamageable>();
 
         soundManager = SoundManager.Instance;
     }
@@ -117,7 +104,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isDead)
+        if (!playerDamageable.isDead)
         {
             Move();
             HandleAnimation();
@@ -255,11 +242,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PlayerDead()
-    {
-        animator.SetTrigger(deadHash);
-    }
-
+   
     private void ChuongHandle(InputAction.CallbackContext ctx)
     {
         chuongVFX.Play();
@@ -272,39 +255,12 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger(chuongLaserHash);
     }
 
-    public void Hited()
-    {
-        animator.SetTrigger(hitHash);
-    }
-
-    public void KnockDown()
-    {
-        animator.SetTrigger(knockDownHash);
-        isKnockDown = true;
-    }
-
-    IEnumerator StandUpAfterTime()
-    {
-        yield return new WaitForSeconds(standUpTimer);
-        animator.SetTrigger(standUpHash);
-        isKnockDown = false;
-
-    }
-
+   
     private void ChuongRocket(InputAction.CallbackContext ctx)
     {
         // Instantiate(rocket, iniRocketPos.transform.position, rocket.transform.rotation);
     }
 
-    private void StandUp()
-    {
-        StartCoroutine(StandUpAfterTime());
-    }
-
-    private void Dead()
-    {
-        animator.SetTrigger(deadHash);
-    }
 
     protected virtual void CameraShake()
     {
@@ -339,55 +295,6 @@ public class PlayerController : MonoBehaviour
     public void SetLayerDefault()
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
-    }
-
-    private void OnTriggerEnter(Collider other) 
-    {
-        if (gameObject.layer != LayerMask.NameToLayer("Default"))
-        {
-            if ((enemyAttackLayer & (1 << other.gameObject.layer)) != 0)
-            {
-                if (health > 0)
-                {
-                    if (Random.Range(0, 3) >= 2)
-                    {
-                        KnockDown();
-                        health -= 10;
-                    }
-                    else
-                    {
-                        Hited();
-                        PlayHitSound();
-                        health -= 5;
-                    }
-                }
-                else if (health <= 0)
-                {
-                    Dead();
-                    PlaySoundDead();
-                    isDead = true;
-                }
-
-            }
-        }
-            
-    }
-
-    private void OnTriggerStay(Collider other) 
-    {
-        if ((enemyLayerMask & (1 << other.gameObject.layer)) != 0)
-        {
-            // animator.SetTrigger(hitHash);
-            // Debug.Log(other);
-        }
-    }
-
-    private void OnCollisionEnter(Collision other) 
-    {
-        if ((enemyGun & (1 << other.gameObject.layer)) != 0)
-        {
-            animator.SetTrigger(hitHash);
-        }
     }
 
     //Animation

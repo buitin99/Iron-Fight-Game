@@ -5,27 +5,14 @@ using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
-public enum TypePatrol
-{
-    STANDINPLACE,
-    MOVEAROUND,
-    ATTACK
-}
 
 protected enum ComboState
 {
     NONE,
     ATTACK
 }
-
-    private int          knockDownHash;
-    private int          hitHash;
-    private int          standUpHash;
-    private int          laserHitHash;
     private int          velocityHash;
     private int          attackHash;
-    private int          deadHash;
-    private float        standUpTimer = 2f;
     private NavMeshAgent agent;
     private bool         activeTimerToReset;
     private float        default_Combo_Timer = 0.4f;
@@ -35,15 +22,9 @@ protected enum ComboState
     private Camera       cam;
     private EnemyDamageable enemyDamageable;
     private SoundManager soundManager;
-    private bool        isDead, isKnockDown;
-    protected Vector3    playerDirection;
-
-    public Vector3       standPos;
-    public Vector3[]     patrolList; 
-    public LayerMask     attackLayerMask;
+    
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
-    public TypePatrol    typePatrol;
     private bool turnRight, turnLeft;
     public GameObject    leftHand, rightHand, rightLeg;
 
@@ -55,24 +36,21 @@ protected enum ComboState
         agent         = GetComponent<NavMeshAgent>();
         animator      = GetComponent<Animator>();
         velocityHash  = Animator.StringToHash("Velocity");
-        knockDownHash = Animator.StringToHash("KnockDown");
-        standUpHash   = Animator.StringToHash("StandUp");
-        hitHash       = Animator.StringToHash("Hit");
-        laserHitHash  = Animator.StringToHash("LaserHit");
         attackHash    = Animator.StringToHash("Attack");
-        deadHash      = Animator.StringToHash("Dead");
+  
         enemyDamageable = GetComponent<EnemyDamageable>();
 
         cam = Camera.main;
-        enemyDamageable.setInit(100, 10);
+        enemyDamageable.setInit(100, 0);
 
         soundManager = SoundManager.Instance;
         agent.updateRotation =  false;
+
     }
 
     protected virtual void Update()
     {
-        if (!isKnockDown && !isDead)
+        if (!enemyDamageable.isKnockDown && !enemyDamageable.isDead)
         {
             HandleAnimation();
             ResetComboState();
@@ -80,17 +58,11 @@ protected enum ComboState
             EnemyRotation();
         }
     }
-        
 
-    
-    // protected void RotationLook(Vector3 direction)
-    // {
-    //     if (gameObject.layer != LayerMask.NameToLayer("Default"))
-    //     {
-    //         Quaternion rotationLook = Quaternion.LookRotation(direction);
-    //         transform.rotation      = Quaternion.Lerp(transform.rotation, rotationLook, 40f*Time.deltaTime);
-    //     }
-    // }
+    private void DontMove()
+    {
+
+    }
 
     protected virtual void EnemyRotation()
     {
@@ -142,27 +114,6 @@ protected enum ComboState
         } 
     }
 
-    public void KnockDown()
-    {
-        animator.SetTrigger(knockDownHash);
-        isKnockDown = true;
-    }
-
-    public void Hited()
-    {
-        animator.SetTrigger(hitHash);
-    }
-
-    public void Dead()
-    {
-        animator.SetTrigger(deadHash);
-        isDead = true;
-    }
-
-    protected virtual void StandUp()
-    {
-        StartCoroutine(StandUpAfterTime());
-    }
 
     protected virtual void CameraShake()
     {
@@ -182,17 +133,6 @@ protected enum ComboState
         }
     }
 
-    protected virtual void AttackWhenHandlePlayer(Vector3 pos)
-    {
-        agent.SetDestination(pos);
-        typePatrol = TypePatrol.ATTACK;
-    }
-
-    protected virtual void BackToPatrol()
-    {
-        typePatrol = TypePatrol.MOVEAROUND;
-    } 
-
     protected void ResetComboState()
     {
         if (activeTimerToReset)
@@ -207,13 +147,6 @@ protected enum ComboState
                 current_Combo_Timer = default_Combo_Timer;
             }
         }
-    }
-    
-    IEnumerator StandUpAfterTime()
-    {
-        yield return new WaitForSeconds(standUpTimer);
-        isKnockDown = false;
-        animator.SetTrigger(standUpHash);
     }
 
     //Layer
@@ -261,9 +194,6 @@ protected enum ComboState
         {
             ComboAttack(); 
         }
-
-        Vector3 dir = playerRotation.transform.position - transform.position;
-        playerDirection = dir;
     }
 
     public void PlaySoundKnockDown()
