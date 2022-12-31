@@ -17,6 +17,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     public bool        isDead = false;
     public bool        isKnockDown = false; 
+    public UnityEvent OnEnemyDead;
 
     private Animator animator;
     private int          knockDownHash;
@@ -64,7 +65,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         soundManager.PlayOneShot(audioClip);
         if (_health > 0)
         {
-            if (Random.Range(0, 4) >= 2)
+            if (Random.Range(0, 4) >= 3)
             {
                 KnockDown();
             }
@@ -98,11 +99,11 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     public void Hited()
     {
         animator.SetTrigger(hitHash);
-
     }
 
     public void Dead()
     {
+        OnEnemyDead?.Invoke();
         animator.SetTrigger(deadHash);
     }
     

@@ -11,7 +11,7 @@ public class PlayerAttack : MonoBehaviour
 
         if (damageable != null && ((enemyLayer & (1 << other.gameObject.layer)) != 0))
         {
-            damageable.TakeDamge(0);
+            damageable.TakeDamge(10);
         }
     }
 }

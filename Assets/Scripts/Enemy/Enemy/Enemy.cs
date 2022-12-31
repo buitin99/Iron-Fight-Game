@@ -12,24 +12,25 @@ protected enum ComboState
     ATTACK
 }
     private int          velocityHash;
-    private int          attackHash;
-    private NavMeshAgent agent;
+    protected int          attackHash;
+    protected NavMeshAgent agent;
     private bool         activeTimerToReset;
     private float        default_Combo_Timer = 0.4f;
     private float        current_Combo_Timer;
     private ComboState   current_Combo_State;
-    private Animator     animator;
+    protected Animator     animator;
     private Camera       cam;
-    private EnemyDamageable enemyDamageable;
+    protected EnemyDamageable enemyDamageable;
     private SoundManager soundManager;
     
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
     private bool turnRight, turnLeft;
     public GameObject    leftHand, rightHand, rightLeg;
-
     public AudioClip    knockoutAudioClip;
     [Range(0,1)] public float volumeScale;
+
+
 
     protected virtual void Awake()
     {
@@ -50,28 +51,17 @@ protected enum ComboState
 
     protected virtual void Update()
     {
-        if (!enemyDamageable.isKnockDown && !enemyDamageable.isDead)
-        {
-            HandleAnimation();
-            ResetComboState();
-            EnemyFollowPlayer();
-            EnemyRotation();
-        }
-    }
-
-    private void DontMove()
-    {
-
+        HandleAnimation(); 
     }
 
     protected virtual void EnemyRotation()
     {
         if(agent.velocity.x > 0) {
             turnRight = true;
-            turnLeft =  false;
+            turnLeft  =  false;
         } else if( agent.velocity.x < 0) {
-            turnLeft = true;
-            turnRight =  false;
+            turnLeft  = true;
+            turnRight = false;
         }
 
         if(turnRight) {
@@ -104,7 +94,7 @@ protected enum ComboState
     protected virtual void HandleAnimation()
     {
         Vector3 horizontalVelocity = new Vector3(agent.velocity.x, 0, agent.velocity.z);
-        float Velocity = horizontalVelocity.magnitude/3;
+        float Velocity = horizontalVelocity.magnitude/agent.speed;
         if(Velocity > 0) {
             animator.SetFloat(velocityHash, Velocity);
         } else {
@@ -190,10 +180,10 @@ protected enum ComboState
 
     protected virtual void OnTriggerStay(Collider other)
     { 
-        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            ComboAttack(); 
-        }
+        // if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        // {
+        //     ComboAttack(); 
+        // }
     }
 
     public void PlaySoundKnockDown()
