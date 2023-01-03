@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Tarodev {
-    
+
     public class Missile : MonoBehaviour {
         [Header("REFERENCES")] 
         [SerializeField] private Rigidbody _rb;
@@ -23,24 +22,16 @@ namespace Tarodev {
         [SerializeField] private float _deviationAmount = 50;
         [SerializeField] private float _deviationSpeed = 2;
 
-        public bool flag;
-
         private void FixedUpdate() {
+            _rb.velocity = transform.forward * _speed;
 
+            var leadTimePercentage = Mathf.InverseLerp(_minDistancePredict, _maxDistancePredict, Vector3.Distance(transform.position, _target.transform.position));
 
-            // if (flag)
-            // {
-                _rb.velocity = transform.forward * _speed;
+            PredictMovement(leadTimePercentage);
 
-                var leadTimePercentage = Mathf.InverseLerp(_minDistancePredict, _maxDistancePredict, Vector3.Distance(transform.position, _target.transform.position));
+            AddDeviation(leadTimePercentage);
 
-                PredictMovement(leadTimePercentage);
-
-                AddDeviation(leadTimePercentage);
-
-                RotateRocket();
-            // }
-            
+            RotateRocket();
         }
 
         private void PredictMovement(float leadTimePercentage) {
@@ -71,16 +62,10 @@ namespace Tarodev {
             Destroy(gameObject);
         }
 
-        public void InitianceRocket()
-        {
-            flag = true;
-        }
-
         private void OnDrawGizmos() {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, _standardPrediction);
             Gizmos.color = Color.green;
             Gizmos.DrawLine(_standardPrediction, _deviatedPrediction);
         }
-    }
 }

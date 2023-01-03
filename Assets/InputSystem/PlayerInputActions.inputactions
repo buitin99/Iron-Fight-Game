@@ -42,15 +42,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChuongLaserBame",
-                    "type": "Button",
-                    "id": "2e4d4596-1aaa-4313-b823-0cdb55bd76e5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ChuongRocket",
                     "type": "Button",
                     "id": "3f8958a4-a1b9-4c28-afd0-cbdcb690a4f1",
@@ -272,19 +263,8 @@
                 },
                 {
                     "name": "",
-                    "id": "a0811b4b-745b-44bb-8645-27baa0979632",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChuongLaserBame",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "f303e420-909b-410c-a9d5-27ced2f1af44",
-                    "path": "<Keyboard>/3",
+                    "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

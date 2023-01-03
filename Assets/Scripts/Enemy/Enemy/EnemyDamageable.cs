@@ -7,26 +7,30 @@ using UnityEngine.AI;
 public class EnemyDamageable : MonoBehaviour, IDamageable
 {
     private float _coinBonus;
-    private float _health = 1000;
+    private float _health = 100;
+    private float _knock = 0;
     [SerializeField]
     private HealthBarRennder healthBarRennder = new HealthBarRennder();
+
+    [SerializeField]
+    private KnockDownBarRennder knockDownBarRennder = new KnockDownBarRennder();
     private SoundManager soundManager;
-    public AudioClip audioClip, deathAudioClip;
+    public AudioClip     audioClip, deathAudioClip;
     [Range(0,1)]
-    public float volumeScale;
+    public float         volumeScale;
 
-    public bool        isDead = false;
-    public bool        isKnockDown = false; 
-    public UnityEvent OnEnemyDead;
+    public bool          isDead = false;
+    public bool          isKnockDown = false; 
+    public UnityEvent    OnEnemyDead;
 
-    private Animator animator;
+    private Animator     animator;
     private int          knockDownHash;
-    private int             stateDeath;
+    private int          stateDeath;
     private int          hitHash;
     private int          laserHitHash;
     private int          deadHash;
     private float        standUpTimer = 2f;
-    private bool knockBack;
+    private bool         knockBack;
     private NavMeshAgent agent;
 
     private void Awake() 
@@ -58,6 +62,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private void LateUpdate() 
     {
         healthBarRennder.UpdateHealthBarRotation();
+        knockDownBarRennder.UpdateKnockDownBarRotation();
     }
 
     public void TakeDamge(float damage)
@@ -70,14 +75,18 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         soundManager.PlayOneShot(audioClip);
         if (_health > 0)
         {
-            if (Random.Range(0, 4) >= 3)
+            TakeKnockDown(25);
+            if (_knock >= 100)
             {
                 KnockDown();
+                _knock = 0;
+                knockDownBarRennder.UpdateKnockDownBarValue(_knock);
             }
             else
             {
                 Hited();
             }
+            Debug.Log(_knock);
         }
 
         if (_health <= 0 && !isDead )
@@ -85,9 +94,15 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
             soundManager.PlayOneShot(deathAudioClip);
             Dead();
             isDead = true;
+            knockDownBarRennder.DestroyKnockDownBar();
+            healthBarRennder.DestroyHealbar();
         }
+    }
 
-
+    public void TakeKnockDown(float knock)
+    {
+        _knock += knock;
+        knockDownBarRennder.UpdateKnockDownBarValue(_knock);
     }
 
     public void KnockDown()
@@ -112,7 +127,9 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     {
         OnEnemyDead?.Invoke();
         // animator.SetTrigger(deadHash);
-        animator.SetFloat(stateDeath,Random.Range(1, 4));
+        float t = Random.Range(1, 4);
+        animator.SetFloat(stateDeath,t);
+        Debug.Log(t);
     }
     
     protected virtual void StandUp()
@@ -130,6 +147,12 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         _health = health;
         _coinBonus = coinBonus;
         healthBarRennder.CreateHealthBar(transform, health);
+    }
+
+    public void setInitKnockDown(float knock)
+    {
+        _knock = knock;
+        knockDownBarRennder.CreateKnockDownBar(transform,knock);
     }
 
 }

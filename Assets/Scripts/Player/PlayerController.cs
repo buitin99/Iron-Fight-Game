@@ -45,18 +45,21 @@ public class PlayerController : MonoBehaviour
     private float                       current_Combo_Timer;
     private ComboState                  current_Combo_State;
     private float                       chuongTimer = 3f;
-    private Missile                     missile;
 
     public Vector3                      direction;
     public Rig                          handRig;
     public ParticleSystem               chuongVFX;
     public GameObject                   chuongObject;
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
-    public AudioClip    hitAudioClip, knockoutAudioClip, deadAudioClip;
+    public AudioClip                    hitAudioClip, knockoutAudioClip, deadAudioClip;
+    public GameObject                   missilePrefab;
+
+    public GameObject                   missilePos;
+
     [Range(0,1)] public float volumeScale;
     private bool turnRight, turnLeft;
     private float health = 100f;
-    private bool  isDead, isKnockDown;
+    private bool  isDead, isLaser;
     private SoundManager soundManager;
     private PlayerDamageable playerDamageable;
 
@@ -64,7 +67,6 @@ public class PlayerController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         playerInputActions  = new PlayerInputActions();
-        missile             = GetComponentInChildren<Missile>();
         velocityHash        = Animator.StringToHash("Velocity");
         chuongAHash         = Animator.StringToHash("ChuongA");
         chuongBHash         = Animator.StringToHash("ChuongB");
@@ -92,13 +94,12 @@ public class PlayerController : MonoBehaviour
     private void OnEnable() 
     {
         playerInputActions.Enable();
-        playerInputActions.Player.Move.performed += GetDirectionMove;
-        playerInputActions.Player.Move.canceled  += GetDirectionMove;
-        playerInputActions.Player.Fire.started   += PunchAnimation;
-        playerInputActions.Player.Punch.started  += FlipAnimation;
-        playerInputActions.Player.Chuong.started += ChuongHandle;
-        playerInputActions.Player.ChuongLaserBame.started += ChuongLaserAnimation;
-        playerInputActions.Player.ChuongRocket.started += ChuongRocket;
+        playerInputActions.Player.Move.performed        += GetDirectionMove;
+        playerInputActions.Player.Move.canceled         += GetDirectionMove;
+        playerInputActions.Player.Fire.started          += PunchAnimation;
+        playerInputActions.Player.Punch.started         += FlipAnimation;
+        playerInputActions.Player.Chuong.started        += ChuongHandle;
+        playerInputActions.Player.ChuongRocket.started  += ChuongRocket;
     }
 
     // Update is called once per frame
@@ -112,7 +113,7 @@ public class PlayerController : MonoBehaviour
             RotationLook();
             HandleGravity(); 
         }
-      
+        Debug.Log(missilePos.transform.position);
     }
 
     private void RotationLook()
@@ -144,9 +145,13 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        Vector3 motionMove = direction*speed*Time.deltaTime;
-        Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
-        characterController.Move(motionMove + motionFall);
+        if (!isLaser)
+        {
+            Vector3 motionMove = direction*speed*Time.deltaTime;
+            Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
+            characterController.Move(motionMove + motionFall);
+        }
+    
     }
 
     private void GetDirectionMove(InputAction.CallbackContext ctx) {
@@ -242,7 +247,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-   
     private void ChuongHandle(InputAction.CallbackContext ctx)
     {
         chuongVFX.Play();
@@ -250,18 +254,11 @@ public class PlayerController : MonoBehaviour
         chuongObject.SetActive(true);
     }
 
-    private void ChuongLaserAnimation(InputAction.CallbackContext ctx)
-    {
-        animator.SetTrigger(chuongLaserHash);
-    }
-
-   
     private void ChuongRocket(InputAction.CallbackContext ctx)
     {
-        // Instantiate(rocket, iniRocketPos.transform.position, rocket.transform.rotation);
+        Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
+        Debug.Log(missilePos.transform.position);
     }
-
-
     protected virtual void CameraShake()
     {
         CinemachineShake.Instance.ShakeCamera(10f, .2f);
@@ -273,7 +270,7 @@ public class PlayerController : MonoBehaviour
         {
             handRig.weight = handRig.weight = Mathf.Lerp(handRig.weight, 1f, 20f*Time.deltaTime);
         }
-        playerInputActions.Player.Fire.started   -= PunchAnimation;
+        isLaser = true;
         StartCoroutine(ChuongAnimationOff());
     }
 
@@ -284,7 +281,7 @@ public class PlayerController : MonoBehaviour
         {
             handRig.weight = handRig.weight = Mathf.Lerp(handRig.weight, -1f, 20f*Time.deltaTime);
         }
-        playerInputActions.Player.Fire.started   += PunchAnimation;
+        isLaser = false;
         chuongObject.SetActive(false);
     }
 
@@ -357,11 +354,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable() 
     {
-        playerInputActions.Player.Move.performed -= GetDirectionMove;
-        playerInputActions.Player.Move.canceled  -= GetDirectionMove;
-        playerInputActions.Player.Punch.started  -= FlipAnimation;
-        playerInputActions.Player.Fire.started   -= PunchAnimation;
-        playerInputActions.Player.Chuong.started -= ChuongHandle;
-        playerInputActions.Player.ChuongLaserBame.started -= ChuongLaserAnimation;
+        playerInputActions.Player.Move.performed        -= GetDirectionMove;
+        playerInputActions.Player.Move.canceled         -= GetDirectionMove;
+        playerInputActions.Player.Punch.started         -= FlipAnimation;
+        playerInputActions.Player.Fire.started          -= PunchAnimation;
+        playerInputActions.Player.Chuong.started        -= ChuongHandle;
+        playerInputActions.Player.ChuongRocket.started  -= ChuongRocket;
     }
 }

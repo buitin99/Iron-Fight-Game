@@ -30,6 +30,8 @@ protected enum ComboState
     public AudioClip    knockoutAudioClip;
     [Range(0,1)] public float volumeScale;
 
+    public GameObject targetPrefab;
+
 
 
     protected virtual void Awake()
@@ -42,6 +44,7 @@ protected enum ComboState
 
         cam = Camera.main;
         enemyDamageable.setInit(100, 0);
+        enemyDamageable.setInitKnockDown(0);
 
         soundManager = SoundManager.Instance;
         agent.updateRotation =  false;
@@ -179,10 +182,10 @@ protected enum ComboState
 
     protected virtual void OnTriggerStay(Collider other)
     { 
-        // if ((playerLayer & (1 << other.gameObject.layer)) != 0)
-        // {
-        //     ComboAttack(); 
-        // }
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            ComboAttack(); 
+        }
     }
 
     public void PlaySoundKnockDown()

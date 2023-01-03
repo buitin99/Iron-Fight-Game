@@ -27,7 +27,7 @@ public class HealthBarRennder
         sliderHealthBar.value = Maxhealth;
     }
 
-    public void UpdateHealthBarRotation() {;
+    public void UpdateHealthBarRotation() {
         Vector3 dirCam = camera.transform.position - _healthBar.transform.position;
         dirCam.x = 0;
         _healthBar.transform.rotation = Quaternion.LookRotation(dirCam.normalized);
@@ -36,5 +36,10 @@ public class HealthBarRennder
     public void UpdateHealthBarValue(float health) {
         
         sliderHealthBar.value = health;
+    }
+
+    public void DestroyHealbar()
+    {
+        _healthBar.SetActive(false);
     }
 }

@@ -141,15 +141,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6218341245850011874}
-  m_LocalRotation: {x: -0.30342135, y: 0.29422566, z: -0.34232265, w: 0.83915555}
-  m_LocalPosition: {x: 17.56, y: 10.61, z: 18.64}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1493051510760732005}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -17.926, y: 47.505, z: -52.326}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3502941325190920122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,9 +163,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 184470500350564771}
-  _target: {fileID: 7303567736375038509, guid: 8520eb27cc3106445a7b93dd527b3d6d, type: 3}
+  _target: {fileID: 3673069221297097323, guid: 63bfcf98e28f2f543b4ac30fe80774f7, type: 3}
   _explosionPrefab: {fileID: 0}
-  _speed: 15
+  _speed: 1.5
   _rotateSpeed: 90
   _maxDistancePredict: 100
   _minDistancePredict: 5
@@ -322,7 +322,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7604778225646678301}
-  m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.49267, y: 0.49267, z: 0.49267}
   m_ConstrainProportionsScale: 0
@@ -331,7 +331,7 @@ Transform:
   - {fileID: 2288047679252950152}
   m_Father: {fileID: 3502654976704766322}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7467013526920474509
 MeshFilter:
   m_ObjectHideFlags: 0
