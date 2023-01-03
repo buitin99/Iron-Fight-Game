@@ -11,15 +11,15 @@ protected enum ComboState
     NONE,
     ATTACK
 }
-    private int          velocityHash;
-    protected int          attackHash;
-    protected NavMeshAgent agent;
-    private bool         activeTimerToReset;
-    private float        default_Combo_Timer = 0.4f;
-    private float        current_Combo_Timer;
-    private ComboState   current_Combo_State;
-    protected Animator     animator;
-    private Camera       cam;
+    private int             velocityHash;
+    protected int           attackHash;
+    protected NavMeshAgent  agent;
+    private bool            activeTimerToReset;
+    private float           default_Combo_Timer = 0.4f;
+    private float           current_Combo_Timer;
+    private ComboState      current_Combo_State;
+    protected Animator      animator;
+    private Camera          cam;
     protected EnemyDamageable enemyDamageable;
     private SoundManager soundManager;
     
@@ -37,8 +37,7 @@ protected enum ComboState
         agent         = GetComponent<NavMeshAgent>();
         animator      = GetComponent<Animator>();
         velocityHash  = Animator.StringToHash("Velocity");
-        attackHash    = Animator.StringToHash("Attack");
-  
+        attackHash    = Animator.StringToHash("Attack");  
         enemyDamageable = GetComponent<EnemyDamageable>();
 
         cam = Camera.main;

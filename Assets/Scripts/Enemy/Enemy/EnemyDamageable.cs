@@ -21,6 +21,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     private Animator animator;
     private int          knockDownHash;
+    private int             stateDeath;
     private int          hitHash;
     private int          laserHitHash;
     private int          deadHash;
@@ -36,6 +37,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         knockDownHash = Animator.StringToHash("KnockDown");
         hitHash       = Animator.StringToHash("Hit");
         laserHitHash  = Animator.StringToHash("LaserHit");
+        stateDeath    = Animator.StringToHash("StateDeath");
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -60,6 +62,9 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     public void TakeDamge(float damage)
     {
+        if (isDead)
+            return;
+
         _health -= damage;
         healthBarRennder.UpdateHealthBarValue(_health);
         soundManager.PlayOneShot(audioClip);
@@ -81,6 +86,8 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
             Dead();
             isDead = true;
         }
+
+
     }
 
     public void KnockDown()
@@ -104,7 +111,8 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     public void Dead()
     {
         OnEnemyDead?.Invoke();
-        animator.SetTrigger(deadHash);
+        // animator.SetTrigger(deadHash);
+        animator.SetFloat(stateDeath,Random.Range(1, 4));
     }
     
     protected virtual void StandUp()
