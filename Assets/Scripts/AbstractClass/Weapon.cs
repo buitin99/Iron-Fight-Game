@@ -14,7 +14,7 @@ public abstract class Weapon : MonoBehaviour
     public abstract void Shoot(Transform target, LayerMask targets, String namelayerMask);
     protected virtual void Awake() 
     {
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInParent<Animator>();
         shootHash = Animator.StringToHash("Shoot");
     }
 
@@ -25,7 +25,7 @@ public abstract class Weapon : MonoBehaviour
 
     private void WeaponPlayAnimation()
     {
-        // _animator.SetTrigger(shootHash);
+        _animator.SetTrigger(shootHash);
     }
     
     protected virtual void OnDisable() 

@@ -23,7 +23,7 @@ public class RangeWeapon : Weapon
         {
             OnShoot?.Invoke();
             // shootEffect.Play();
-            GameObject c_bullet = objectPooler.SpawnObject("Bullet", shootPosition.position, shootPosition.rotation);
+            GameObject c_bullet = objectPooler.SpawnObject("Bullet", shootPosition.position, Quaternion.identity);
             c_bullet.layer = LayerMask.NameToLayer(namelayerMask);
             soundManager.PlayOneShot(audioClip, volumeScale);
             c_bullet.GetComponent<Bullet>().TriggerFireBullet(shootPosition.forward.normalized, speedBullet, damage, force, targets);

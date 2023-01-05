@@ -52,9 +52,12 @@ public class PlayerController : MonoBehaviour
     public GameObject                   chuongObject;
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
     public AudioClip                    hitAudioClip, knockoutAudioClip, deadAudioClip;
-    public GameObject                   missilePrefab;
+    private UIManager ui;
 
-    public GameObject                   missilePos;
+    public LayerMask alertLayer;
+    // public GameObject                   missilePrefab;
+
+    // public GameObject                   missilePos;
 
     [Range(0,1)] public float volumeScale;
     private bool turnRight, turnLeft;
@@ -80,6 +83,8 @@ public class PlayerController : MonoBehaviour
         chuongRocketHash    = Animator.StringToHash("Rocket");
         playerDamageable = GetComponent<PlayerDamageable>();
 
+        ui = FindObjectOfType<UIManager>();
+
         soundManager = SoundManager.Instance;
     }
 
@@ -89,6 +94,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         current_Combo_Timer = default_Combo_Timer;
         current_Combo_State = ComboState.NONE;
+
     }
 
     private void OnEnable() 
@@ -113,7 +119,6 @@ public class PlayerController : MonoBehaviour
             RotationLook();
             HandleGravity(); 
         }
-        Debug.Log(missilePos.transform.position);
     }
 
     private void RotationLook()
@@ -256,8 +261,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChuongRocket(InputAction.CallbackContext ctx)
     {
-        Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
-        Debug.Log(missilePos.transform.position);
+        // Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
     }
     protected virtual void CameraShake()
     {
@@ -350,6 +354,14 @@ public class PlayerController : MonoBehaviour
     public void PlaySoundKnockDonw()
     {
         soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
+    }
+
+    private void OnTriggerEnter(Collider other) 
+    {
+        if ((alertLayer & (1 << other.gameObject.layer)) != 0)
+        {  
+            ui.NonAlert();
+        }
     }
 
     private void OnDisable() 

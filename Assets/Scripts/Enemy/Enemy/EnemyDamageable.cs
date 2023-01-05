@@ -86,7 +86,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
             {
                 Hited();
             }
-            Debug.Log(_knock);
         }
 
         if (_health <= 0 && !isDead )
@@ -126,10 +125,9 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     public void Dead()
     {
         OnEnemyDead?.Invoke();
-        // animator.SetTrigger(deadHash);
         float t = Random.Range(1, 4);
         animator.SetFloat(stateDeath,t);
-        Debug.Log(t);
+        ScoreManager.Instance.CountEnemy();
     }
     
     protected virtual void StandUp()

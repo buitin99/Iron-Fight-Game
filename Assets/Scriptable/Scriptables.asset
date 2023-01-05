@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Scriptables
   m_EditorClassIdentifier: 
   enemies:
-  - {fileID: 11400000, guid: 879740b53d3f31840b484690229e81a4, type: 2}
+  - {fileID: 11400000, guid: b9aa4afc44ca65942b7d2628fbe17dd5, type: 2}

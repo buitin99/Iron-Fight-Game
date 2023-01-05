@@ -9,7 +9,9 @@ public abstract class Enemy : MonoBehaviour
 protected enum ComboState
 {
     NONE,
-    ATTACK
+    ATTACK,
+    ATTACKA,
+    KICK
 }
     private int             velocityHash;
     protected int           attackHash;
@@ -22,18 +24,12 @@ protected enum ComboState
     private Camera          cam;
     protected EnemyDamageable enemyDamageable;
     private SoundManager soundManager;
-    
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
     private bool turnRight, turnLeft;
     public GameObject    leftHand, rightHand, rightLeg;
     public AudioClip    knockoutAudioClip;
     [Range(0,1)] public float volumeScale;
-
-    public GameObject targetPrefab;
-
-
-
     protected virtual void Awake()
     {
         agent         = GetComponent<NavMeshAgent>();
@@ -49,11 +45,14 @@ protected enum ComboState
         soundManager = SoundManager.Instance;
         agent.updateRotation =  false;
 
+
+        //prefabs 
+        playerRotation = FindObjectOfType<CharacterController>().gameObject;
     }
 
     protected virtual void Update()
     {
-        HandleAnimation(); 
+        HandleAnimation();
     }
 
     protected virtual void EnemyRotation()
@@ -114,6 +113,11 @@ protected enum ComboState
 
     protected virtual void ComboAttack()
     {
+
+        //3-1-2023 k co code nay
+        // if (current_Combo_State == ComboState.KICK)
+        //     return;
+
         current_Combo_State++;
         activeTimerToReset = true;
         current_Combo_Timer = default_Combo_Timer;
@@ -123,6 +127,7 @@ protected enum ComboState
         {
             animator.SetTrigger(attackHash);
         }
+
     }
 
     protected void ResetComboState()
@@ -184,7 +189,8 @@ protected enum ComboState
     { 
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
-            ComboAttack(); 
+            ComboAttack();
+            ResetComboState();
         }
     }
 

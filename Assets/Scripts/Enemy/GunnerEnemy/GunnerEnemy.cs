@@ -36,7 +36,7 @@ public class GunnerEnemy : Enemy
         ResetComboState();
         if (isRange)
         {
-            EnemyGunShoot();
+            // EnemyGunShoot();
         }
     }   
 
@@ -77,8 +77,7 @@ public class GunnerEnemy : Enemy
 
         if (isReadyAttack)
         {
-            Debug.Log(playerLayer);
-            enemyWeapon.Shoot(playerRotation.transform, playerLayer, "FromEnemy");
+            // enemyWeapon.Shoot(playerRotation.transform, playerLayer, "FromEnemy");
         }
     }
 
