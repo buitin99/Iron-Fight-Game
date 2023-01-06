@@ -23,6 +23,8 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     public bool          isKnockDown = false; 
     public UnityEvent    OnEnemyDead;
 
+    public bool isMelee, isGunner;
+
     private Animator     animator;
     private int          knockDownHash;
     private int          stateDeath;
@@ -36,13 +38,22 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
-        animator = GetComponent<Animator>();
         deadHash      = Animator.StringToHash("Dead");
         knockDownHash = Animator.StringToHash("KnockDown");
         hitHash       = Animator.StringToHash("Hit");
         laserHitHash  = Animator.StringToHash("LaserHit");
         stateDeath    = Animator.StringToHash("StateDeath");
         agent = GetComponent<NavMeshAgent>();
+
+        if (isMelee)
+        {
+            animator = GetComponent<Animator>();
+        }
+        else if (isGunner)
+        {
+            animator = GetComponentInParent<Animator>();
+        }
+
     }
 
     // Start is called before the first frame update

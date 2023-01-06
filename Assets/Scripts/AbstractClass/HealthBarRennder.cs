@@ -33,8 +33,8 @@ public class HealthBarRennder
         _healthBar.transform.rotation = Quaternion.LookRotation(dirCam.normalized);
     }
 
-    public void UpdateHealthBarValue(float health) {
-        
+    public void UpdateHealthBarValue(float health) 
+    {
         sliderHealthBar.value = health;
     }
 

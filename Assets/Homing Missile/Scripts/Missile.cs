@@ -58,7 +58,7 @@ using UnityEngine;
         private void OnCollisionEnter(Collision collision) {
             if(_explosionPrefab) Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             if (collision.transform.TryGetComponent<IExplode>(out var ex)) ex.Explode();
-   
+                Debug.Log(collision.gameObject.name);
             Destroy(gameObject);
         }
 

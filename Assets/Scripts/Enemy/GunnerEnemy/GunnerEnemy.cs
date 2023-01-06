@@ -7,11 +7,11 @@ public class GunnerEnemy : Enemy
     private bool isRange, isReadyAttack;
     private int shootHash;
     private float distance;
-    private Vector3 rot;
-    public Camera cmr;
+    private Vector3 rot, gunRot;
     private Weapon enemyWeapon;
-    //Gun
+    public GameObject shootPoint;
 
+    //Gun
     public float damage = 10f;
     public float range = 100f;
 
@@ -31,13 +31,16 @@ public class GunnerEnemy : Enemy
     // Update is called once per frame
     protected override void Update()
     {
-        base.Update();
-        EnemyGunMovement();
-        ResetComboState();
-        if (isRange)
+        if (!enemyDamageable.isKnockDown && !enemyDamageable.isDead)
         {
-            // EnemyGunShoot();
+            EnemyGunMovement();
+            ResetComboState();
+            if (isRange)
+            {
+                EnemyGunShoot();
+            }
         }
+        base.Update();
     }   
 
     private void EnemyGunMovement()
@@ -49,6 +52,14 @@ public class GunnerEnemy : Enemy
         distance = Vector3.Distance(playerRotation.transform.position, transform.position);
         rot = playerRotation.transform.position - transform.position;
         RotationLook(rot);
+    }
+
+
+
+    private void GunRotation()
+    {
+        gunRot = playerRotation.transform.position - shootPoint.transform.position;
+        RotationLook(gunRot);
     }
 
     private void RotationLook(Vector3 dir)
@@ -77,27 +88,12 @@ public class GunnerEnemy : Enemy
 
         if (isReadyAttack)
         {
-            // enemyWeapon.Shoot(playerRotation.transform, playerLayer, "FromEnemy");
+            enemyWeapon.Shoot(playerRotation.transform, playerLayer, "FromEnemy");
         }
     }
 
     private void WaitForReadyAttack() {
         isReadyAttack = true;
-    }
-
-    protected override void OnTriggerStay(Collider other)
-    {
-        base.OnTriggerStay(other);
-        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            
-        }
-
-
-        if ((playerLayer & (1 << other.gameObject.layer)) != 0 && distance <= 1f)
-        {
-            ComboAttack();
-        }
     }
 
     private void OnTriggerEnter(Collider other) 
@@ -106,6 +102,14 @@ public class GunnerEnemy : Enemy
         {
             agent.SetDestination(transform.localPosition);
             isRange = true;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0 && distance <= 1f)
+        {
+            ComboAttack();
         }
     }
 

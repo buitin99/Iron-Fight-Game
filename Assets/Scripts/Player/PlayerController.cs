@@ -55,9 +55,9 @@ public class PlayerController : MonoBehaviour
     private UIManager ui;
 
     public LayerMask alertLayer;
-    // public GameObject                   missilePrefab;
+    public GameObject                   missilePrefab;
 
-    // public GameObject                   missilePos;
+    public GameObject                   missilePos;
 
     [Range(0,1)] public float volumeScale;
     private bool turnRight, turnLeft;
@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         playerDamageable = GetComponent<PlayerDamageable>();
 
         ui = FindObjectOfType<UIManager>();
+        playerDamageable.setInit(200, 0);
 
         soundManager = SoundManager.Instance;
     }
@@ -261,7 +262,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChuongRocket(InputAction.CallbackContext ctx)
     {
-        // Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
+        Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
     }
     protected virtual void CameraShake()
     {

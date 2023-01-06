@@ -11,6 +11,7 @@ public class SpawnEnemy : MonoBehaviour
     private GameObject _enemy;
     public UnityEvent<int, int> OnTotalEnemy = new UnityEvent<int, int>();
     private int turn = 1;
+    private int randomEnemy;
     private ScoreManager scoreManager;
     private void Awake() 
     {
@@ -36,16 +37,21 @@ public class SpawnEnemy : MonoBehaviour
     public void Wave()
     {
         ChangePosSpawn();
-        _enemy = enemySO.enemies[0].enemy;
+        // _enemy = enemySO.enemies[0].enemy;
+
+
         int   r  = Random.Range(2,3);
         switch(r)
         {
             case 1:
-                    Instantiate(_enemy, new Vector3 (spawn.transform.position.x,spawn.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    randomEnemy = Random.Range(0,3);
+                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawn.transform.position.x,spawn.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                 break;
             case 2:
-                    Instantiate(_enemy, new Vector3 (spawn.transform.position.x,spawn.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
-                    Instantiate(_enemy, new Vector3 (spawn1.transform.position.x,spawn1.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    randomEnemy = Random.Range(0,3);
+                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawn.transform.position.x,spawn.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    randomEnemy = Random.Range(0,3);
+                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawn1.transform.position.x,spawn1.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                 break;
             default:
                 break;

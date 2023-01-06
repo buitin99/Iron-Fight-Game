@@ -15,4 +15,13 @@ public class MeleeEnemyController : Enemy
         base.Update();
     }
 
+    protected virtual void OnTriggerStay(Collider other)
+    { 
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            ComboAttack();
+            ResetComboState();
+        }
+    }
+
 }

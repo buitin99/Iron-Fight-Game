@@ -36,7 +36,7 @@ protected enum ComboState
         animator      = GetComponent<Animator>();
         velocityHash  = Animator.StringToHash("Velocity");
         attackHash    = Animator.StringToHash("Attack");  
-        enemyDamageable = GetComponent<EnemyDamageable>();
+        enemyDamageable = GetComponentInChildren<EnemyDamageable>();
 
         cam = Camera.main;
         enemyDamageable.setInit(100, 0);
@@ -93,7 +93,7 @@ protected enum ComboState
 
     //Animator
     protected virtual void HandleAnimation()
-    {
+    {   
         Vector3 horizontalVelocity = new Vector3(agent.velocity.x, 0, agent.velocity.z);
         float Velocity = horizontalVelocity.magnitude/agent.speed;
         if(Velocity > 0) {
@@ -183,15 +183,6 @@ protected enum ComboState
     public void RightLegAttackFalse()
     {
         rightLeg.SetActive(false);
-    }
-
-    protected virtual void OnTriggerStay(Collider other)
-    { 
-        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
-        {
-            ComboAttack();
-            ResetComboState();
-        }
     }
 
     public void PlaySoundKnockDown()

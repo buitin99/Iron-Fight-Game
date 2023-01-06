@@ -13,11 +13,13 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     private PlayerController playerController;
     public bool isDead = false;
     public bool isKnockDown = false;
-
+    [SerializeField]
+    private HealthBarRennder healthBarRennder = new HealthBarRennder();
     private int                         deadHash;
     private int                         hitHash;
     private int                         knockDownHash;
     private int                         standUpHash;
+    private int                         stateDeath;
     private Animator                    animator;
     private float                       standUpTimer = 2f;
 
@@ -30,6 +32,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         knockDownHash       = Animator.StringToHash("KnockDown");
         standUpHash       = Animator.StringToHash("StandUp");
         animator        = GetComponent<Animator>();
+        stateDeath    = Animator.StringToHash("StateDeath");
     }
     // Start is called before the first frame update
     void Start()
@@ -37,15 +40,14 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void LateUpdate() 
     {
-        
+        healthBarRennder.UpdateHealthBarRotation();
     }
     public void TakeDamge(float damage)
     {
         _health -= damage;
-        // healthBarRennder.UpdateHealthBarValue(_health);
+        healthBarRennder.UpdateHealthBarValue(_health);
         soundManager.PlayOneShot(audioClip);
         if (_health > 0)
         {
@@ -62,13 +64,20 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     public void PlayerDead()
     {
         isDead = true;
-        animator.SetTrigger(deadHash);
+        float t = Random.Range(1, 4);
+        animator.SetFloat(stateDeath,t);
     }
 
     public void Hited()
     {
         animator.SetTrigger(hitHash);
     }
+
+    public void setInit(float health, float coinBonus) {
+        _health = health;
+        healthBarRennder.CreateHealthBar(transform, health);
+    }
+
 
     // public void KnockDown()
     // {
