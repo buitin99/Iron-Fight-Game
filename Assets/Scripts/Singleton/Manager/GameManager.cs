@@ -7,6 +7,8 @@ public class GameManager : Singleton<GameManager>
 {
 
     public UnityEvent<int> OnNextStep = new UnityEvent<int>();
+    public UnityEvent OnNextLevel = new UnityEvent();
+    public UnityEvent OnStartGame = new UnityEvent();
     private GameData gameData;
 
     protected override void Awake() 
@@ -60,8 +62,20 @@ public class GameManager : Singleton<GameManager>
         // }
     }
 
+    //Update Lastest Level
+    public void NextLevel()
+    {
+        OnNextLevel?.Invoke();
+    }
+
     public void EndGame(bool isWin)
     {
+        NextLevel();
+    }
+
+    public void StartGame()
+    {
+        OnStartGame?.Invoke();
     }
 
 }

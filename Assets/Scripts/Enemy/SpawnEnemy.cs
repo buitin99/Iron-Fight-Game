@@ -19,6 +19,7 @@ public class SpawnEnemy : MonoBehaviour
     private ScoreManager scoreManager;
     private GameManager gameManager;
     private GameData gameData;
+    private bool isStartGame;
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -29,19 +30,28 @@ public class SpawnEnemy : MonoBehaviour
     private void OnEnable() 
     {
         scoreManager.OnWaveDone.AddListener(Wave);
+        gameManager.OnStartGame.AddListener(StartGame);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        InitSpawnEnemy();
-        GetPositionWhenStart();
-        Wave();
+      
     }
     // Update is called once per frame
     void Update()
     {
+        if (!isStartGame)
+            return;    
+    }
 
+    private void StartGame()
+    {
+        isStartGame = true;
+
+        InitSpawnEnemy();
+        GetPositionWhenStart();
+        Wave();
     }
 
     private void InitSpawnEnemy()
@@ -92,7 +102,7 @@ public class SpawnEnemy : MonoBehaviour
         {
             case 1:
                     randomEnemy = Random.Range(0,3);
-                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    Instantiate(enemySO.enemies[2].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                     Debug.Log(spawnPoint.transform.position);
                 break;
             case 2:

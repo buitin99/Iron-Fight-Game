@@ -26,9 +26,11 @@ protected enum ComboState
     private SoundManager soundManager;
     public LayerMask     playerLayer;
     public GameObject    playerRotation;
-    private bool turnRight, turnLeft;
+    private bool turnRight, turnLeft, isCanMove;
+    private bool isStartGame;
     public GameObject    leftHand, rightHand, rightLeg;
     public AudioClip    knockoutAudioClip;
+    private GameManager gameManager;
     [Range(0,1)] public float volumeScale;
     protected virtual void Awake()
     {
@@ -48,10 +50,20 @@ protected enum ComboState
 
         //prefabs 
         playerRotation = FindObjectOfType<CharacterController>().gameObject;
+        gameManager = GameManager.Instance;
+        isCanMove = true;
+    }
+
+    private void OnEnable() 
+    {
+        gameManager.OnStartGame.AddListener(StartGame);
     }
 
     protected virtual void Update()
     {
+        if (!isStartGame)
+            return;
+
         HandleAnimation();
     }
 
@@ -85,8 +97,15 @@ protected enum ComboState
 
     protected virtual void EnemyFollowPlayer()
     {
-        if(agent.remainingDistance <= agent.stoppingDistance) {
-            agent.SetDestination(playerRotation.transform.position);
+        if (!isCanMove)
+        {
+            agent.ResetPath();
+        }
+        else
+        {
+            if(agent.remainingDistance <= agent.stoppingDistance) {
+                agent.SetDestination(playerRotation.transform.position);
+            }
         }
     }
 
@@ -94,15 +113,19 @@ protected enum ComboState
     //Animator
     protected virtual void HandleAnimation()
     {   
-        Vector3 horizontalVelocity = new Vector3(agent.velocity.x, 0, agent.velocity.z);
-        float Velocity = horizontalVelocity.magnitude/agent.speed;
-        if(Velocity > 0) {
-            animator.SetFloat(velocityHash, Velocity);
-        } else {
-            float v = animator.GetFloat(velocityHash);
-            v = Mathf.Lerp(v, -0.1f, 20f * Time.deltaTime);
-            animator.SetFloat(velocityHash, v);
-        } 
+        if (isCanMove)
+        {
+            Vector3 horizontalVelocity = new Vector3(agent.velocity.x, 0, agent.velocity.z);
+            float Velocity = horizontalVelocity.magnitude/agent.speed;
+            if(Velocity > 0) {
+                animator.SetFloat(velocityHash, Velocity);
+            } else {
+                float v = animator.GetFloat(velocityHash);
+                v = Mathf.Lerp(v, -0.1f, 20f * Time.deltaTime);
+                animator.SetFloat(velocityHash, v);
+            }
+        }
+         
     }
 
 
@@ -185,8 +208,28 @@ protected enum ComboState
         rightLeg.SetActive(false);
     }
 
+    public void EnemyCanMove()
+    {
+        isCanMove = true;
+    }
+
+    public void EnemyCanNotMove()
+    {
+        isCanMove = false;
+    }
+
     public void PlaySoundKnockDown()
     {
         soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
+    }
+
+    private void StartGame()
+    {
+        isStartGame = true;
+    }
+
+    private void OnDisable() 
+    {
+        gameManager.OnStartGame.RemoveListener(StartGame);
     }
 }

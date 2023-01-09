@@ -8,12 +8,16 @@ public class UIManager : MonoBehaviour
     private int alert;
     private int non;
     private ScoreManager scoreManager;
+    private GameManager gameManager;
+
+    public GameObject playBtn;
     private void Awake() 
     {
         animator = GetComponent<Animator>();
         scoreManager = FindObjectOfType<ScoreManager>();
         alert = Animator.StringToHash("Next");
         non = Animator.StringToHash("Non");
+        gameManager = GameManager.Instance;
     }
 
     private void OnEnable() 
@@ -40,6 +44,12 @@ public class UIManager : MonoBehaviour
     private void AlertPlayer()
     {
         animator.SetTrigger(alert);
+    }
+
+    public void StartGame()
+    {
+        gameManager.StartGame();
+        playBtn.SetActive(false);
     }
 
     private void OnDisable() 

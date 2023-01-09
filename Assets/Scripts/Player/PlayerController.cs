@@ -59,10 +59,13 @@ public class PlayerController : MonoBehaviour
 
     public GameObject                   missilePos;
 
+    private GameManager gameManager;
+
     [Range(0,1)] public float volumeScale;
     private bool turnRight, turnLeft;
     private float health = 100f;
-    private bool  isDead, isLaser ,isAttack;
+    private bool  isDead, isLaser ,isCanMove;
+    private bool isStartGame;
     private SoundManager soundManager;
     private PlayerDamageable playerDamageable;
 
@@ -87,6 +90,7 @@ public class PlayerController : MonoBehaviour
         playerDamageable.setInit(200, 0);
 
         soundManager = SoundManager.Instance;
+        gameManager = GameManager.Instance;
     }
 
     // Start is called before the first frame update
@@ -95,6 +99,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         current_Combo_Timer = default_Combo_Timer;
         current_Combo_State = ComboState.NONE;
+        isCanMove = true;
     }
 
     private void OnEnable() 
@@ -106,19 +111,33 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Punch.started         += FlipAnimation;
         playerInputActions.Player.Chuong.started        += ChuongHandle;
         playerInputActions.Player.ChuongRocket.started  += ChuongRocket;
+
+        gameManager.OnStartGame.AddListener(StartGame);
+    }
+
+    private void StartGame()
+    {
+        isStartGame = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (!isStartGame)
+            return;
+
         if (!playerDamageable.isDead)
         {
-            Move();
-            HandleAnimation();
-            ResetComboState();
-            RotationLook();
-            HandleGravity(); 
+            if (!isLaser & !isCanMove)
+            {
+                Move();
+                RotationLook();
+                HandleGravity(); 
+            }
         }
+        HandleAnimation();
+        ResetComboState();
     }
 
     private void RotationLook()
@@ -150,13 +169,9 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        if (!isLaser & !isAttack)
-        {
-            Vector3 motionMove = direction*speed*Time.deltaTime;
-            Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
-            characterController.Move(motionMove + motionFall);
-        }
-    
+        Vector3 motionMove = direction*speed*Time.deltaTime;
+        Vector3 motionFall = Vector3.up*fallingVelocity*Time.deltaTime;
+        characterController.Move(motionMove + motionFall);
     }
 
     private void GetDirectionMove(InputAction.CallbackContext ctx) {
@@ -229,7 +244,6 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger(kickBHash);
         }
-        isAttack = true;
     }
 
     private void FlipAnimation(InputAction.CallbackContext ctx)
@@ -251,7 +265,6 @@ public class PlayerController : MonoBehaviour
                 current_Combo_Timer = default_Combo_Timer;
             }
         }
-        isAttack = false;
     }
 
     private void ChuongHandle(InputAction.CallbackContext ctx)
@@ -342,9 +355,14 @@ public class PlayerController : MonoBehaviour
         leftLeg.SetActive(false);
     }
 
-    public void SetAttackFalse()
+    public void PlayerCanMove()
     {
-        isAttack = false;
+        isCanMove = true;
+    }
+
+    public void PlayerCanNotMove()
+    {
+        isCanMove = false;
     }
 
     //Audio
