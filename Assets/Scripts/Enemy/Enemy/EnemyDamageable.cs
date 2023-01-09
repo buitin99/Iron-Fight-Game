@@ -137,6 +137,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     {
         OnEnemyDead?.Invoke();
         float t = Random.Range(1, 4);
+        Debug.Log(t);
         animator.SetFloat(stateDeath,t);
         ScoreManager.Instance.CountEnemy();
     }
