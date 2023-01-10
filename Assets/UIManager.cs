@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -11,6 +9,8 @@ public class UIManager : MonoBehaviour
     private GameManager gameManager;
 
     public GameObject playBtn;
+    public GameObject endBtn;
+    public GameObject playerGO;
     private void Awake() 
     {
         animator = GetComponent<Animator>();
@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     private void OnEnable() 
     {
         scoreManager.OnWaveDone.AddListener(AlertPlayer);
+        gameManager.OnEndGame.AddListener(EndGame);
     }
 
     // Start is called before the first frame update
@@ -46,14 +47,27 @@ public class UIManager : MonoBehaviour
         animator.SetTrigger(alert);
     }
 
+    public void ClickEndGame()
+    {
+        endBtn.SetActive(false);
+        // gameManager
+    }
+
     public void StartGame()
     {
         gameManager.StartGame();
         playBtn.SetActive(false);
+        playerGO.SetActive(false);
+    }
+
+    private void EndGame(bool isWin)
+    {
+        endBtn.SetActive(true);
     }
 
     private void OnDisable() 
     {
         scoreManager.OnWaveDone.RemoveListener(AlertPlayer);
+        gameManager.OnEndGame.RemoveListener(EndGame);
     }
 }

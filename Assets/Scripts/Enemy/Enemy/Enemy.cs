@@ -47,7 +47,6 @@ protected enum ComboState
         soundManager = SoundManager.Instance;
         agent.updateRotation =  false;
 
-
         //prefabs 
         playerRotation = FindObjectOfType<CharacterController>().gameObject;
         gameManager = GameManager.Instance;
@@ -223,7 +222,7 @@ protected enum ComboState
         soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
     }
 
-    private void StartGame()
+    private void StartGame(int level)
     {
         isStartGame = true;
     }

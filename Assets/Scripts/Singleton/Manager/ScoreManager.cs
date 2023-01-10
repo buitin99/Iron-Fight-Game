@@ -8,13 +8,17 @@ public class ScoreManager : Singleton<ScoreManager>
     public GameObject obWave1, obWave2;
     public UnityEvent OnWaveDone = new UnityEvent();
     private SpawnEnemy spawnEnemy;
+    private GameManager gameManager;
     private int score = 1;
     private int totalEnemy;
     private int _wave = 1;
+    private GameData gameData;
     protected override void Awake() 
     {
         base.Awake();
         spawnEnemy = FindObjectOfType<SpawnEnemy>();
+        gameManager = GameManager.Instance;
+        gameData = GameData.Load();
     }
     private void OnEnable() 
     {
@@ -52,6 +56,11 @@ public class ScoreManager : Singleton<ScoreManager>
         if (totalEnemy <= 0 && _wave <= 2)
         {
             WaveDone();
+        }
+        
+        if (_wave == 3 && totalEnemy == 0)
+        {
+            gameManager.EndGame(true);
         }
     }
 

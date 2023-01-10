@@ -8,20 +8,29 @@ public class GameManager : Singleton<GameManager>
 
     public UnityEvent<int> OnNextStep = new UnityEvent<int>();
     public UnityEvent OnNextLevel = new UnityEvent();
-    public UnityEvent OnStartGame = new UnityEvent();
+    public UnityEvent<int> OnStartGame = new UnityEvent<int>();
+    public UnityEvent<bool> OnEndGame = new UnityEvent<bool>();
+
     private GameData gameData;
+    private bool _isWin;
+    private int currentLevel;
 
     protected override void Awake() 
     {
         base.Awake();
         gameData = GameData.Load();
     }
+    
+    private void OnEnable() 
+    {
+        currentLevel = gameData.LastestLevel;
+    }
 
 
     private void Start() 
     {
         Application.targetFrameRate = 60;
-        // InitGame ();
+        gameData.Save();
     }
 
     public void InitGame ()
@@ -63,19 +72,23 @@ public class GameManager : Singleton<GameManager>
     }
 
     //Update Lastest Level
-    public void NextLevel()
-    {
-        OnNextLevel?.Invoke();
-    }
+    // public void NextLevel()
+    // {
+    //     OnNextLevel?.Invoke();
+    // }
 
     public void EndGame(bool isWin)
     {
-        NextLevel();
+        // NextLevel();
+        _isWin = isWin;
+        OnEndGame?.Invoke(_isWin);
+        currentLevel++;
+        gameData.levels.Add(currentLevel);
+        gameData.Save();
     }
 
     public void StartGame()
     {
-        OnStartGame?.Invoke();
+        OnStartGame?.Invoke(gameData.LastestLevel);
     }
-
 }

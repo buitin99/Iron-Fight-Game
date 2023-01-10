@@ -12,7 +12,6 @@ public class SpawnEnemy : MonoBehaviour
     private GameObject spawnPoint2;
 
     private List<GameObject> goSpawnList = new List<GameObject>();
-    private GameObject _enemy;
     public UnityEvent<int, int> OnTotalEnemy = new UnityEvent<int, int>();
     private int turn = 1;
     private int randomEnemy;
@@ -20,6 +19,7 @@ public class SpawnEnemy : MonoBehaviour
     private GameManager gameManager;
     private GameData gameData;
     private bool isStartGame;
+
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -45,7 +45,7 @@ public class SpawnEnemy : MonoBehaviour
             return;    
     }
 
-    private void StartGame()
+    private void StartGame(int level)
     {
         isStartGame = true;
 
@@ -57,8 +57,14 @@ public class SpawnEnemy : MonoBehaviour
     private void InitSpawnEnemy()
     {
         int i  = 0;
-        int k  = 0;
-        while (i < gameData.spawnPoints[gameData.LastestLevel])
+        int k  = 1;
+        
+        if (gameData.LastestLevel != 1)
+        {
+            k = gameData.totalPositionSpawnedEnemys[gameData.LastestLevel];
+        }
+
+        while (i < gameData.pointSpawnEnemys[gameData.LastestLevel])
         {
             GameObject go = new GameObject("go"+ i);
             int t = 0;
@@ -75,7 +81,7 @@ public class SpawnEnemy : MonoBehaviour
 
     private void GetPositionWhenStart()
     {
-        int temp = gameData.spawnPoints[gameData.LastestLevel] /gameData.totalEnemyinWave;
+        int temp = gameData.pointSpawnEnemys[gameData.LastestLevel] /gameData.totalEnemyinWave[gameData.LastestLevel];
 
         switch (temp)
         {
@@ -97,12 +103,12 @@ public class SpawnEnemy : MonoBehaviour
     public void Wave()
     {
         ChangePosSpawn();
-        int  r  = Random.Range(1,2);
+        int  r  = Random.Range(2,3);
         switch(r)
         {
             case 1:
                     randomEnemy = Random.Range(0,3);
-                    Instantiate(enemySO.enemies[2].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                     Debug.Log(spawnPoint.transform.position);
                 break;
             case 2:
@@ -138,6 +144,7 @@ public class SpawnEnemy : MonoBehaviour
     private void OnDisable() 
     {
         scoreManager.OnWaveDone.RemoveListener(Wave);
+        gameManager.OnStartGame.RemoveListener(StartGame);
     }
 
 }

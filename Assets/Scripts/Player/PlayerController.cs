@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
         gameManager.OnStartGame.AddListener(StartGame);
     }
 
-    private void StartGame()
+    private void StartGame(int level)
     {
         isStartGame = true;
     }
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
         if (!playerDamageable.isDead)
         {
-            if (!isLaser & !isCanMove)
+            if (!isLaser)
             {
                 Move();
                 RotationLook();

@@ -5,13 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public class GameData 
 {
-    public int spawnMaps;
-    public int totalEnemyinWave;
-    public List<int> levels;
-    public List<int> spawnPoints;
-
+    public List<int>   pointSpawnMaps;
+    public List<int>   totalEnemyinWave;
+    public List<int>   levels;
+    public List<int>   pointSpawnEnemys;
+    public List<int>   totalPositionSpawnedEnemys;
+    public List<int>   totalPositionSpawnedMaps;
     public List<float> positionPointsSpawn;
     public List<float> positionPointsMaps;
+
+
 
     public int LastestLevel {
         get {
@@ -20,15 +23,24 @@ public class GameData
     }
     public GameData()
     {
-        spawnMaps = 0;
-        totalEnemyinWave = 0;
-        spawnPoints = new List<int>();
+        totalPositionSpawnedEnemys = new List<int>();
+        totalPositionSpawnedMaps   = new List<int>();
+
+        pointSpawnMaps = new List<int>();
+        totalEnemyinWave = new List<int>();
+        pointSpawnEnemys = new List<int>();
         levels = new List<int>();
         positionPointsSpawn = new List<float>();
         positionPointsMaps = new List<float>();
-        spawnPoints.Add(0);
+
+        pointSpawnMaps.Add(0);
+        totalEnemyinWave.Add(0);
+        levels.Add(0);
+        pointSpawnEnemys.Add(0);
         positionPointsSpawn.Add(0);
         positionPointsMaps.Add(0);
+        totalPositionSpawnedEnemys.Add(0);
+        totalPositionSpawnedMaps.Add(0);
     }
 
     public void Save() {
