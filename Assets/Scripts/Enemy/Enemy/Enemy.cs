@@ -128,7 +128,7 @@ protected enum ComboState
     }
 
 
-    protected virtual void CameraShake()
+    public virtual void CameraShake()
     {
         CinemachineShake.Instance.ShakeCamera(5f, .1f);
     }
@@ -222,7 +222,7 @@ protected enum ComboState
         soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
     }
 
-    private void StartGame(int level)
+    private void StartGame()
     {
         isStartGame = true;
     }

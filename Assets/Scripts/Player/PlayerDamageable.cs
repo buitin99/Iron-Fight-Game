@@ -27,12 +27,12 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     {
         soundManager = SoundManager.Instance;
         playerController = GetComponent<PlayerController>();
-        deadHash            = Animator.StringToHash("Dead");
-        hitHash             = Animator.StringToHash("Hit");
-        knockDownHash       = Animator.StringToHash("KnockDown");
-        standUpHash       = Animator.StringToHash("StandUp");
-        animator        = GetComponent<Animator>();
-        stateDeath    = Animator.StringToHash("StateDeath");
+        deadHash         = Animator.StringToHash("Dead");
+        hitHash          = Animator.StringToHash("Hit");
+        knockDownHash    = Animator.StringToHash("KnockDown");
+        standUpHash      = Animator.StringToHash("StandUp");
+        animator         = GetComponent<Animator>();
+        stateDeath       = Animator.StringToHash("StateDeath");
     }
     // Start is called before the first frame update
     void Start()
@@ -77,24 +77,4 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         _health = health;
         healthBarRennder.CreateHealthBar(transform, health);
     }
-
-
-    // public void KnockDown()
-    // {
-    //     isKnockDown = true;
-    //     animator.SetTrigger(knockDownHash);
-    // }
-
-    // IEnumerator StandUpAfterTime()
-    // {
-    //     yield return new WaitForSeconds(standUpTimer);
-    //     isKnockDown = false;
-    //     animator.SetTrigger(standUpHash);
-
-    // }
-
-    // private void StandUp()
-    // {
-    //     StartCoroutine(StandUpAfterTime());
-    // }
 }

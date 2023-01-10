@@ -34,7 +34,7 @@ public class SpawnMaps : MonoBehaviour
 
     }
 
-    private void StartGame(int level)
+    private void StartGame()
     {
         isStartGame = true;
 

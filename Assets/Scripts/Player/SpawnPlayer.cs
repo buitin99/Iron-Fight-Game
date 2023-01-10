@@ -1,12 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class SpawnPlayer : MonoBehaviour
 {
-    public GameObject playerPrefab;
+    public PlayerSO playerSO;
     private GameManager gameManager;
-
+    private PlayerController playerController;
+    public CinemachineVirtualCamera vtcmr;
+    private Transform playerTransform;
+    private GameObject playerSpawn;
+    private GameObject player;
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -20,21 +23,26 @@ public class SpawnPlayer : MonoBehaviour
     private void OnEnable() 
     {
         gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnNextLevels.AddListener(DestroyPlayerGO);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void StartGame()
     {
-        
+        player = playerSO.player;
+        playerSpawn = Instantiate(player, new Vector3 (transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+        playerTransform = playerSpawn.transform;
+        vtcmr.Follow = playerTransform;
+        vtcmr.LookAt = playerTransform;
     }
 
-    private void StartGame(int level)
+    private void DestroyPlayerGO()
     {
-        Instantiate(playerPrefab, new Vector3 (transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+        Destroy(playerSpawn);
     }
 
     private void OnDisable() 
     {
         gameManager.OnStartGame.RemoveListener(StartGame);
+        gameManager.OnNextLevels.RemoveListener(DestroyPlayerGO);
     }
 }

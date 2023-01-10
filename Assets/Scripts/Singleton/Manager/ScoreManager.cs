@@ -23,6 +23,7 @@ public class ScoreManager : Singleton<ScoreManager>
     private void OnEnable() 
     {
         spawnEnemy.OnTotalEnemy.AddListener(TotalEnemy);
+        gameManager.OnStartGame.AddListener(StartGame);
     }
 
     public void TotalEnemy(int wave, int total)
@@ -70,8 +71,16 @@ public class ScoreManager : Singleton<ScoreManager>
         OnWaveDone?.Invoke();
     }
 
+    private void StartGame()
+    {
+        _wave = 1;
+        obWave1.SetActive(true);
+        obWave2.SetActive(true);
+    }
+
     private void OnDisable() 
     {
         spawnEnemy.OnTotalEnemy.RemoveListener(TotalEnemy);
+        gameManager.OnStartGame.AddListener(StartGame);
     }
 }

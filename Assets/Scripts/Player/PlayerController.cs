@@ -53,7 +53,6 @@ public class PlayerController : MonoBehaviour
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
     public AudioClip                    hitAudioClip, knockoutAudioClip, deadAudioClip;
     private UIManager ui;
-
     public LayerMask alertLayer;
     public GameObject                   missilePrefab;
 
@@ -65,7 +64,7 @@ public class PlayerController : MonoBehaviour
     private bool turnRight, turnLeft;
     private float health = 100f;
     private bool  isDead, isLaser ,isCanMove;
-    private bool isStartGame;
+    public bool isStartGame;
     private SoundManager soundManager;
     private PlayerDamageable playerDamageable;
 
@@ -105,6 +104,8 @@ public class PlayerController : MonoBehaviour
     private void OnEnable() 
     {
         playerInputActions.Enable();
+
+
         playerInputActions.Player.Move.performed        += GetDirectionMove;
         playerInputActions.Player.Move.canceled         += GetDirectionMove;
         playerInputActions.Player.Fire.started          += PunchAnimation;
@@ -115,7 +116,7 @@ public class PlayerController : MonoBehaviour
         gameManager.OnStartGame.AddListener(StartGame);
     }
 
-    private void StartGame(int level)
+    private void StartGame()
     {
         isStartGame = true;
     }
@@ -123,10 +124,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (!isStartGame)
-            return;
-
+        // Debug.Log (isStartGame);
+        // if (!isStartGame)
+        //     return;
+    
         if (!playerDamageable.isDead)
         {
             if (!isLaser)
@@ -134,6 +135,7 @@ public class PlayerController : MonoBehaviour
                 Move();
                 RotationLook();
                 HandleGravity(); 
+
             }
         }
         HandleAnimation();
@@ -397,5 +399,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.Fire.started          -= PunchAnimation;
         playerInputActions.Player.Chuong.started        -= ChuongHandle;
         playerInputActions.Player.ChuongRocket.started  -= ChuongRocket;
+
+        gameManager.OnStartGame.RemoveListener(StartGame);
     }
 }

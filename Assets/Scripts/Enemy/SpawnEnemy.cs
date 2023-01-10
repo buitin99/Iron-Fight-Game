@@ -41,27 +41,31 @@ public class SpawnEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isStartGame)
-            return;    
+        // if (!isStartGame)
+        //     return;    
     }
 
-    private void StartGame(int level)
+    private void StartGame()
     {
+        gameData = GameData.Load();
         isStartGame = true;
 
+        turn = 1;
         InitSpawnEnemy();
-        GetPositionWhenStart();
+        SetPositionWhenStart();
         Wave();
+
     }
 
     private void InitSpawnEnemy()
     {
+        Debug.Log(gameData.totalPositionSpawnedEnemys[gameData.LastestLevel]);
         int i  = 0;
         int k  = 1;
         
         if (gameData.LastestLevel != 1)
         {
-            k = gameData.totalPositionSpawnedEnemys[gameData.LastestLevel];
+            k = gameData.totalPositionSpawnedEnemys[gameData.LastestLevel-1] + 1;
         }
 
         while (i < gameData.pointSpawnEnemys[gameData.LastestLevel])
@@ -77,9 +81,10 @@ public class SpawnEnemy : MonoBehaviour
             goSpawnList.Add(go);
             i++;
         }
+        Debug.Log(gameData.totalPositionSpawnedEnemys[gameData.LastestLevel]);
     }
 
-    private void GetPositionWhenStart()
+    private void SetPositionWhenStart()
     {
         int temp = gameData.pointSpawnEnemys[gameData.LastestLevel] /gameData.totalEnemyinWave[gameData.LastestLevel];
 

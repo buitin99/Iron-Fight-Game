@@ -1,4 +1,5 @@
 using UnityEngine;
+using Cinemachine;
 
 public class UIManager : MonoBehaviour
 {  
@@ -8,9 +9,11 @@ public class UIManager : MonoBehaviour
     private ScoreManager scoreManager;
     private GameManager gameManager;
 
+    public CinemachineVirtualCamera vtcmr;
     public GameObject playBtn;
     public GameObject endBtn;
     public GameObject playerGO;
+    public GameObject ava;
     private void Awake() 
     {
         animator = GetComponent<Animator>();
@@ -24,6 +27,7 @@ public class UIManager : MonoBehaviour
     {
         scoreManager.OnWaveDone.AddListener(AlertPlayer);
         gameManager.OnEndGame.AddListener(EndGame);
+        gameManager.OnNextLevels.AddListener(NewGame);
     }
 
     // Start is called before the first frame update
@@ -50,11 +54,13 @@ public class UIManager : MonoBehaviour
     public void ClickEndGame()
     {
         endBtn.SetActive(false);
-        // gameManager
+        ava.SetActive(false);
+        gameManager.NextLevel();
     }
 
     public void StartGame()
     {
+        ava.SetActive(true);
         gameManager.StartGame();
         playBtn.SetActive(false);
         playerGO.SetActive(false);
@@ -62,12 +68,22 @@ public class UIManager : MonoBehaviour
 
     private void EndGame(bool isWin)
     {
+        ava.SetActive(false);
         endBtn.SetActive(true);
+    }
+
+    private void NewGame()
+    {
+        playBtn.SetActive(true);
+        playerGO.SetActive(true);
+        vtcmr.Follow = playerGO.transform;
+        vtcmr.LookAt = playerGO.transform;
     }
 
     private void OnDisable() 
     {
         scoreManager.OnWaveDone.RemoveListener(AlertPlayer);
         gameManager.OnEndGame.RemoveListener(EndGame);
+        gameManager.OnNextLevels.RemoveListener(NewGame);
     }
 }

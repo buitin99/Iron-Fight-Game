@@ -16,12 +16,6 @@ public class LoadScenes : MonoBehaviour
     {
         
     }
-
-    private void OnEnable() 
-    {
-        gameManager.OnNextLevel.AddListener(UpdateLastestLevel);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -31,10 +25,5 @@ public class LoadScenes : MonoBehaviour
     public void UpdateLastestLevel()
     {
         lastestLevel = GameData.Load().LastestLevel; 
-    }
-
-    private void OnDisable() 
-    {
-        gameManager.OnNextLevel.RemoveListener(UpdateLastestLevel);
     }
 }
