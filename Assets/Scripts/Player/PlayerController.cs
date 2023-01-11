@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
     
         if (!playerDamageable.isDead)
         {
-            if (!isLaser)
+            if (isCanMove & !isLaser)
             {
                 Move();
                 RotationLook();

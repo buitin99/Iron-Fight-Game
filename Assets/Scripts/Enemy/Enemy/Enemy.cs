@@ -32,6 +32,9 @@ protected enum ComboState
     public AudioClip    knockoutAudioClip;
     private GameManager gameManager;
     [Range(0,1)] public float volumeScale;
+    private float countTimeAttack = 3f;
+    protected bool isAttack;
+    protected bool isRangeZone;
     protected virtual void Awake()
     {
         agent         = GetComponent<NavMeshAgent>();
@@ -215,6 +218,16 @@ protected enum ComboState
     public void EnemyCanNotMove()
     {
         isCanMove = false;
+    }
+
+    public void EnemyAttacking()
+    {
+        isAttack = true;
+    }
+
+    public void EnemyNotAttacking()
+    {
+        isAttack = false;
     }
 
     public void PlaySoundKnockDown()

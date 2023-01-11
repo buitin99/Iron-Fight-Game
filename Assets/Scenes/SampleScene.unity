@@ -2886,6 +2886,9 @@ MonoBehaviour:
   playerGO: {fileID: 7127131742829853846}
   ava: {fileID: 1057251165}
   hitText: {fileID: 234102624}
+  hitGO: {fileID: 2031647264}
+  levelTxt: {fileID: 2097286131}
+  levelGO: {fileID: 2090405610}
 --- !u!1 &614558207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2937,6 +2940,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnNextLevels:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUpdateHealPlayerUI:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &637338362
@@ -3996,6 +4005,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnNextLevels:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUpdateHealPlayerUI:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &818859920
@@ -9100,9 +9115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73acd2016522ac144bf75a91531873b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnHit:
-    m_PersistentCalls:
-      m_Calls: []
   healthBarRennder:
     healthBar: {fileID: 3401809623928120375, guid: 9a20d0b8752573e47993860e81130a39,
       type: 3}
@@ -9121,6 +9133,9 @@ MonoBehaviour:
       m_Calls: []
   isMelee: 0
   isGunner: 0
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!195 &1547743084
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -11381,7 +11396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2031647265
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11519,7 +11534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2090405611
 RectTransform:
   m_ObjectHideFlags: 0

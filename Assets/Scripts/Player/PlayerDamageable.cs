@@ -3,9 +3,7 @@ using System.Collections;
 
 public class PlayerDamageable : MonoBehaviour, IDamageable
 {
-
     private float _health = 100;
-
     private SoundManager soundManager;
     public AudioClip audioClip, deathAudioClip;
     [Range(0,1)]
@@ -22,6 +20,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     private int                         stateDeath;
     private Animator                    animator;
     private float                       standUpTimer = 2f;
+    private GameManager gameManager;
 
     private void Awake() 
     {
@@ -33,6 +32,8 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         standUpHash      = Animator.StringToHash("StandUp");
         animator         = GetComponent<Animator>();
         stateDeath       = Animator.StringToHash("StateDeath");
+
+        gameManager = GameManager.Instance;
     }
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     }
     public void TakeDamge(float damage)
     {
+        gameManager.UpdateHealPlayerUI(damage);
         _health -= damage;
         healthBarRennder.UpdateHealthBarValue(_health);
         soundManager.PlayOneShot(audioClip);

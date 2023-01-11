@@ -19,6 +19,15 @@ public class UIManager : MonoBehaviour
     private SpawnMaps spawnMaps;
     public TMP_Text hitText;
     private int hitPoint;
+    public GameObject hitGO;
+    private EnemyDamageable enemyDamageable;
+    private float currentTimeCombo = 3f;
+    private bool isAttack;
+    public TMP_Text levelTxt;
+    public GameObject levelGO;
+    private GameData gameData;
+
+
     private void Awake() 
     {
         animator = GetComponent<Animator>();
@@ -35,7 +44,7 @@ public class UIManager : MonoBehaviour
         scoreManager.OnWaveDone.AddListener(AlertPlayer);
         gameManager.OnEndGame.AddListener(EndGame);
         gameManager.OnNextLevels.AddListener(NewGame);
-        gameManager.OnUpdateHitCombo.AddListener(DisplayHit);
+        gameManager.OnStartGame.AddListener(StartGameUI);
     }
 
     // Start is called before the first frame update
@@ -47,6 +56,10 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isAttack)
+        {
+            CountTimeCombo();
+        }
     }
 
     public void NonAlert()
@@ -66,10 +79,14 @@ public class UIManager : MonoBehaviour
         spawnEnemy.EndGame();
         spawnMaps.EndGame();
         gameManager.NextLevel();
+        levelGO.SetActive(false);
     }
 
     public void StartGame()
     {
+        gameData = GameData.Load();
+        levelTxt.text = "Level " + gameData.LastestLevel;
+        levelGO.SetActive(true);
         ava.SetActive(true);
         gameManager.StartGame();
         playBtn.SetActive(false);
@@ -78,22 +95,57 @@ public class UIManager : MonoBehaviour
 
     private void EndGame(bool isWin)
     {
+        NonAlert();
         ava.SetActive(false);
         endBtn.SetActive(true);
+        hitGO.SetActive(false);
     }
 
     private void NewGame()
     {
         playBtn.SetActive(true);
         playerGO.SetActive(true);
+        hitPoint = 0;
+        currentTimeCombo = 0f;
+        hitText.text = hitPoint + "hit";
         vtcmr.Follow = playerGO.transform;
         vtcmr.LookAt = playerGO.transform;
     }
 
     private void DisplayHit()
     {
-        hitPoint++;
-        hitText.text = hitPoint + "hit";
+        isAttack = true;
+        hitGO.SetActive(true);
+        currentTimeCombo = 3f;
+        if (isAttack)
+        {
+            hitPoint++;
+            hitText.text = hitPoint + "hit";
+        }
+    }
+
+    private void CountTimeCombo()
+    {
+        currentTimeCombo -= Time.deltaTime;
+        if (currentTimeCombo < 0)
+        {   
+            isAttack = false;
+            hitGO.SetActive(false);
+            hitPoint = 0;
+            hitText.text = hitPoint + "";
+        }
+    }
+
+
+    private void StartGameUI()
+    {
+        gameManager.OnHit.AddListener(DisplayHit);
+        gameManager.OnUpdateHealPlayerUI.AddListener(UpdateHealthUI);
+    }
+
+    private void UpdateHealthUI(float damage)
+    {
+        
     }
 
     private void OnDisable() 
@@ -101,6 +153,8 @@ public class UIManager : MonoBehaviour
         scoreManager.OnWaveDone.RemoveListener(AlertPlayer);
         gameManager.OnEndGame.RemoveListener(EndGame);
         gameManager.OnNextLevels.RemoveListener(NewGame);
-        gameManager.OnUpdateHitCombo.RemoveListener(DisplayHit);
+        gameManager.OnStartGame.RemoveListener(StartGameUI);
+        gameManager.OnHit.RemoveListener(DisplayHit);
+        gameManager.OnUpdateHealPlayerUI.RemoveListener(UpdateHealthUI);
     }
 }

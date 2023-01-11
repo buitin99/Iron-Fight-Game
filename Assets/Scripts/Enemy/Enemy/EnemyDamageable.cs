@@ -4,13 +4,11 @@ using UnityEngine.Events;
 using System.Collections;
 using UnityEngine.AI;
 
-public class EnemyDamageable : MonoBehaviour, IDamageable
+public class EnemyDamageable : MonoBehaviour, IDamageable 
 {
     private float _coinBonus;
     private float _health = 100;
     private float _knock = 0;
-
-    public UnityEvent OnHit = new UnityEvent();
 
     [SerializeField]
     private HealthBarRennder healthBarRennder = new HealthBarRennder();
@@ -38,7 +36,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private bool         knockBack;
     private NavMeshAgent agent;
     private GameManager gameManager;
-
+    public UnityEvent OnHit;
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
@@ -74,7 +72,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     private void StartGame()
     {
-        gameManager.OnUpdateHitCombo.AddListener(HitedUI);
     }
 
     // Update is called once per frame
@@ -91,16 +88,13 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         knockDownBarRennder.UpdateKnockDownBarRotation();
     }
 
-    private void HitedUI()
-    {
-        
-    }
-
     public void TakeDamge(float damage)
     {
         if (isDead)
             return;
 
+        gameManager.HitedInUI();
+        
         _health -= damage;
         healthBarRennder.UpdateHealthBarValue(_health);
         soundManager.PlayOneShot(audioClip);
@@ -187,7 +181,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private void OnDisable() 
     {
         gameManager.OnStartGame.RemoveListener(StartGame);
-        gameManager.OnUpdateHitCombo.RemoveListener(HitedUI);
     }
 
 

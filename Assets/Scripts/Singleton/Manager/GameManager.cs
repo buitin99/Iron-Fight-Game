@@ -8,12 +8,11 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnStartGame = new UnityEvent();
     public UnityEvent<bool> OnEndGame = new UnityEvent<bool>();
     public UnityEvent OnNextLevels = new UnityEvent();
-    public UnityEvent OnUpdateHitCombo = new UnityEvent();
-
+    public UnityEvent OnHit = new UnityEvent();
+    public UnityEvent<float> OnUpdateHealPlayerUI = new UnityEvent<float>();
     private GameData gameData;
     private bool _isWin;
     private int currentLevel;
-
     protected override void Awake() 
     {
         base.Awake();
@@ -24,7 +23,6 @@ public class GameManager : Singleton<GameManager>
     {
         currentLevel = gameData.LastestLevel;
     }
-
 
     private void Start() 
     {
@@ -51,8 +49,13 @@ public class GameManager : Singleton<GameManager>
         OnStartGame?.Invoke();
     }
 
-    public void DisplayHitInUI()
+    public void HitedInUI()
     {
-        OnUpdateHitCombo?.Invoke();
+        OnHit?.Invoke();
+    }
+
+    public void UpdateHealPlayerUI(float health)
+    {
+        OnUpdateHealPlayerUI?.Invoke(health);
     }
 }

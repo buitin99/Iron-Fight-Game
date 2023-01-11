@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MeleeEnemyController : Enemy
 {
+ 
     protected override void Update()
     {
         if (!enemyDamageable.isKnockDown && !enemyDamageable.isDead)
@@ -13,6 +14,13 @@ public class MeleeEnemyController : Enemy
             ResetComboState();
         }
         base.Update();
+
+        Debug.Log(isRangeZone);
+
+        if (isRangeZone && !isAttack)
+        {
+        }
+
     }
 
     protected virtual void OnTriggerStay(Collider other)
@@ -21,6 +29,15 @@ public class MeleeEnemyController : Enemy
         {
             ComboAttack();
             ResetComboState();
+            isRangeZone = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other) 
+    {
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
+        {
+            isRangeZone = false;
         }
     }
 
