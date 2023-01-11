@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnStartGame = new UnityEvent();
     public UnityEvent<bool> OnEndGame = new UnityEvent<bool>();
     public UnityEvent OnNextLevels = new UnityEvent();
+    public UnityEvent OnUpdateHitCombo = new UnityEvent();
 
     private GameData gameData;
     private bool _isWin;
@@ -48,5 +49,10 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         OnStartGame?.Invoke();
+    }
+
+    public void DisplayHitInUI()
+    {
+        OnUpdateHitCombo?.Invoke();
     }
 }

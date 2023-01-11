@@ -60,8 +60,8 @@ protected enum ComboState
 
     protected virtual void Update()
     {
-        if (!isStartGame)
-            return;
+        // if (!isStartGame)
+        //     return;
 
         HandleAnimation();
     }

@@ -37,7 +37,9 @@ public class SpawnMaps : MonoBehaviour
     private void StartGame()
     {
         isStartGame = true;
+        gameData = GameData.Load();
 
+        goSpawnSpriteList.Clear();
         InitSpawnSprite();
         SetPositionWhenStart();
     }
@@ -49,8 +51,10 @@ public class SpawnMaps : MonoBehaviour
 
         if (gameData.LastestLevel != 1)
         {
-            k = gameData.totalPositionSpawnedMaps[gameData.LastestLevel];
+            k = gameData.totalPositionSpawnedMaps[gameData.LastestLevel-1] + 2;
         }
+
+        Debug.Log(k);
         
         while (i < gameData.pointSpawnMaps[gameData.LastestLevel])
         {
@@ -67,8 +71,6 @@ public class SpawnMaps : MonoBehaviour
         }
     }
 
-
-
     private void SetPositionWhenStart()
     {
         int l = 0;
@@ -76,6 +78,20 @@ public class SpawnMaps : MonoBehaviour
         {
             Instantiate(spriteSO.sprites[0].sprite2D,goSpawnSpriteList[l].transform.position, Quaternion.identity);
             l++;
+        }
+    }
+
+    public void EndGame()
+    {
+        for (int n = 0; n < goSpawnSpriteList.Count; n++)
+        {
+            Destroy(goSpawnSpriteList[n].gameObject);
+        }
+
+        SpriteRenderer[] goSpriteRender = FindObjectsOfType<SpriteRenderer>();
+        for (int m = 0; m < goSpriteRender.Length; m++)
+        {
+            Destroy(goSpriteRender[m].gameObject);
         }
     }
 

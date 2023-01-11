@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.AI;
 
 public class SpawnEnemy : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class SpawnEnemy : MonoBehaviour
     public GameObject spawnPoint;
     public GameObject spawnPoint1;
     private GameObject spawnPoint2;
-
     private List<GameObject> goSpawnList = new List<GameObject>();
     public UnityEvent<int, int> OnTotalEnemy = new UnityEvent<int, int>();
     private int turn = 1;
@@ -51,6 +51,7 @@ public class SpawnEnemy : MonoBehaviour
         isStartGame = true;
 
         turn = 1;
+        goSpawnList.Clear();
         InitSpawnEnemy();
         SetPositionWhenStart();
         Wave();
@@ -59,7 +60,6 @@ public class SpawnEnemy : MonoBehaviour
 
     private void InitSpawnEnemy()
     {
-        Debug.Log(gameData.totalPositionSpawnedEnemys[gameData.LastestLevel]);
         int i  = 0;
         int k  = 1;
         
@@ -81,7 +81,6 @@ public class SpawnEnemy : MonoBehaviour
             goSpawnList.Add(go);
             i++;
         }
-        Debug.Log(gameData.totalPositionSpawnedEnemys[gameData.LastestLevel]);
     }
 
     private void SetPositionWhenStart()
@@ -143,6 +142,20 @@ public class SpawnEnemy : MonoBehaviour
                     spawnPoint.transform.position = goSpawnList[turn].transform.position;
                     spawnPoint1.transform.position = goSpawnList[turn+1].transform.position;
                 break;
+        }
+    }
+
+    public void EndGame()
+    {
+        for (int n = 0; n < goSpawnList.Count; n++)
+        {
+            Destroy(goSpawnList[n].gameObject);
+        }
+
+        NavMeshAgent[] goDestroy = FindObjectsOfType<NavMeshAgent>();
+        for (int m = 0; m < goDestroy.Length; m++)
+        {
+            Destroy(goDestroy[m].gameObject);
         }
     }
 

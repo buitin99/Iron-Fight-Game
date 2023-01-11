@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cinemachine;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {  
@@ -14,6 +15,10 @@ public class UIManager : MonoBehaviour
     public GameObject endBtn;
     public GameObject playerGO;
     public GameObject ava;
+    private SpawnEnemy spawnEnemy;
+    private SpawnMaps spawnMaps;
+    public TMP_Text hitText;
+    private int hitPoint;
     private void Awake() 
     {
         animator = GetComponent<Animator>();
@@ -21,6 +26,8 @@ public class UIManager : MonoBehaviour
         alert = Animator.StringToHash("Next");
         non = Animator.StringToHash("Non");
         gameManager = GameManager.Instance;
+        spawnEnemy = FindObjectOfType<SpawnEnemy>();
+        spawnMaps = FindObjectOfType<SpawnMaps>();
     }
 
     private void OnEnable() 
@@ -28,6 +35,7 @@ public class UIManager : MonoBehaviour
         scoreManager.OnWaveDone.AddListener(AlertPlayer);
         gameManager.OnEndGame.AddListener(EndGame);
         gameManager.OnNextLevels.AddListener(NewGame);
+        gameManager.OnUpdateHitCombo.AddListener(DisplayHit);
     }
 
     // Start is called before the first frame update
@@ -55,6 +63,8 @@ public class UIManager : MonoBehaviour
     {
         endBtn.SetActive(false);
         ava.SetActive(false);
+        spawnEnemy.EndGame();
+        spawnMaps.EndGame();
         gameManager.NextLevel();
     }
 
@@ -80,10 +90,17 @@ public class UIManager : MonoBehaviour
         vtcmr.LookAt = playerGO.transform;
     }
 
+    private void DisplayHit()
+    {
+        hitPoint++;
+        hitText.text = hitPoint + "hit";
+    }
+
     private void OnDisable() 
     {
         scoreManager.OnWaveDone.RemoveListener(AlertPlayer);
         gameManager.OnEndGame.RemoveListener(EndGame);
         gameManager.OnNextLevels.RemoveListener(NewGame);
+        gameManager.OnUpdateHitCombo.RemoveListener(DisplayHit);
     }
 }

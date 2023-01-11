@@ -9,6 +9,9 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private float _coinBonus;
     private float _health = 100;
     private float _knock = 0;
+
+    public UnityEvent OnHit = new UnityEvent();
+
     [SerializeField]
     private HealthBarRennder healthBarRennder = new HealthBarRennder();
 
@@ -34,10 +37,12 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private float        standUpTimer = 2f;
     private bool         knockBack;
     private NavMeshAgent agent;
+    private GameManager gameManager;
 
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
+        gameManager = GameManager.Instance;
         deadHash      = Animator.StringToHash("Dead");
         knockDownHash = Animator.StringToHash("KnockDown");
         hitHash       = Animator.StringToHash("Hit");
@@ -56,10 +61,20 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     }
 
+    private void OnEnable() 
+    {
+        gameManager.OnStartGame.AddListener(StartGame);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
 
+    }
+
+    private void StartGame()
+    {
+        gameManager.OnUpdateHitCombo.AddListener(HitedUI);
     }
 
     // Update is called once per frame
@@ -74,6 +89,11 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     {
         healthBarRennder.UpdateHealthBarRotation();
         knockDownBarRennder.UpdateKnockDownBarRotation();
+    }
+
+    private void HitedUI()
+    {
+        
     }
 
     public void TakeDamge(float damage)
@@ -137,7 +157,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     {
         OnEnemyDead?.Invoke();
         float t = Random.Range(1, 4);
-        Debug.Log(t);
         animator.SetFloat(stateDeath,t);
         ScoreManager.Instance.CountEnemy();
     }
@@ -164,5 +183,12 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         _knock = knock;
         knockDownBarRennder.CreateKnockDownBar(transform,knock);
     }
+    
+    private void OnDisable() 
+    {
+        gameManager.OnStartGame.RemoveListener(StartGame);
+        gameManager.OnUpdateHitCombo.RemoveListener(HitedUI);
+    }
+
 
 }
