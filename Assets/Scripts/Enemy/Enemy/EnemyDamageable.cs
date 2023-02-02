@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyDamageable : MonoBehaviour, IDamageable 
 {
-    private float _coinBonus;
+    private float _coinBonus = 10;
     private float _health = 100;
     private float _knock = 0;
 
@@ -36,11 +36,13 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private bool         knockBack;
     private NavMeshAgent agent;
     private GameManager gameManager;
+    private ObjectPooler objectPooler;
     public UnityEvent OnHit;
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
         gameManager = GameManager.Instance;
+        objectPooler = ObjectPooler.Instance;
         deadHash      = Animator.StringToHash("Dead");
         knockDownHash = Animator.StringToHash("KnockDown");
         hitHash       = Animator.StringToHash("Hit");
@@ -117,6 +119,11 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         {
             soundManager.PlayOneShot(deathAudioClip);
             Dead();
+            while (_coinBonus > 0)
+            {
+                objectPooler.SpawnObject("Money", transform.position, transform.rotation);
+                _coinBonus--;
+            }
             isDead = true;
             knockDownBarRennder.DestroyKnockDownBar();
             healthBarRennder.DestroyHealbar();

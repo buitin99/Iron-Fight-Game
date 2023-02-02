@@ -13,8 +13,7 @@ public class GameData
     public List<int>   totalPositionSpawnedMaps;
     public List<float> positionPointsSpawn;
     public List<float> positionPointsMaps;
-
-
+    public List<Vector3> pos;
 
     public int LastestLevel {
         get {

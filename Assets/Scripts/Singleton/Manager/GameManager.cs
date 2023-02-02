@@ -10,8 +10,11 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnNextLevels = new UnityEvent();
     public UnityEvent OnHit = new UnityEvent();
     public UnityEvent<float> OnUpdateHealPlayerUI = new UnityEvent<float>();
+    public UnityEvent<int, int> OnUpdateMoney = new UnityEvent<int, int>();
     private GameData gameData;
     private bool _isWin;
+    public int moneyCollected {get; private set;}
+
     private int currentLevel;
     protected override void Awake() 
     {
@@ -57,5 +60,11 @@ public class GameManager : Singleton<GameManager>
     public void UpdateHealPlayerUI(float health)
     {
         OnUpdateHealPlayerUI?.Invoke(health);
+    }
+
+    public void UpdateCurrency(int point, bool save = false)
+    {
+        moneyCollected += point;
+        OnUpdateMoney?.Invoke(moneyCollected, moneyCollected);
     }
 }

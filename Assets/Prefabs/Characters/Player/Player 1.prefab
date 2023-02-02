@@ -1010,6 +1010,7 @@ Transform:
   - {fileID: 3260964277261463336}
   - {fileID: 3260964277718509456}
   - {fileID: 6469994266222632151}
+  - {fileID: 4084987524297796038}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -1029,13 +1030,7 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'mixamorig:RightArm'\n\tTransform 'mixamorig:LeftShoulder'\n\tTransform
-    'mixamorig:LeftArm'\n\tTransform 'mixamorig:RightHand'\n\tTransform 'mixamorig:RightShoulder'\n\tTransform
-    'mixamorig:LeftForeArm'\n\tTransform 'mixamorig:RightForeArm'\n\tTransform 'mixamorig:LeftHand'\n\tTransform
-    'mixamorig:RightArm'\n\tTransform 'mixamorig:LeftShoulder'\n\tand more ...\n\tFrom
-    animation clip 'PunchB'\n\tFrom animation clip 'PunchAB'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -1100,7 +1095,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  direction: {x: 0, y: 0, z: 0}
   handRig: {fileID: 3260964278601369525}
   chuongVFX: {fileID: 3260964277691373947}
   chuongObject: {fileID: 3260964277318223912}
@@ -1108,15 +1102,12 @@ MonoBehaviour:
   leftHand: {fileID: 3260964277229597411}
   rightLeg: {fileID: 3260964277886515199}
   leftLeg: {fileID: 3260964277212853026}
-  hitAudioClip: {fileID: 8300000, guid: 1f596d47af3609e4cadb24e9b82209c7, type: 3}
   knockoutAudioClip: {fileID: 8300000, guid: 95d6faa1c23d81d4381fb68be2db0cb7, type: 3}
-  deadAudioClip: {fileID: 8300000, guid: 9408f26d2e6aefe48b814e09f3bb5eca, type: 3}
   alertLayer:
     serializedVersion: 2
     m_Bits: 4096
-  missilePrefab: {fileID: 0}
-  missilePos: {fileID: 3260964278242580525}
   volumeScale: 0.9
+  isStartGame: 0
 --- !u!114 &3260964278710437299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3615,6 +3606,67 @@ Transform:
   m_Father: {fileID: 8610074812360214065}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5156808768204829135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4084987524297796038}
+  - component: {fileID: 6347028858123713559}
+  - component: {fileID: 8598652243180153835}
+  m_Layer: 6
+  m_Name: CollectItems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4084987524297796038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5156808768204829135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3083836300199670809}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6347028858123713559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5156808768204829135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7af597d31b1931429bc5923bc1d93f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!135 &8598652243180153835
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5156808768204829135}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5333981766424793238
 GameObject:
   m_ObjectHideFlags: 0

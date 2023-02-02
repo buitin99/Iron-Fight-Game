@@ -44,7 +44,7 @@ protected enum ComboState
         enemyDamageable = GetComponentInChildren<EnemyDamageable>();
 
         cam = Camera.main;
-        enemyDamageable.setInit(100, 0);
+        enemyDamageable.setInit(100, 10);
         enemyDamageable.setInitKnockDown(0);
 
         soundManager = SoundManager.Instance;

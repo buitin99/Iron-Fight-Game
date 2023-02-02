@@ -14,9 +14,6 @@ public class MeleeEnemyController : Enemy
             ResetComboState();
         }
         base.Update();
-
-        Debug.Log(isRangeZone);
-
         if (isRangeZone && !isAttack)
         {
         }

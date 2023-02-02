@@ -46,17 +46,17 @@ public class PlayerController : MonoBehaviour
     private ComboState                  current_Combo_State;
     private float                       chuongTimer = 3f;
 
-    public Vector3                      direction;
+    private Vector3                      direction;
     public Rig                          handRig;
     public ParticleSystem               chuongVFX;
     public GameObject                   chuongObject;
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
-    public AudioClip                    hitAudioClip, knockoutAudioClip, deadAudioClip;
+    public AudioClip                    knockoutAudioClip;
     private UIManager ui;
     public LayerMask alertLayer;
-    public GameObject                   missilePrefab;
+    // public GameObject                   missilePrefab;
 
-    public GameObject                   missilePos;
+    // public GameObject                   missilePos;
 
     private GameManager gameManager;
 
@@ -278,7 +278,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChuongRocket(InputAction.CallbackContext ctx)
     {
-        Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
+        // Instantiate(missilePrefab, missilePos.transform.position, missilePos.transform.rotation);
     }
     protected virtual void CameraShake()
     {
@@ -368,15 +368,15 @@ public class PlayerController : MonoBehaviour
     }
 
     //Audio
-    private void PlayHitSound()
-    {
-        soundManager.PlayOneShot(hitAudioClip, volumeScale);
-    }
+    // private void PlayHitSound()
+    // {
+    //     soundManager.PlayOneShot(hitAudioClip, volumeScale);
+    // }
 
-    private void PlaySoundDead()
-    {
-        soundManager.PlayOneShot(deadAudioClip, volumeScale);
-    }
+    // private void PlaySoundDead()
+    // {
+    //     soundManager.PlayOneShot(deadAudioClip, volumeScale);
+    // }
 
     public void PlaySoundKnockDonw()
     {

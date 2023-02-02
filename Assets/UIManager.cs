@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cinemachine;
+using System.Collections.Generic;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -27,6 +28,12 @@ public class UIManager : MonoBehaviour
     public GameObject levelGO;
     private GameData gameData;
 
+    // Settings
+    public List<GameObject> settingBtnLists;
+    public List<GameObject> backgroundList;
+
+    // Video Player
+    private UnityEngine.Video.VideoPlayer videoPlayer;
 
     private void Awake() 
     {
@@ -37,6 +44,7 @@ public class UIManager : MonoBehaviour
         gameManager = GameManager.Instance;
         spawnEnemy = FindObjectOfType<SpawnEnemy>();
         spawnMaps = FindObjectOfType<SpawnMaps>();
+        videoPlayer = FindObjectOfType<UnityEngine.Video.VideoPlayer>();
     }
 
     private void OnEnable() 
@@ -146,6 +154,32 @@ public class UIManager : MonoBehaviour
     private void UpdateHealthUI(float damage)
     {
         
+    }
+
+    public void ClickButtonInSettings(int id)
+    {
+        for (int i = 0; i < settingBtnLists.Count; i++)
+        {
+            backgroundList[i].gameObject.SetActive(false);
+        }
+        backgroundList[id].gameObject.SetActive(true);
+    }
+
+    public void ClickButtonSettings(int id)
+    {
+        backgroundList[id].gameObject.SetActive(true);
+        ClickButtonInSettings(0);
+    }
+
+    public void ClickBackButton(int id)
+    {
+        backgroundList[id].gameObject.SetActive(false);
+    }
+
+    public void ShowVideoSkill(int id)
+    {
+        string url = "C:/Users/OS/Tin_Project/Iron Fight Game/Assets/Video/" + id + ".mp4";
+        videoPlayer.url = url;
     }
 
     private void OnDisable() 

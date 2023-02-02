@@ -81,6 +81,6 @@ public class ScoreManager : Singleton<ScoreManager>
     private void OnDisable() 
     {
         spawnEnemy.OnTotalEnemy.RemoveListener(TotalEnemy);
-        gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnStartGame.RemoveListener(StartGame);
     }
 }
