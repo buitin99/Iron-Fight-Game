@@ -12,13 +12,13 @@ public class CurrencyBonus : MonoBehaviour
     private Rigidbody rb;
     private GameManager gameManager;
     private SoundManager soundManager;
-    private ObjectPooler objectPooler;
+    // private ObjectPooler objectPooler;
 
     private void Awake() 
     {
         gameManager = GameManager.Instance;
         soundManager = SoundManager.Instance;
-        objectPooler = ObjectPooler.Instance;
+        // objectPooler = ObjectPooler.Instance;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -35,7 +35,7 @@ public class CurrencyBonus : MonoBehaviour
     {
         if ((layerMask & (1 << other.gameObject.layer)) != 0)
         {
-            objectPooler.InactiveObject("Money", gameObject);
+            // objectPooler.InactiveObject("Money", gameObject);
             soundManager.PlayOneShot(audioClip, volumeScale);
         }
     }

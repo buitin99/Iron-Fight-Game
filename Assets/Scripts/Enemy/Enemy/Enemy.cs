@@ -130,7 +130,6 @@ protected enum ComboState
          
     }
 
-
     public virtual void CameraShake()
     {
         CinemachineShake.Instance.ShakeCamera(5f, .1f);

@@ -5,61 +5,46 @@ using UnityEngine.Events;
 
 public class ScoreManager : Singleton<ScoreManager>
 {
-    public GameObject obWave1, obWave2;
-    public UnityEvent OnWaveDone = new UnityEvent();
-    private SpawnEnemy spawnEnemy;
-    private GameManager gameManager;
     private int score = 1;
-    private int totalEnemy;
-    private int _wave = 1;
-    private GameData gameData;
+    private int wave = 1;
+    private int totalEnemies;
+    private int totalWaves;
+
+    //Game
+    private GameManager gameManager;
+    private SpawnMap    spawnMap;
+
     protected override void Awake() 
     {
         base.Awake();
-        spawnEnemy = FindObjectOfType<SpawnEnemy>();
         gameManager = GameManager.Instance;
-        gameData = GameData.Load();
+        spawnMap    = FindObjectOfType<SpawnMap>();
     }
     private void OnEnable() 
     {
-        spawnEnemy.OnTotalEnemy.AddListener(TotalEnemy);
         gameManager.OnStartGame.AddListener(StartGame);
     }
 
-    public void TotalEnemy(int wave, int total)
+    private void StartGame()
     {
-        totalEnemy = total;
-        WaveOb(_wave);
+        spawnMap.OnInforWave.AddListener(InforMap);
     }
 
-    private void WaveOb(int wave)
+    public void InforMap(int enemy, int wave)
     {
-        switch(wave)
-        {
-            case 1:
-                break;
-            case 2:
-                obWave1.SetActive(false);
-                break;
-            case 3:
-                // obWave1.SetActive(true);
-                obWave2.SetActive(false);
-                break;
-            default:
-                break;
-        }
+        totalEnemies = enemy;
+        totalWaves   = wave;
     }
-
 
     public void CountEnemy()
     {
-        totalEnemy -= score;
-        if (totalEnemy <= 0 && _wave <= 2)
+        totalEnemies -= score;
+        if (totalEnemies <= 0 && wave <= totalWaves)
         {
             WaveDone();
         }
         
-        if (_wave == 3 && totalEnemy == 0)
+        if (wave == 3 && totalWaves == 0)
         {
             gameManager.EndGame(true);
         }
@@ -67,20 +52,12 @@ public class ScoreManager : Singleton<ScoreManager>
 
     private void WaveDone()
     {   
-        _wave++;
-        OnWaveDone?.Invoke();
-    }
-
-    private void StartGame()
-    {
-        _wave = 1;
-        obWave1.SetActive(true);
-        obWave2.SetActive(true);
+        wave++;
     }
 
     private void OnDisable() 
     {
-        spawnEnemy.OnTotalEnemy.RemoveListener(TotalEnemy);
         gameManager.OnStartGame.RemoveListener(StartGame);
+        spawnMap.OnInforWave.RemoveListener(InforMap);
     }
 }

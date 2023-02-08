@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class SpawnEnemy : MonoBehaviour
 {
     [SerializeField]
-    private  ScriptableInfo enemySO;
+    // private  ScriptableInfo enemySO;
     public GameObject spawnPoint;
     public GameObject spawnPoint1;
     private GameObject spawnPoint2;
@@ -15,7 +15,7 @@ public class SpawnEnemy : MonoBehaviour
     public UnityEvent<int, int> OnTotalEnemy = new UnityEvent<int, int>();
     private int turn = 1;
     private int randomEnemy;
-    private ScoreManager scoreManager;
+    // private ScoreManager scoreManager;
     private GameManager gameManager;
     private GameData gameData;
     private bool isStartGame;
@@ -23,13 +23,13 @@ public class SpawnEnemy : MonoBehaviour
     private void Awake() 
     {
         gameManager = GameManager.Instance;
-        scoreManager = FindObjectOfType<ScoreManager>();
+        // scoreManager = FindObjectOfType<ScoreManager>();
         gameData = GameData.Load();
     }
 
     private void OnEnable() 
     {
-        scoreManager.OnWaveDone.AddListener(Wave);
+        // scoreManager.OnWaveDone.AddListener(Wave);
         gameManager.OnStartGame.AddListener(StartGame);
     }
 
@@ -112,14 +112,14 @@ public class SpawnEnemy : MonoBehaviour
         {
             case 1:
                     randomEnemy = Random.Range(0,3);
-                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    // Instantiate(enemySO.enemies[0].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                     Debug.Log(spawnPoint.transform.position);
                 break;
             case 2:
                     randomEnemy = Random.Range(0,3);
-                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    // Instantiate(enemySO.enemies[0].enemy, new Vector3 (spawnPoint.transform.position.x,spawnPoint.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                     randomEnemy = Random.Range(0,3);
-                    Instantiate(enemySO.enemies[randomEnemy].enemy, new Vector3 (spawnPoint1.transform.position.x,spawnPoint1.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
+                    // Instantiate(enemySO.enemies[0].enemy, new Vector3 (spawnPoint1.transform.position.x,spawnPoint1.transform.position.y, Random.Range(-6.1f, 7.1f)), Quaternion.identity);
                 break;
             default:
                 break;
@@ -161,7 +161,7 @@ public class SpawnEnemy : MonoBehaviour
 
     private void OnDisable() 
     {
-        scoreManager.OnWaveDone.RemoveListener(Wave);
+        // scoreManager.OnWaveDone.RemoveListener(Wave);
         gameManager.OnStartGame.RemoveListener(StartGame);
     }
 

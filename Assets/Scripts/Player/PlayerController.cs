@@ -387,7 +387,7 @@ public class PlayerController : MonoBehaviour
     {
         if ((alertLayer & (1 << other.gameObject.layer)) != 0)
         {  
-            ui.NonAlert();
+            // ui.NonAlert();
         }
     }
 

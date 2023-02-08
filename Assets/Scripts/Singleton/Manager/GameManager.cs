@@ -14,12 +14,22 @@ public class GameManager : Singleton<GameManager>
     private GameData gameData;
     private bool _isWin;
     public int moneyCollected {get; private set;}
-
     private int currentLevel;
+
+    //V2
+    private GameDatas gameDatas;
+
+    public bool flag;
+
+
+    //Event Enemy
+    public UnityEvent<Transform> OnDetectedPlayer = new UnityEvent<Transform>();
+
     protected override void Awake() 
     {
         base.Awake();
         gameData = GameData.Load();
+        gameDatas = GameDatas.LoadData();
     }
     
     private void OnEnable() 
@@ -42,7 +52,7 @@ public class GameManager : Singleton<GameManager>
     {
         _isWin = isWin;
         OnEndGame?.Invoke(_isWin);
-        currentLevel++;
+        // currentLevel++;
         gameData.levels.Add(currentLevel);
         gameData.Save();
     }
@@ -66,5 +76,10 @@ public class GameManager : Singleton<GameManager>
     {
         moneyCollected += point;
         OnUpdateMoney?.Invoke(moneyCollected, moneyCollected);
+    }
+
+    public void DetectedPlayer(Transform player)
+    {
+        OnDetectedPlayer?.Invoke(player);
     }
 }

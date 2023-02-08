@@ -35,14 +35,14 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private float        standUpTimer = 2f;
     private bool         knockBack;
     private NavMeshAgent agent;
-    private GameManager gameManager;
-    private ObjectPooler objectPooler;
-    public UnityEvent OnHit;
+    private GameManager gameManager;  
+
+    //Game
+    private ControlMap controlMap;
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
         gameManager = GameManager.Instance;
-        objectPooler = ObjectPooler.Instance;
         deadHash      = Animator.StringToHash("Dead");
         knockDownHash = Animator.StringToHash("KnockDown");
         hitHash       = Animator.StringToHash("Hit");
@@ -64,6 +64,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private void OnEnable() 
     {
         gameManager.OnStartGame.AddListener(StartGame);
+        controlMap = FindObjectOfType<ControlMap>();
     }
 
     // Start is called before the first frame update
@@ -121,7 +122,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
             Dead();
             while (_coinBonus > 0)
             {
-                objectPooler.SpawnObject("Money", transform.position, transform.rotation);
                 _coinBonus--;
             }
             isDead = true;
@@ -160,6 +160,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         float t = Random.Range(1, 4);
         animator.SetFloat(stateDeath,t);
         ScoreManager.Instance.CountEnemy();
+        controlMap.EnemyCount();
     }
     
     protected virtual void StandUp()

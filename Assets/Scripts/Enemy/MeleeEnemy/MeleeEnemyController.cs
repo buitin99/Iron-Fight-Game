@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class MeleeEnemyController : Enemy
 {
- 
+    private GameManager gameManager;
+    protected override void Awake() 
+    {
+        base.Awake();
+        gameManager = GameManager.Instance;
+    }
     protected override void Update()
     {
         if (!enemyDamageable.isKnockDown && !enemyDamageable.isDead)
@@ -27,6 +32,7 @@ public class MeleeEnemyController : Enemy
             ComboAttack();
             ResetComboState();
             isRangeZone = true;
+            gameManager.DetectedPlayer(other.transform);
         }
     }
 

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a48f21bf930b6f34aa815f2d64d5bee4, type: 3}
+  m_Name: ScriptableLevels
+  m_EditorClassIdentifier: 
+  levels:
+  - key: Example
+    totalWaves: 0
+    totalEnemies: 0
+    enemyInWave: 0
+    totalSprites: 0
+    positionSpawnEnemiesList: []
+    positionSpawnSpritesList: []
+    positionSpawnPlaneList: []
+  - key: Level1
+    totalWaves: 3
+    totalEnemies: 6
+    enemyInWave: 2
+    totalSprites: 2
+    positionSpawnEnemiesList:
+    - {x: -22.06218, y: 1, z: 3.8349037}
+    - {x: -25.139973, y: 1, z: -7.722391}
+    - {x: 7.7489023, y: 1, z: 6.0225487}
+    - {x: 12.942284, y: 1, z: -7.2105165}
+    - {x: 51.000187, y: 1, z: -8.325451}
+    - {x: 56.831966, y: 1, z: 1.8944769}
+    positionSpawnSpritesList:
+    - {x: -62.7364, y: 0, z: -45.473164}
+    - {x: -45.13836, y: 0, z: -31.50091}
+    positionSpawnPlaneList:
+    - {x: 0, y: 0, z: 0}
+    - {x: 35, y: 0, z: 0}
