@@ -465,9 +465,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846985327231564024}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -46.3, y: 0.1, z: -3.73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -53.7, y: 1.0149575, z: -0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8717270881206051593}
@@ -564,6 +564,7 @@ MonoBehaviour:
   rightLeg: {fileID: 1540414206031749384}
   leftLeg: {fileID: 1540414206090000389}
   knockoutAudioClip: {fileID: 8300000, guid: 95d6faa1c23d81d4381fb68be2db0cb7, type: 3}
+  deadAudioClip: {fileID: 8300000, guid: 9408f26d2e6aefe48b814e09f3bb5eca, type: 3}
   alertLayer:
     serializedVersion: 2
     m_Bits: 4096
@@ -589,7 +590,7 @@ MonoBehaviour:
   healthBarRennder:
     healthBar: {fileID: 3401809623928120375, guid: e4f9db63c5e3a0145a6fe67185a58356,
       type: 3}
-    offset: 2.2
+    offset: 3.2
 --- !u!1 &1902109021702134691
 GameObject:
   m_ObjectHideFlags: 0

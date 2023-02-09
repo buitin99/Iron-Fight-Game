@@ -23,6 +23,93 @@ MonoBehaviour:
     positionSpawnPlaneList: []
   - key: Level1
     totalWaves: 3
+    totalEnemies: 3
+    enemyInWave: 1
+    totalSprites: 2
+    positionSpawnEnemiesList:
+    - {x: -22.06218, y: 1, z: 3.8349037}
+    - {x: 7.748902, y: 1, z: 6.022549}
+    - {x: 51.00019, y: 1, z: -8.325451}
+    positionSpawnSpritesList:
+    - {x: -62.7364, y: 0, z: -45.473164}
+    - {x: -45.13836, y: 0, z: -31.50091}
+    positionSpawnPlaneList:
+    - {x: 0, y: 0, z: 0}
+    - {x: 35, y: 0, z: 0}
+  - key: Level2
+    totalWaves: 3
+    totalEnemies: 6
+    enemyInWave: 2
+    totalSprites: 2
+    positionSpawnEnemiesList:
+    - {x: -22.06218, y: 1, z: 3.8349037}
+    - {x: -66.978546, y: 1, z: -10.490385}
+    - {x: 7.7489023, y: 1, z: 6.0225487}
+    - {x: 12.942284, y: 1, z: -7.2105165}
+    - {x: 51.000187, y: 1, z: -8.325451}
+    - {x: 56.831966, y: 1, z: 1.8944769}
+    positionSpawnSpritesList:
+    - {x: -62.7364, y: 0, z: -45.473164}
+    - {x: -45.13836, y: 0, z: -31.50091}
+    positionSpawnPlaneList:
+    - {x: 0, y: 0, z: 0}
+    - {x: 35, y: 0, z: 0}
+  - key: Level3
+    totalWaves: 3
+    totalEnemies: 6
+    enemyInWave: 2
+    totalSprites: 2
+    positionSpawnEnemiesList:
+    - {x: -22.06218, y: 1, z: 3.8349037}
+    - {x: -25.139973, y: 1, z: -7.722391}
+    - {x: 7.7489023, y: 1, z: 6.0225487}
+    - {x: 12.942284, y: 1, z: -7.2105165}
+    - {x: 51.000187, y: 1, z: -8.325451}
+    - {x: 56.831966, y: 1, z: 1.8944769}
+    positionSpawnSpritesList:
+    - {x: -62.7364, y: 0, z: -45.473164}
+    - {x: -45.13836, y: 0, z: -31.50091}
+    positionSpawnPlaneList:
+    - {x: 0, y: 0, z: 0}
+    - {x: 35, y: 0, z: 0}
+  - key: Level4
+    totalWaves: 3
+    totalEnemies: 6
+    enemyInWave: 2
+    totalSprites: 2
+    positionSpawnEnemiesList:
+    - {x: -22.06218, y: 1, z: 3.8349037}
+    - {x: -25.139973, y: 1, z: -7.722391}
+    - {x: 7.7489023, y: 1, z: 6.0225487}
+    - {x: 12.942284, y: 1, z: -7.2105165}
+    - {x: 51.000187, y: 1, z: -8.325451}
+    - {x: 56.831966, y: 1, z: 1.8944769}
+    positionSpawnSpritesList:
+    - {x: -62.7364, y: 0, z: -45.473164}
+    - {x: -45.13836, y: 0, z: -31.50091}
+    positionSpawnPlaneList:
+    - {x: 0, y: 0, z: 0}
+    - {x: 35, y: 0, z: 0}
+  - key: Level5
+    totalWaves: 3
+    totalEnemies: 6
+    enemyInWave: 2
+    totalSprites: 2
+    positionSpawnEnemiesList:
+    - {x: -22.06218, y: 1, z: 3.8349037}
+    - {x: -25.139973, y: 1, z: -7.722391}
+    - {x: 7.7489023, y: 1, z: 6.0225487}
+    - {x: 12.942284, y: 1, z: -7.2105165}
+    - {x: 51.000187, y: 1, z: -8.325451}
+    - {x: 56.831966, y: 1, z: 1.8944769}
+    positionSpawnSpritesList:
+    - {x: -62.7364, y: 0, z: -45.473164}
+    - {x: -45.13836, y: 0, z: -31.50091}
+    positionSpawnPlaneList:
+    - {x: 0, y: 0, z: 0}
+    - {x: 35, y: 0, z: 0}
+  - key: Level6
+    totalWaves: 3
     totalEnemies: 6
     enemyInWave: 2
     totalSprites: 2

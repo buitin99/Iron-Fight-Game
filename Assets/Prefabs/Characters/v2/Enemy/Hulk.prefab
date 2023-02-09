@@ -1907,13 +1907,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7425161828136527833}
+  - component: {fileID: 8983732748608179857}
+  - component: {fileID: 2943600026781691932}
   m_Layer: 0
   m_Name: Left Hand Punch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7425161828136527833
 Transform:
   m_ObjectHideFlags: 0
@@ -1929,6 +1931,34 @@ Transform:
   m_Father: {fileID: 4411026796705694705}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &8983732748608179857
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425161828136527830}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0.2, z: 0.1}
+--- !u!114 &2943600026781691932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425161828136527830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3839f4d36f0874948842f8d845f927ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &7425161828760603717
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,13 +1968,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7425161828760603716}
+  - component: {fileID: 3241917512860883471}
+  - component: {fileID: 6723989640540529570}
   m_Layer: 0
   m_Name: Right Hand Punch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7425161828760603716
 Transform:
   m_ObjectHideFlags: 0
@@ -1960,6 +1992,34 @@ Transform:
   m_Father: {fileID: 9132971967812872698}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3241917512860883471
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425161828760603717}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0.2, z: 0.1}
+--- !u!114 &6723989640540529570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425161828760603717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3839f4d36f0874948842f8d845f927ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &7425161829440383207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1969,13 +2029,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7425161829440383206}
+  - component: {fileID: 305380998833168448}
+  - component: {fileID: 3787962421728981896}
   m_Layer: 0
   m_Name: Right Leg Kick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7425161829440383206
 Transform:
   m_ObjectHideFlags: 0
@@ -1991,6 +2053,34 @@ Transform:
   m_Father: {fileID: 3101188611267877096}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &305380998833168448
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425161829440383207}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0.5, z: 0.1}
+--- !u!114 &3787962421728981896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425161829440383207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3839f4d36f0874948842f8d845f927ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &7434295398696753355
 GameObject:
   m_ObjectHideFlags: 0
@@ -2104,7 +2194,7 @@ GameObject:
   - component: {fileID: 7425161829321397816}
   - component: {fileID: 7425161829321397818}
   - component: {fileID: 7425161829321397821}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hulk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2119,7 +2209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7767038675341339491}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2155,7 +2245,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.6
+  m_Radius: 1
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!136 &7425161829321397819
 CapsuleCollider:
@@ -2212,7 +2302,9 @@ MonoBehaviour:
   rightHand: {fileID: 7425161828760603717}
   rightLeg: {fileID: 7425161829440383207}
   knockoutAudioClip: {fileID: 8300000, guid: 95d6faa1c23d81d4381fb68be2db0cb7, type: 3}
+  deadAudioClip: {fileID: 8300000, guid: ba5dbe0db2ece9648b0e370dacdbd1f0, type: 3}
   volumeScale: 0.9
+  attackState: 0
 --- !u!195 &7425161829321397818
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2222,12 +2314,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 7767038675341339491}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.01
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1
+  m_StoppingDistance: 2.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -2250,11 +2342,11 @@ MonoBehaviour:
   healthBarRennder:
     healthBar: {fileID: 3401809623928120375, guid: bc80eee84f8d7234b8853d0f57ed41b3,
       type: 3}
-    offset: 3
+    offset: 3.2
   knockDownBarRennder:
     knockDownBar: {fileID: 3401809623928120375, guid: b8423247d505ff0438ec50daafe22c38,
       type: 3}
-    offset: 1.65
+    offset: 2.95
   audioClip: {fileID: 8300000, guid: 522528d4c49ced7429151b7c4a0e1fd8, type: 3}
   deathAudioClip: {fileID: 8300000, guid: ba5dbe0db2ece9648b0e370dacdbd1f0, type: 3}
   volumeScale: 0.9
@@ -2265,9 +2357,6 @@ MonoBehaviour:
       m_Calls: []
   isMelee: 1
   isGunner: 0
-  OnHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8127596261364999865
 GameObject:
   m_ObjectHideFlags: 0

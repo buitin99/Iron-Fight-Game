@@ -59,6 +59,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         if (_health <= 0 && !isDead)
         {
             soundManager.PlayOneShot(deathAudioClip);
+            gameManager.PlayerDead();
             PlayerDead();
         }
     }
@@ -66,8 +67,8 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     public void PlayerDead()
     {
         isDead = true;
-        float t = Random.Range(1, 4);
-        animator.SetFloat(stateDeath,t);
+        // float t = Random.Range(1, 4);
+        animator.SetFloat(stateDeath,1);
     }
 
     public void Hited()

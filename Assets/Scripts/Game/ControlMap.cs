@@ -17,11 +17,13 @@ public class ControlMap : MonoBehaviour
     private int               indexEnemies;
 
     private List<EnemyDamageable>    enemyList = new List<EnemyDamageable>();
-    private List<PlanePrefab>    planeList = new List<PlanePrefab>();
+    private List<PlanePrefab>        planeList = new List<PlanePrefab>();
 
 
     //Game
     private UIManager ui;
+
+    private PlayUI    playUi;
 
     private void Awake() 
     {
@@ -33,6 +35,7 @@ public class ControlMap : MonoBehaviour
         gameManager.OnStartGame.AddListener(StartGame);
         spawnMap = FindObjectOfType<SpawnMap>();
         ui       = FindObjectOfType<UIManager>();
+        gameManager.OnPlayerDead.AddListener(LoseGame);
     }
 
     // Start is called before the first frame update
@@ -94,6 +97,7 @@ public class ControlMap : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         SetActiveEnemy(enemyInLevel);
+        playUi = FindObjectOfType<PlayUI>();
     }
 
     public void EnemyCount()
@@ -107,6 +111,7 @@ public class ControlMap : MonoBehaviour
         if (enemies == 0 && waves == totalWave)
         {
             gameManager.EndGame(true);
+            EndGame();
             ui.playUI.SetActive(false);
             ui.endUI.SetActive(true);
         }
@@ -128,6 +133,31 @@ public class ControlMap : MonoBehaviour
         planeList[indexPlanes].gameObject.SetActive(false);
         indexPlanes++;
         SetActiveEnemy(indexEnemies);
+        playUi.PreviousAnimation(true);
+    }
+
+    private void LoseGame()
+    {
+        gameManager.EndGame(false);
+        EndGame();
+        ui.StatusGame();
+    }
+
+    private void EndGame()
+    {
+        spawnMap.ClearMap();
+        enemyList.Clear();
+        planeList.Clear();
+
+        for(int k = 0; k < enemyDamageables.Length; k++)
+        {
+            Destroy(enemyDamageables[k].gameObject);
+        }
+
+        for(int l = 0; l < planes.Length; l++)
+        {
+            Destroy(planes[l].gameObject);
+        }
     }
 
     private void OnDisable() 
@@ -135,5 +165,7 @@ public class ControlMap : MonoBehaviour
         gameManager.OnStartGame.RemoveListener(StartGame);
         spawnMap.OnSpawnMapDone.RemoveListener(CotrolEnemy);
         spawnMap.OnInforWave.RemoveListener(MapInfo);
+        gameManager.OnPlayerDead.RemoveListener(LoseGame);
+
     }
 }

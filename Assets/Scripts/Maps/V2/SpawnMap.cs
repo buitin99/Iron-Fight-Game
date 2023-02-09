@@ -8,6 +8,8 @@ public class SpawnMap : MonoBehaviour
 {
     //Scriptable
     [SerializeField]
+    private ScriptablePlayersObject player;
+    [SerializeField]
     private ScriptableEnemiesObject enemy;
     [SerializeField]
     private ScriptableSpritesObject sprite;
@@ -35,17 +37,22 @@ public class SpawnMap : MonoBehaviour
     public UnityEvent<int, int> OnInforWave = new UnityEvent<int, int>();
     public UnityEvent           OnSpawnMapDone = new UnityEvent();
 
-    //
-    private EnemyDamageable[]   enemyDamageables;
-
     private int level;
     private int turn = 1;
+
+    //Player
+    public GameObject playerGO;
+    public GameObject posPlayer;
+
+    private CharacterController  characterController;
 
     private void Awake() 
     {
         gameData     = GameDatas.LoadData();
         gameManager  = GameManager.Instance;
         // scoreManager = ScoreManager.Instance;
+
+        characterController = FindObjectOfType<CharacterController>();
     }
 
     private void OnEnable() 
@@ -161,11 +168,7 @@ public class SpawnMap : MonoBehaviour
         SpawnInitPlane(level);
         SpawnInitPositionSpawnPoint(level);
         OnInforWave?.Invoke(levelSO.levels[level].totalEnemies, levelSO.levels[level].totalWaves);
-        enemyDamageables = FindObjectsOfType<EnemyDamageable>();
-        foreach (var item in enemyDamageables)
-        {
-            // Debug.Log(item.transform.position);
-        } 
+        Instantiate(player.players[0].player, player.players[0].player.transform.position, player.players[0].player.transform.rotation);
     }
 
     private void EndGame(int level)
@@ -173,6 +176,34 @@ public class SpawnMap : MonoBehaviour
         gameData = GameDatas.LoadData();
         gameData.totalLevel.Add(level);
         gameData.SaveData();
+    }
+
+    public void ClearMap()
+    {
+        for (int a = 0; a < goSpawnSprites.Count; a++)
+        {
+            Destroy(goSpawnSprites[a].gameObject);
+        }
+
+        for (int b = 0; b < goSpawnPlanes.Count; b++)
+        {
+            Destroy(goSpawnPlanes[b].gameObject);
+        }
+
+        for (int c = 0; c < goSpawnPoints.Count; c++)
+        {
+            Destroy(goSpawnPoints[c].gameObject);
+        }
+
+        for (int d = 0; d < goSpawnEnemy.Count; d++)
+        {
+            Destroy(goSpawnEnemy[d].gameObject);
+        }
+
+        goSpawnSprites.Clear();
+        goSpawnPlanes.Clear();
+        goSpawnPoints.Clear();
+        goSpawnEnemy.Clear();
     }
 
 

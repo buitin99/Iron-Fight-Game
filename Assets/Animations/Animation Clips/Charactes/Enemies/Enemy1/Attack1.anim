@@ -28339,7 +28339,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: EnemyCanNotMove
+    functionName: EnemyCanMove
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -28360,7 +28360,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.5
-    functionName: LeftHandAttackFalse
+    functionName: RightLegAttackFalse
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

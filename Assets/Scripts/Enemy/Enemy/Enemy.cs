@@ -14,6 +14,7 @@ protected enum ComboState
     KICK
 }
     private int             velocityHash;
+    private int             isPlayerDeadHash;
     protected int           attackHash;
     protected NavMeshAgent  agent;
     private bool            activeTimerToReset;
@@ -30,17 +31,23 @@ protected enum ComboState
     private bool isStartGame;
     public GameObject    leftHand, rightHand, rightLeg;
     public AudioClip    knockoutAudioClip;
+    public AudioClip    deadAudioClip;
     private GameManager gameManager;
     [Range(0,1)] public float volumeScale;
     private float countTimeAttack = 3f;
     protected bool isAttack;
     protected bool isRangeZone;
+
+    //09-02
+    protected bool isDeadPlayer;
+
     protected virtual void Awake()
     {
         agent         = GetComponent<NavMeshAgent>();
         animator      = GetComponent<Animator>();
         velocityHash  = Animator.StringToHash("Velocity");
         attackHash    = Animator.StringToHash("Attack");  
+        isPlayerDeadHash  = Animator.StringToHash("isPlayerDead");
         enemyDamageable = GetComponentInChildren<EnemyDamageable>();
 
         cam = Camera.main;
@@ -51,7 +58,6 @@ protected enum ComboState
         agent.updateRotation =  false;
 
         //prefabs 
-        playerRotation = FindObjectOfType<CharacterController>().gameObject;
         gameManager = GameManager.Instance;
         isCanMove = true;
     }
@@ -59,13 +65,15 @@ protected enum ComboState
     private void OnEnable() 
     {
         gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnDetectedPlayer.AddListener(AttackPlayer);
+        gameManager.OnPlayerDead.AddListener(PlayerDead);
     }
 
     protected virtual void Update()
     {
         // if (!isStartGame)
         //     return;
-
+        playerRotation = FindObjectOfType<CharacterController>().gameObject;
         HandleAnimation();
     }
 
@@ -137,11 +145,10 @@ protected enum ComboState
 
     protected virtual void ComboAttack()
     {
-
         //3-1-2023 k co code nay
         // if (current_Combo_State == ComboState.KICK)
         //     return;
-
+        new WaitForSeconds(10f);
         current_Combo_State++;
         activeTimerToReset = true;
         current_Combo_Timer = default_Combo_Timer;
@@ -234,13 +241,37 @@ protected enum ComboState
         soundManager.PlayOneShot(knockoutAudioClip, volumeScale);
     }
 
+    public void PlaySoundDead()
+    {
+        soundManager.PlayOneShot(deadAudioClip, volumeScale);
+    }
+
     private void StartGame()
     {
         isStartGame = true;
     }
 
+    private void AttackPlayer(Transform player)
+    {
+        if (!enemyDamageable.isDead)
+        {
+            agent.SetDestination(player.transform.position);
+        } else if (enemyDamageable.isDead)
+        {
+            agent.isStopped = true;
+        }
+    }
+
+    protected void PlayerDead()
+    {
+        animator.SetBool(isPlayerDeadHash, true);
+        isDeadPlayer = true;
+    }
+
     private void OnDisable() 
     {
         gameManager.OnStartGame.RemoveListener(StartGame);
+        gameManager.OnDetectedPlayer.RemoveListener(AttackPlayer);
+        gameManager.OnPlayerDead.RemoveListener(PlayerDead);
     }
 }

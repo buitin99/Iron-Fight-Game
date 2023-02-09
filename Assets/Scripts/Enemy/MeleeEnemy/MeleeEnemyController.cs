@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class MeleeEnemyController : Enemy
 {
+    public enum AttackState {
+        IDLE,
+        ATTACK
+    }
+    public AttackState attackState;
     private GameManager gameManager;
     protected override void Awake() 
     {
         base.Awake();
         gameManager = GameManager.Instance;
     }
+
     protected override void Update()
     {
         if (!enemyDamageable.isKnockDown && !enemyDamageable.isDead)
@@ -19,8 +25,17 @@ public class MeleeEnemyController : Enemy
             ResetComboState();
         }
         base.Update();
-        if (isRangeZone && !isAttack)
+        if(attackState == AttackState.ATTACK && !isAttack) {
+
+            ComboAttack();
+            // ResetComboState();
+        }
+    }
+    private void OnTriggerEnter(Collider other) 
+    {
+        if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
+            attackState = AttackState.ATTACK;
         }
 
     }
@@ -29,10 +44,12 @@ public class MeleeEnemyController : Enemy
     { 
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
-            ComboAttack();
-            ResetComboState();
-            isRangeZone = true;
             gameManager.DetectedPlayer(other.transform);
+            if (!isAttack && !isDeadPlayer)
+            {
+                // ResetComboState();
+                ComboAttack();
+            }
         }
     }
 
@@ -40,8 +57,7 @@ public class MeleeEnemyController : Enemy
     {
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
-            isRangeZone = false;
+            attackState = AttackState.IDLE;
         }
     }
-
 }

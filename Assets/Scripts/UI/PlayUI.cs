@@ -14,12 +14,19 @@ public class PlayUI : MonoBehaviour
 
     public GameObject delayLoading;
 
+
+    //Animator
+    private Animator    animator;
+    private int         previousHash;
+
     //Manager
     private GameManager gameManager;
 
     private void Awake() 
     {
         gameManager = GameManager.Instance;
+        animator    = GetComponent<Animator>();
+        previousHash= Animator.StringToHash("isAactive");
     }
 
     private void OnEnable() 
@@ -43,5 +50,8 @@ public class PlayUI : MonoBehaviour
         
     }
 
-
+    public void PreviousAnimation(bool isAactive)
+    {
+        animator.SetBool(previousHash, isAactive);
+    }
 }

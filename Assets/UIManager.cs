@@ -7,8 +7,8 @@ using UnityEngine.Events;
 
 public class UIManager : MonoBehaviour
 {  
+    public CinemachineVirtualCamera cinemachine;
     public GameObject cameraPlay;
-
     public GameObject startUI;
     public GameObject playUI;
     public GameObject endUI;
@@ -16,8 +16,12 @@ public class UIManager : MonoBehaviour
     public GameObject heroUI;
     public GameObject delayLoading;
 
-
     private GameManager gameManager;
+
+    //Player Camera
+    private GameObject  player;
+
+    private bool        isPlay;
 
     private void Awake() 
     {
@@ -36,11 +40,17 @@ public class UIManager : MonoBehaviour
         startUI.SetActive(false);
         StartCoroutine(DeylayLoading());
         playUI.SetActive(true);
+        isPlay = true;
     }
 
     public void EndGame()
     {
         cameraPlay.SetActive(false);
+        startUI.SetActive(true);
+        endUI.SetActive(false);
+        StartCoroutine(DeylayLoading());
+        isPlay = false;
+        Destroy(player);
     }
 
 
@@ -49,6 +59,21 @@ public class UIManager : MonoBehaviour
         delayLoading.SetActive(true);
         yield return new WaitForSeconds(2f);
         delayLoading.SetActive(false);
+
+        //09-02 Null Exception
+        if (isPlay)
+        {
+            player = FindObjectOfType<CharacterController>().gameObject;
+            cinemachine.LookAt = player.transform;
+            cinemachine.Follow = player.transform;
+        }
+    }
+
+    //Call When Lose Or Win
+    public void StatusGame()
+    {
+        playUI.SetActive(false);
+        endUI.SetActive(true);
     }
 
     private void OnDisable() 

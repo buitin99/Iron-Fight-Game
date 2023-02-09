@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
     public GameObject                   chuongObject;
     public GameObject                   rightHand, leftHand, rightLeg, leftLeg;
     public AudioClip                    knockoutAudioClip;
+    public AudioClip                    deadAudioClip;
     private UIManager ui;
     public LayerMask alertLayer;
     // public GameObject                   missilePrefab;
@@ -373,10 +374,10 @@ public class PlayerController : MonoBehaviour
     //     soundManager.PlayOneShot(hitAudioClip, volumeScale);
     // }
 
-    // private void PlaySoundDead()
-    // {
-    //     soundManager.PlayOneShot(deadAudioClip, volumeScale);
-    // }
+    private void PlaySoundDead()
+    {
+        soundManager.PlayOneShot(deadAudioClip, volumeScale);
+    }
 
     public void PlaySoundKnockDonw()
     {
