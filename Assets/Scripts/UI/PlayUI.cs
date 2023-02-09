@@ -18,7 +18,6 @@ public class PlayUI : MonoBehaviour
     //Animator
     private Animator    animator;
     private int         previousHash;
-
     //Manager
     private GameManager gameManager;
 

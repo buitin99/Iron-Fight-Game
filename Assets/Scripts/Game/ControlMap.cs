@@ -143,7 +143,7 @@ public class ControlMap : MonoBehaviour
         ui.StatusGame();
     }
 
-    private void EndGame()
+    public void EndGame()
     {
         spawnMap.ClearMap();
         enemyList.Clear();

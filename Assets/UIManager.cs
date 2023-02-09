@@ -23,6 +23,12 @@ public class UIManager : MonoBehaviour
 
     private bool        isPlay;
 
+    //Hit Combo
+    public TMP_Text     hitTxt;
+    private int         hitPoint;
+    private float       currentTimeCombo = 3f;
+    private bool        isAttack;
+
     private void Awake() 
     {
         gameManager = GameManager.Instance;
@@ -31,6 +37,15 @@ public class UIManager : MonoBehaviour
     private void OnEnable() 
     {
         gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnHit.AddListener(DisplayHit);
+    }
+
+    private void Update() 
+    {
+        if (isAttack)
+        {
+            CountTimeCombo();
+        }
     }
 
 
@@ -41,6 +56,9 @@ public class UIManager : MonoBehaviour
         StartCoroutine(DeylayLoading());
         playUI.SetActive(true);
         isPlay = true;
+        currentTimeCombo = 0f;
+        hitTxt.text = "";
+
     }
 
     public void EndGame()
@@ -76,9 +94,32 @@ public class UIManager : MonoBehaviour
         endUI.SetActive(true);
     }
 
+    private void DisplayHit()
+    {
+        isAttack = true;
+        currentTimeCombo = 3f;
+        if (isAttack)
+        {
+            hitPoint++;
+            hitTxt.text = hitPoint + " hit";
+        }
+    }
+
+    private void CountTimeCombo()
+    {
+        currentTimeCombo -= Time.deltaTime;
+        if (currentTimeCombo < 0)
+        {
+            isAttack = false;
+            hitPoint = 0;
+            hitTxt.text = "";
+        }
+    }
+
     private void OnDisable() 
     {
         gameManager.OnStartGame.RemoveListener(StartGame);
+        gameManager.OnHit.RemoveListener(DisplayHit);
     }
 
     

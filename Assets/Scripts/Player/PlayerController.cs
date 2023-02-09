@@ -115,6 +115,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.ChuongRocket.started  += ChuongRocket;
 
         gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnEndGame.AddListener(SetPositionHealthBar);
     }
 
     private void StartGame()
@@ -392,6 +393,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void SetPositionHealthBar(bool isWin)
+    {
+        if (isWin)
+        {
+            playerDamageable.PositionHealthBar();
+        }
+    }
+
     private void OnDisable() 
     {
         playerInputActions.Player.Move.performed        -= GetDirectionMove;
@@ -402,5 +411,7 @@ public class PlayerController : MonoBehaviour
         playerInputActions.Player.ChuongRocket.started  -= ChuongRocket;
 
         gameManager.OnStartGame.RemoveListener(StartGame);
+        gameManager.OnEndGame.RemoveListener(SetPositionHealthBar);
+
     }
 }

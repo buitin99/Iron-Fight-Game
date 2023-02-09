@@ -66,6 +66,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
 
     public void PlayerDead()
     {
+        PositionHealthBar();
         isDead = true;
         // float t = Random.Range(1, 4);
         animator.SetFloat(stateDeath,1);
@@ -79,5 +80,10 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     public void setInit(float health, float coinBonus) {
         _health = health;
         healthBarRennder.CreateHealthBar(transform, health);
+    }
+
+    public void PositionHealthBar()
+    {
+        healthBarRennder.offset = 1000000f;
     }
 }

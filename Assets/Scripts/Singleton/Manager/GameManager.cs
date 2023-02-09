@@ -22,6 +22,8 @@ public class GameManager : Singleton<GameManager>
     //Event Enemy
     public UnityEvent<Transform> OnDetectedPlayer = new UnityEvent<Transform>();
     public UnityEvent            OnPlayerDead     = new UnityEvent();
+    public UnityEvent            OnPasueGame      = new UnityEvent();
+    public UnityEvent            OnResumeGame     = new UnityEvent();
 
     protected override void Awake() 
     {
@@ -95,5 +97,17 @@ public class GameManager : Singleton<GameManager>
     public void PlayerDead()
     {
         OnPlayerDead?.Invoke();
+    }
+
+    public void PauseGame()
+    {
+        OnPasueGame?.Invoke();
+        Time.timeScale = 0;
+    }
+
+    public void ResumeGame()
+    {
+        OnResumeGame?.Invoke();
+        Time.timeScale = 1;
     }
 }
