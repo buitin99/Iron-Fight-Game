@@ -11,8 +11,9 @@ public class PlayUI : MonoBehaviour
     public GameObject moneyTxt;
     public GameObject previousImg;
     public GameObject hitImg;
-
     public GameObject delayLoading;
+    public TMP_Text    levelTxt;
+    private GameDatas  gameDatas;
 
 
     //Animator
@@ -31,6 +32,9 @@ public class PlayUI : MonoBehaviour
     private void OnEnable() 
     {   
         gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnHit.AddListener(NonPreviousAnimation);
+        gameDatas = GameDatas.LoadData();
+        levelTxt.text = "Level " + gameDatas.LastestLevel;
     }
     // Start is called before the first frame update
     void Start()
@@ -46,11 +50,23 @@ public class PlayUI : MonoBehaviour
 
     private void StartGame()
     {
-        
+        // PreviousAnimation(false);
     }
 
     public void PreviousAnimation(bool isAactive)
     {
         animator.SetBool(previousHash, isAactive);
+    }
+
+    public void NonPreviousAnimation()
+    {
+        animator.SetBool(previousHash, false);
+    }
+
+    private void OnDisable() 
+    {
+        gameManager.OnStartGame.AddListener(StartGame);
+        gameManager.OnHit.AddListener(NonPreviousAnimation);
+        PreviousAnimation(false);
     }
 }

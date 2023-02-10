@@ -110,10 +110,11 @@ public class ControlMap : MonoBehaviour
 
         if (enemies == 0 && waves == totalWave)
         {
-            gameManager.EndGame(true);
             EndGame();
             ui.playUI.SetActive(false);
             ui.endUI.SetActive(true);
+            gameManager.EndGame(true);
+            ui.StatusGame();
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class StartUI : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class StartUI : MonoBehaviour
     public GameObject shopBtn;
     public GameObject heroBtn;
     public GameObject newPlayBtn;
-    public GameObject moneyTxt;
+    public TMP_Text   moneyTxt;
 
     public GameObject delayLoading;
 
@@ -32,6 +33,8 @@ public class StartUI : MonoBehaviour
     private void OnEnable() 
     {
         gameManager.OnStartGame.AddListener(StartGame);
+        gameDatas = GameDatas.LoadData();
+        moneyTxt.text = "" + gameDatas.gold + "G";
     }
 
 

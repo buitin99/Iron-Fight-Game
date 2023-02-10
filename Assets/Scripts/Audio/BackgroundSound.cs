@@ -19,6 +19,7 @@ public class BackgroundSound : MonoBehaviour
 
     private void OnEnable() 
     {
+        soundManager.OnMute.AddListener(MuteGame);
         gameManager.OnEndGame.AddListener(OnEndGame);
     }
 
@@ -52,9 +53,16 @@ public class BackgroundSound : MonoBehaviour
         audioSource.Play();
     }
 
+    private void MuteGame(bool mute)
+    {
+        audioSource.mute = mute;
+    }
+
     private void OnDisable() 
     {
         gameManager.OnEndGame.RemoveListener(OnEndGame);
+        soundManager.OnMute.RemoveListener(MuteGame);
+
     }
 
 
