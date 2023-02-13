@@ -71,9 +71,10 @@ protected enum ComboState
 
     protected virtual void Update()
     {
-        // if (!isStartGame)
-        //     return;
-        playerRotation = FindObjectOfType<CharacterController>().gameObject;
+        if (!ControlMap.isActive)
+        {
+            playerRotation = FindObjectOfType<CharacterController>().gameObject;
+        }
         HandleAnimation();
     }
 
@@ -113,7 +114,7 @@ protected enum ComboState
         }
         else
         {
-            if(agent.remainingDistance <= agent.stoppingDistance) {
+            if(agent.remainingDistance <= agent.stoppingDistance && !ControlMap.isActive) {
                 agent.SetDestination(playerRotation.transform.position);
             }
         }
@@ -262,11 +263,13 @@ protected enum ComboState
         }
     }
 
-    protected void PlayerDead()
+    protected void PlayerDead(Transform playerPos)
     {
-        animator.SetBool(isPlayerDeadHash, true);
+        // animator.SetBool(isPlayerDeadHash, true);
         isDeadPlayer = true;
+        agent.SetDestination( new Vector3(playerPos.transform.position.x, playerPos.transform.position.y, playerPos.transform.position.z+2f));
     }
+
 
     private void OnDisable() 
     {

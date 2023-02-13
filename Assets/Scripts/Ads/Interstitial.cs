@@ -127,7 +127,7 @@ using System.Collections;
 
         void AdLoaded(object sender, EventArgs e)
         {
-            btnPlayAgain.SetActive(true);
+            // btnPlayAgain.SetActive(true);
             // pannelLoading.SetActive(false);
         }
 

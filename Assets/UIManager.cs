@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
     private void OnEnable() 
     {
 
-        audioManager.MuteGame(settingData.mute);
+        // audioManager.MuteGame(settingData.mute);
         gameManager.OnStartGame.AddListener(StartGame);
         gameManager.OnHit.AddListener(DisplayHit);
         gameManager.OnEndGame.AddListener(AlertEndGame);
@@ -83,7 +83,6 @@ public class UIManager : MonoBehaviour
         isPlay = true;
         currentTimeCombo = 0f;
         hitTxt.text = "";
-
     }
 
     public void EndGame()

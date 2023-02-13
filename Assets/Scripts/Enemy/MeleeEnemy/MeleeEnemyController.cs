@@ -25,6 +25,10 @@ public class MeleeEnemyController : Enemy
             ResetComboState();
         }
         base.Update();
+
+        if (isDeadPlayer)
+            return;
+
         if(attackState == AttackState.ATTACK && !isAttack) {
 
             ComboAttack();

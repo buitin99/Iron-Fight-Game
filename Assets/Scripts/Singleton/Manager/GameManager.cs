@@ -19,9 +19,11 @@ public class GameManager : Singleton<GameManager>
     //V2
     private GameDatas gameDatas;
 
+    private PlayerController playerController;
+
     //Event Enemy
     public UnityEvent<Transform> OnDetectedPlayer = new UnityEvent<Transform>();
-    public UnityEvent            OnPlayerDead     = new UnityEvent();
+    public UnityEvent<Transform> OnPlayerDead     = new UnityEvent<Transform>();
     public UnityEvent            OnPasueGame      = new UnityEvent();
     public UnityEvent            OnResumeGame     = new UnityEvent();
 
@@ -52,12 +54,6 @@ public class GameManager : Singleton<GameManager>
     {
         _isWin = isWin;
         OnEndGame?.Invoke(_isWin);
-        // currentLevel++;
-        // gameData.levels.Add(currentLevel);
-        // gameData.Save();
-        // gameDatas = GameDatas.LoadData();
-        // int currentLevel = gameDatas.LastestLevel;
-        // gameDatas
         gameDatas = GameDatas.LoadData();
         if (isWin)
         {
@@ -71,6 +67,7 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         OnStartGame?.Invoke();
+        playerController = FindObjectOfType<PlayerController>();
     }
 
     public void HitedInUI()
@@ -96,7 +93,7 @@ public class GameManager : Singleton<GameManager>
 
     public void PlayerDead()
     {
-        OnPlayerDead?.Invoke();
+        OnPlayerDead?.Invoke(playerController.transform);
     }
 
     public void PauseGame()

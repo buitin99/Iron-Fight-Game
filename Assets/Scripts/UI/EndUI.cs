@@ -18,6 +18,10 @@ public class EndUI : MonoBehaviour
     public GameObject  resetBtn;
     public GameObject  menuBtn;
 
+    public GameObject  pannelWin;
+    public GameObject  pannelLose;
+
+
     private void Awake() 
     {
         uiManager = FindObjectOfType<UIManager>();
@@ -50,15 +54,11 @@ public class EndUI : MonoBehaviour
     {
         if (isWin)
         {
-            menuBtn.SetActive(true);
-            resetBtn.SetActive(false);
+            pannelWin.SetActive(true);
         }
         else
         {
-            resetBtn.SetActive(true);
-            menuBtn.SetActive(false);
-        moneyBonusTxt.text = "+" + 0 + " G";
-
+            pannelLose.SetActive(true);
         }
     }
 

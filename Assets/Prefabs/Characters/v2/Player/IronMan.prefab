@@ -587,10 +587,9 @@ MonoBehaviour:
   volumeScale: 0.9
   isDead: 0
   isKnockDown: 0
-  healthBarRennder:
-    healthBar: {fileID: 3401809623928120375, guid: e4f9db63c5e3a0145a6fe67185a58356,
+  healthBar:
+    healthBar: {fileID: 4900041198851428630, guid: 42b57235dce7dbe48b843b12224b8bd7,
       type: 3}
-    offset: 3.2
 --- !u!1 &1902109021702134691
 GameObject:
   m_ObjectHideFlags: 0

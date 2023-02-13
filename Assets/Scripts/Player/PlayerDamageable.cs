@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public class PlayerDamageable : MonoBehaviour, IDamageable
 {
@@ -11,8 +12,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     private PlayerController playerController;
     public bool isDead = false;
     public bool isKnockDown = false;
-    [SerializeField]
-    private HealthBarRennder healthBarRennder = new HealthBarRennder();
+
     private int                         deadHash;
     private int                         hitHash;
     private int                         knockDownHash;
@@ -21,6 +21,12 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     private Animator                    animator;
     private float                       standUpTimer = 2f;
     private GameManager gameManager;
+
+    //
+    private HealthUI            healthUI;
+
+    //Events
+    public UnityEvent<Transform>           OnPositionPlayerDead;
 
     private void Awake() 
     {
@@ -35,21 +41,23 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
 
         gameManager = GameManager.Instance;
     }
+
+    private void OnEnable() 
+    {
+        healthUI = FindObjectOfType<HealthUI>();
+        setInit(200,0);
+    }
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    private void LateUpdate() 
-    {
-        healthBarRennder.UpdateHealthBarRotation();
-    }
     public void TakeDamge(float damage)
     {
         gameManager.UpdateHealPlayerUI(damage);
         _health -= damage;
-        healthBarRennder.UpdateHealthBarValue(_health);
+        healthUI.UpdateHealthBarValue(_health);
         soundManager.PlayOneShot(audioClip);
         if (_health > 0)
         {
@@ -66,10 +74,10 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
 
     public void PlayerDead()
     {
-        PositionHealthBar();
         isDead = true;
         // float t = Random.Range(1, 4);
         animator.SetFloat(stateDeath,1);
+        OnPositionPlayerDead?.Invoke(playerController.transform);
     }
 
     public void Hited()
@@ -79,11 +87,6 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
 
     public void setInit(float health, float coinBonus) {
         _health = health;
-        healthBarRennder.CreateHealthBar(transform, health);
-    }
-
-    public void PositionHealthBar()
-    {
-        healthBarRennder.offset = 1000000f;
+        healthUI.CreateHealthBar(health);
     }
 }

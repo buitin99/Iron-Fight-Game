@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
         playerDamageable = GetComponent<PlayerDamageable>();
 
         ui = FindObjectOfType<UIManager>();
-        playerDamageable.setInit(200, 0);
+  
 
         soundManager = SoundManager.Instance;
         gameManager = GameManager.Instance;
@@ -314,7 +314,9 @@ public class PlayerController : MonoBehaviour
     }
     public void SetLayerDefault()
     {
-        gameObject.layer = LayerMask.NameToLayer("Default");
+        int layerDefault = LayerMask.NameToLayer("Default");
+        gameObject.layer = layerDefault;
+        Debug.Log(gameObject.layer);
     }
 
     //Animation
@@ -397,7 +399,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isWin)
         {
-            playerDamageable.PositionHealthBar();
+            // playerDamageable.PositionHealthBar();
         }
     }
 

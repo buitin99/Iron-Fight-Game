@@ -22,8 +22,10 @@ public class ControlMap : MonoBehaviour
 
     //Game
     private UIManager ui;
-
     private PlayUI    playUi;
+    private Revival revival;
+    private CharacterController characterController;
+    public static bool isActive;
 
     private void Awake() 
     {
@@ -98,6 +100,8 @@ public class ControlMap : MonoBehaviour
         yield return new WaitForSeconds(2f);
         SetActiveEnemy(enemyInLevel);
         playUi = FindObjectOfType<PlayUI>();
+        isActive = false;
+        characterController = FindObjectOfType<CharacterController>();
     }
 
     public void EnemyCount()
@@ -137,10 +141,12 @@ public class ControlMap : MonoBehaviour
         playUi.PreviousAnimation(true);
     }
 
-    private void LoseGame()
+    private void LoseGame(Transform playerPos)
     {
         gameManager.EndGame(false);
-        EndGame();
+        // EndGame();
+        isActive = true;
+        // characterController.gameObject.SetActive(false);
         ui.StatusGame();
     }
 

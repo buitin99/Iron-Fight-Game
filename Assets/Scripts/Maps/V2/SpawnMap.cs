@@ -44,7 +44,7 @@ public class SpawnMap : MonoBehaviour
     public GameObject playerGO;
     public GameObject posPlayer;
 
-    private CharacterController  characterController;
+    // private CharacterController  characterController;
 
     private void Awake() 
     {
@@ -52,7 +52,7 @@ public class SpawnMap : MonoBehaviour
         gameManager  = GameManager.Instance;
         // scoreManager = ScoreManager.Instance;
 
-        characterController = FindObjectOfType<CharacterController>();
+        // characterController = FindObjectOfType<CharacterController>();
     }
 
     private void OnEnable() 
