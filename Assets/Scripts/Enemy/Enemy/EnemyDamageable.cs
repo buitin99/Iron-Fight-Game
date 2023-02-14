@@ -39,6 +39,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     //Game
     private ControlMap controlMap;
+    private ObjectPooler objectPooler;
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
@@ -49,6 +50,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         laserHitHash  = Animator.StringToHash("LaserHit");
         stateDeath    = Animator.StringToHash("StateDeath");
         agent = GetComponent<NavMeshAgent>();
+        objectPooler = ObjectPooler.Instance;
 
         if (isMelee)
         {
@@ -63,7 +65,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     private void OnEnable() 
     {
-        gameManager.OnStartGame.AddListener(StartGame);
         controlMap = FindObjectOfType<ControlMap>();
     }
 
@@ -71,10 +72,6 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     void Start()
     {
 
-    }
-
-    private void StartGame()
-    {
     }
 
     // Update is called once per frame
@@ -91,12 +88,14 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         knockDownBarRennder.UpdateKnockDownBarRotation();
     }
 
-    public void TakeDamge(float damage)
+    public void TakeDamge(Vector3 pos, float damage)
     {
         if (isDead)
             return;
 
         gameManager.HitedInUI();
+        objectPooler.SpawnObject("15", new Vector3 (pos.x+1f, pos.y+2f, pos.z), Quaternion.identity);
+        objectPooler.SpawnObject("Hit", new Vector3 (pos.x, pos.y+2f, pos.z), Quaternion.identity);
         
         _health -= damage;
         healthBarRennder.UpdateHealthBarValue(_health);
@@ -138,7 +137,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     public void KnockDown()
     {
-        agent.ResetPath();
+        // agent.ResetPath();
         isKnockDown = true;
         knockBack = true;
         Invoke("CancelKnockBack", 0.3f);
@@ -188,7 +187,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     
     private void OnDisable() 
     {
-        gameManager.OnStartGame.RemoveListener(StartGame);
+        objectPooler.ResetObjectPooler();
     }
 
 

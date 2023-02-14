@@ -24,6 +24,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
 
     //
     private HealthUI            healthUI;
+    private ObjectPooler        objectPooler;
 
     //Events
     public UnityEvent<Transform>           OnPositionPlayerDead;
@@ -42,21 +43,19 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         stateDeath       = Animator.StringToHash("StateDeath");
 
         gameManager = GameManager.Instance;
+        objectPooler = ObjectPooler.Instance;
     }
 
-    private void OnEnable() 
-    {
-       
-    }
     // Start is called before the first frame update
     void Start()
     {
         healthUI = FindObjectOfType<HealthUI>();
         setInit(200,0);
     }
-
-    public void TakeDamge(float damage)
+    
+    public void TakeDamge(Vector3 pos, float damage)
     {
+        objectPooler.SpawnObject("Hit", new Vector3 (pos.x, pos.y+2f, pos.z), Quaternion.identity);
         gameManager.UpdateHealPlayerUI(damage);
         _health -= damage;
         healthUI.UpdateHealthBarValue(_health);
@@ -90,5 +89,10 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     public void setInit(float health, float coinBonus) {
         _health = health;
         healthUI.CreateHealthBar(health);
+    }
+
+    private void OnDisable() 
+    {
+        objectPooler.ResetObjectPooler();
     }
 }

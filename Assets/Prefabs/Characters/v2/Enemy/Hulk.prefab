@@ -2304,6 +2304,7 @@ MonoBehaviour:
   knockoutAudioClip: {fileID: 8300000, guid: 95d6faa1c23d81d4381fb68be2db0cb7, type: 3}
   deadAudioClip: {fileID: 8300000, guid: ba5dbe0db2ece9648b0e370dacdbd1f0, type: 3}
   volumeScale: 0.9
+  isDeadPlayer: 0
   attackState: 0
 --- !u!195 &7425161829321397818
 NavMeshAgent:
@@ -2314,7 +2315,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7767038675341339491}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.01
+  m_Radius: 0.1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50

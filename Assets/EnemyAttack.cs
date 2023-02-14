@@ -11,7 +11,7 @@ public class EnemyAttack : MonoBehaviour
 
         if (damageable != null && ((playerLayer & (1 << other.gameObject.layer)) != 0))
         {
-            damageable.TakeDamge(5);
+            damageable.TakeDamge(other.transform.position,5);
         }
     }
 }

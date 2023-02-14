@@ -46,11 +46,6 @@ public class GameManager : Singleton<GameManager>
         // gameData.Save();
     }
 
-    public void NextLevel()
-    {
-        OnNextLevels?.Invoke();
-    }
-
     public void EndGame(bool isWin)
     {
         _isWin = isWin;

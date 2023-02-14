@@ -11,10 +11,7 @@ public class StartUI : MonoBehaviour
     public GameObject heroBtn;
     public GameObject newPlayBtn;
     public TMP_Text   moneyTxt;
-
     public GameObject delayLoading;
-
-
     //Manager
     private GameManager gameManager;
     private GameDatas   gameDatas;
