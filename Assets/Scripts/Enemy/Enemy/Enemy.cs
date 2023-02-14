@@ -39,7 +39,7 @@ protected enum ComboState
     protected bool isRangeZone;
 
     //09-02
-    protected bool isDeadPlayer;
+    public bool isDeadPlayer;
 
     protected virtual void Awake()
     {
@@ -67,6 +67,7 @@ protected enum ComboState
         gameManager.OnStartGame.AddListener(StartGame);
         gameManager.OnDetectedPlayer.AddListener(AttackPlayer);
         gameManager.OnPlayerDead.AddListener(PlayerDead);
+        gameManager.OnPlayerRevival.AddListener(PlayerRevival);
     }
 
     protected virtual void Update()
@@ -254,7 +255,7 @@ protected enum ComboState
 
     private void AttackPlayer(Transform player)
     {
-        if (!enemyDamageable.isDead)
+        if (!enemyDamageable.isDead && !isDeadPlayer)
         {
             agent.SetDestination(player.transform.position);
         } else if (enemyDamageable.isDead)
@@ -265,9 +266,27 @@ protected enum ComboState
 
     protected void PlayerDead(Transform playerPos)
     {
-        // animator.SetBool(isPlayerDeadHash, true);
         isDeadPlayer = true;
-        agent.SetDestination( new Vector3(playerPos.transform.position.x, playerPos.transform.position.y, playerPos.transform.position.z+2f));
+        Vector3 pos =  RandomNavSphere(transform.position, 20, 7);
+        agent.SetDestination(pos);
+    }
+
+    protected Vector3 RandomNavSphere(Vector3 origin, float dist, int layer)
+    {
+        Vector3 randDirection = Random.insideUnitSphere * dist;
+        
+        randDirection += origin;
+        
+        NavMeshHit navHit;
+        
+        NavMesh.SamplePosition (randDirection, out navHit, dist, layer);
+        
+        return navHit.position;
+    }
+
+    protected void PlayerRevival()
+    {
+        isDeadPlayer = false;
     }
 
 
@@ -276,5 +295,6 @@ protected enum ComboState
         gameManager.OnStartGame.RemoveListener(StartGame);
         gameManager.OnDetectedPlayer.RemoveListener(AttackPlayer);
         gameManager.OnPlayerDead.RemoveListener(PlayerDead);
+        gameManager.OnPlayerRevival.AddListener(PlayerRevival);
     }
 }

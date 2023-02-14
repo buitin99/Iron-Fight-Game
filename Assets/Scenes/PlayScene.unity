@@ -1505,6 +1505,7 @@ Transform:
   m_Children:
   - {fileID: 1410453456}
   - {fileID: 1432125279}
+  - {fileID: 795969770}
   m_Father: {fileID: 0}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1692,7 +1693,7 @@ GameObject:
   m_Component:
   - component: {fileID: 148491369}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: Revival Pos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6030,6 +6031,92 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776065909}
   m_CullTransparentMesh: 1
+--- !u!1 &795969769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 795969770}
+  - component: {fileID: 795969771}
+  m_Layer: 0
+  m_Name: Reward Ads Win
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &795969770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795969769}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 79477963}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &795969771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795969769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef1648e47278ef4394747df2e9124f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadAdsOnAwake: 1
+  androidAdUnitId: Interstitial_Android
+  iosAdUnitId: Interstitial_iOS
+  OnAdFailedLoad:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAdLoaded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAdLoadClose:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1267824755}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 61594701}
+        m_TargetAssemblyTypeName: EndUI, Assembly-CSharp
+        m_MethodName: HideBonusX2Reward
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnAdLoadWinClose:
+    m_PersistentCalls:
+      m_Calls: []
+  OnUserRewarded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &808627958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8755,9 +8842,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 61594701}
-        m_TargetAssemblyTypeName: EndUI, Assembly-CSharp
-        m_MethodName: GoToMenu
+      - m_Target: {fileID: 795969771}
+        m_TargetAssemblyTypeName: Unity.Services.Mediation.RewardedAdsWin, Assembly-CSharp
+        m_MethodName: ShowRewarded
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9682,6 +9769,45 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnAdLoadClose:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1892777024}
+        m_TargetAssemblyTypeName: Revival, Assembly-CSharp
+        m_MethodName: RevivalPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 589229583}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1652962782}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: PlayerRevival
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  OnAdLoadWinClose:
     m_PersistentCalls:
       m_Calls: []
   OnUserRewarded:
@@ -11145,6 +11271,9 @@ MonoBehaviour:
   OnUpdateMoney:
     m_PersistentCalls:
       m_Calls: []
+  OnPlayerRevival:
+    m_PersistentCalls:
+      m_Calls: []
   OnDetectedPlayer:
     m_PersistentCalls:
       m_Calls: []
@@ -11974,7 +12103,7 @@ GameObject:
   - component: {fileID: 1892777025}
   - component: {fileID: 1892777024}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Revival
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11994,6 +12123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 11400000, guid: 35a56943d9bc99b49b55ae824dda7c62, type: 2}
   posPlayerDead: {fileID: 148491368}
+  cmr: {fileID: 589638089}
 --- !u!4 &1892777025
 Transform:
   m_ObjectHideFlags: 0
@@ -12307,10 +12437,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 61594701}
-        m_TargetAssemblyTypeName: EndUI, Assembly-CSharp
-        m_MethodName: GoToMenu
+      - m_Target: {fileID: 1432125280}
+        m_TargetAssemblyTypeName: Unity.Services.Mediation.RewardedAds, Assembly-CSharp
+        m_MethodName: ShowRewarded
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 61594696}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -12648,6 +12790,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 61594701}
+        m_TargetAssemblyTypeName: EndUI, Assembly-CSharp
+        m_MethodName: SaveMoneyEndGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 61594701}
         m_TargetAssemblyTypeName: EndUI, Assembly-CSharp
         m_MethodName: GoToMenu
@@ -13769,19 +13923,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2083731492}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 61594701}
-        m_TargetAssemblyTypeName: EndUI, Assembly-CSharp
-        m_MethodName: GoToMenu
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2083731492
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,8 +6,10 @@ using UnityEngine.Events;
 
 namespace Unity.Services.Mediation
 {
-public class RewardedAds : MonoBehaviour
-    {
+
+public class RewardedAdsWin : MonoBehaviour
+{
+    
         public enum TypeReward {
             Double,
             Plus

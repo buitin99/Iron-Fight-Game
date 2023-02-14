@@ -28,6 +28,8 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     //Events
     public UnityEvent<Transform>           OnPositionPlayerDead;
 
+
+
     private void Awake() 
     {
         soundManager = SoundManager.Instance;
@@ -44,13 +46,13 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
 
     private void OnEnable() 
     {
-        healthUI = FindObjectOfType<HealthUI>();
-        setInit(200,0);
+       
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        healthUI = FindObjectOfType<HealthUI>();
+        setInit(200,0);
     }
 
     public void TakeDamge(float damage)

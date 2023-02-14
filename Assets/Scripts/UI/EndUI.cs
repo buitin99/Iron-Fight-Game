@@ -66,14 +66,21 @@ public class EndUI : MonoBehaviour
     {
         int coefficient = totalEnemy*10;
         money           = Random.Range(coefficient, coefficient*3);
-        SaveMoneyEndGame();
+        moneyBonusTxt.text = "+ " + money + " G";
     }
 
-    private void SaveMoneyEndGame()
+    // public 
+
+    public void HideBonusX2Reward()
+    {
+        money = money*2;
+        moneyBonusTxt.text = "+ " + money + " G";
+    }
+
+    public void SaveMoneyEndGame()
     {
         gameDatas = GameDatas.LoadData();
         totalMoney = gameDatas.gold;
-        moneyBonusTxt.text = "+ " + money + " G";
         totalMoney += money;
         gameDatas.gold = totalMoney;
         gameDatas.SaveData();

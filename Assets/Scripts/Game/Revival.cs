@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class Revival : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Revival : MonoBehaviour
     private ScriptablePlayersObject player;
     public GameObject   posPlayerDead;
     private GameManager  gameManager;
+    private PlayerController playerController;
+    public CinemachineVirtualCamera cmr;
 
     private void Awake() 
     {
@@ -19,6 +22,7 @@ public class Revival : MonoBehaviour
 
     private void OnEnable() 
     {
+
     }
 
     // Start is called before the first frame update
@@ -29,19 +33,21 @@ public class Revival : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log(posPlayerDead.transform.position);
+        playerController = FindObjectOfType<PlayerController>();
     }
 
     private void GetPositionPlayerDead(Transform posPlayer)
     {
-        // Debug.Log(posPlayer.transform.position);
         posPlayerDead.transform.position = posPlayer.transform.position;
+        playerController.gameObject.SetActive(false);
     }
 
     public void RevivalPlayer()
     {
-        // Debug.Log(posPlayerDead.transform.position);
-        Instantiate(player.players[0].player, posPlayerDead.transform.position,player.players[0].player.transform.rotation);
+        GameObject pla =  Instantiate(player.players[0].player, posPlayerDead.transform.position,player.players[0].player.transform.rotation);
+        cmr.LookAt = pla.transform;
+        cmr.Follow = pla.transform;
+        // player.players[0].player.GetComponentInChildren<PlayerDamageable>().setInit(200,0);
     }
 
     private void OnDisable() 

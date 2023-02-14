@@ -11,6 +11,7 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnHit = new UnityEvent();
     public UnityEvent<float> OnUpdateHealPlayerUI = new UnityEvent<float>();
     public UnityEvent<int, int> OnUpdateMoney = new UnityEvent<int, int>();
+    public UnityEvent OnPlayerRevival = new UnityEvent();
     private GameData gameData;
     private bool _isWin;
     public int moneyCollected {get; private set;}
@@ -96,6 +97,11 @@ public class GameManager : Singleton<GameManager>
         OnPlayerDead?.Invoke(playerController.transform);
     }
 
+    public void PlayerRevival()
+    {
+        OnPlayerRevival?.Invoke();
+    }
+
     public void PauseGame()
     {
         OnPasueGame?.Invoke();
@@ -106,5 +112,10 @@ public class GameManager : Singleton<GameManager>
     {
         OnResumeGame?.Invoke();
         Time.timeScale = 1;
+    }
+
+    public void GameHello()
+    {
+        Debug.Log("ABCasdasd");
     }
 }

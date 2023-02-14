@@ -38,6 +38,7 @@ public class ControlMap : MonoBehaviour
         spawnMap = FindObjectOfType<SpawnMap>();
         ui       = FindObjectOfType<UIManager>();
         gameManager.OnPlayerDead.AddListener(LoseGame);
+        gameManager.OnPlayerRevival.AddListener(RevivalPlayer);
     }
 
     // Start is called before the first frame update
@@ -167,12 +168,17 @@ public class ControlMap : MonoBehaviour
         }
     }
 
+    private void RevivalPlayer()
+    {
+        isActive = false;
+    }
+
     private void OnDisable() 
     {
         gameManager.OnStartGame.RemoveListener(StartGame);
         spawnMap.OnSpawnMapDone.RemoveListener(CotrolEnemy);
         spawnMap.OnInforWave.RemoveListener(MapInfo);
         gameManager.OnPlayerDead.RemoveListener(LoseGame);
-
+        gameManager.OnPlayerRevival.AddListener(RevivalPlayer);
     }
 }
