@@ -119,7 +119,7 @@ public class ControlMap : MonoBehaviour
             ui.playUI.SetActive(false);
             ui.endUI.SetActive(true);
             gameManager.EndGame(true);
-            ui.StatusGame();
+            ui.StatusGame(true);
         }
     }
 
@@ -145,10 +145,8 @@ public class ControlMap : MonoBehaviour
     private void LoseGame(Transform playerPos)
     {
         gameManager.EndGame(false);
-        // EndGame();
         isActive = true;
-        // characterController.gameObject.SetActive(false);
-        ui.StatusGame();
+        ui.StatusGame(false);
     }
 
     public void EndGame()

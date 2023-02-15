@@ -87,9 +87,9 @@ public class GameManager : Singleton<GameManager>
         OnDetectedPlayer?.Invoke(player);
     }
 
-    public void PlayerDead()
+    public void PlayerDead(Transform playerPos)
     {
-        OnPlayerDead?.Invoke(playerController.transform);
+        OnPlayerDead?.Invoke(playerPos.transform);
     }
 
     public void PlayerRevival()
@@ -107,10 +107,5 @@ public class GameManager : Singleton<GameManager>
     {
         OnResumeGame?.Invoke();
         Time.timeScale = 1;
-    }
-
-    public void GameHello()
-    {
-        Debug.Log("ABCasdasd");
     }
 }

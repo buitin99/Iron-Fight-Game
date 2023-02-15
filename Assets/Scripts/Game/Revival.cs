@@ -38,6 +38,7 @@ public class Revival : MonoBehaviour
 
     private void GetPositionPlayerDead(Transform posPlayer)
     {
+        Debug.Log(posPlayer.position);
         posPlayerDead.transform.position = posPlayer.transform.position;
         playerController.gameObject.SetActive(false);
     }

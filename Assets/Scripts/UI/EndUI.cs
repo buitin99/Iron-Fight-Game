@@ -52,13 +52,12 @@ public class EndUI : MonoBehaviour
 
     public void GetInforEndGame(bool isWin)
     {
-        if (isWin)
-        {
-            pannelWin.SetActive(true);
-        }
-        else
+        if(!isWin)
         {
             pannelLose.SetActive(true);
+        }else
+        {
+            pannelWin.SetActive(true);
         }
     }
 

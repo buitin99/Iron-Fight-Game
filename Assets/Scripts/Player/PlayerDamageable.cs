@@ -69,7 +69,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
         if (_health <= 0 && !isDead)
         {
             soundManager.PlayOneShot(deathAudioClip);
-            gameManager.PlayerDead();
+            gameManager.PlayerDead(gameObject.transform);
             PlayerDead();
         }
     }

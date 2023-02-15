@@ -119,13 +119,13 @@ public class UIManager : MonoBehaviour
     }
 
     //Call When Lose Or Win
-    public void StatusGame()
+    public void StatusGame(bool isWin)
     {
         endUI.SetActive(true);
         endUiClass = FindObjectOfType<EndUI>();
-        endUiClass.GetInforEndGame(isStatus);
+        endUiClass.GetInforEndGame(isWin);
         playUI.SetActive(false);
-        if (isStatus)
+        if (isWin)
         {
             OnTotalEnemy?.Invoke(totalEnemyInfor);
         }
