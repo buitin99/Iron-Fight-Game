@@ -34,7 +34,13 @@ public class PlayUI : MonoBehaviour
         gameManager.OnStartGame.AddListener(StartGame);
         gameManager.OnHit.AddListener(NonPreviousAnimation);
         gameDatas = GameDatas.LoadData();
-        levelTxt.text = "Level " + gameDatas.LastestLevel;
+        if (gameDatas.LastestLevel == 0)
+        {
+            levelTxt.text = "Level " + 1;
+        }else
+        {
+            levelTxt.text = "Level " + gameDatas.LastestLevel;
+        }
     }
     // Start is called before the first frame update
     void Start()

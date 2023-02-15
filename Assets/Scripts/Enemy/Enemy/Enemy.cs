@@ -267,7 +267,7 @@ protected enum ComboState
     protected void PlayerDead(Transform playerPos)
     {
         isDeadPlayer = true;
-        Vector3 pos =  RandomNavSphere(transform.position, 20, 7);
+        Vector3 pos = RandomNavSphere(transform.position, 2, 7);
         agent.SetDestination(pos);
     }
 

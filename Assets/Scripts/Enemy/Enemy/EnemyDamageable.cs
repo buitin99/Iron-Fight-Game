@@ -71,7 +71,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     void Start()
     {
-
+        objectPooler.ResetObjectPooler();
     }
 
     // Update is called once per frame
@@ -79,6 +79,8 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     {
         if(knockBack) {
             agent.Move(-transform.forward * 10f * Time.deltaTime);
+            //15-02 fix bug knockdown enemy van tien den player
+            agent.isStopped = true;
         }
     }
 
@@ -171,6 +173,8 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     {
         yield return new WaitForSeconds(standUpTimer);
         isKnockDown = false;
+        //15-02 fix bug knockdown enemy van tien den player
+        agent.isStopped = false;
     }
 
     public void setInit(float health, float coinBonus) {
@@ -184,11 +188,4 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
         _knock = knock;
         knockDownBarRennder.CreateKnockDownBar(transform,knock);
     }
-    
-    private void OnDisable() 
-    {
-        objectPooler.ResetObjectPooler();
-    }
-
-
 }

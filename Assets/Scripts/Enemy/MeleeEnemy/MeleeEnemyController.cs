@@ -26,23 +26,24 @@ public class MeleeEnemyController : Enemy
         }
         base.Update();
 
+        // if (isDeadPlayer)
+        //     return;
+
         if (isDeadPlayer)
-            return;
-
-        // if(attackState == AttackState.ATTACK && !isAttack) {
-
-        //     ComboAttack();
-        //     // ResetComboState();
-        //     Debug.Log("ABC");
-
-        // }
+        {
+            attackState = AttackState.IDLE;
+        }
+        
+        if(attackState == AttackState.ATTACK && !isAttack) 
+        {
+            ComboAttack();
+        }
     }
     private void OnTriggerEnter(Collider other) 
     {
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
             attackState = AttackState.ATTACK;
-            ComboAttack();
         }
 
     }
@@ -52,12 +53,7 @@ public class MeleeEnemyController : Enemy
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
             gameManager.DetectedPlayer(other.transform);
-            if (!isAttack && !isDeadPlayer)
-            {
-                // ResetComboState();
-                ComboAttack();
-                Debug.Log("ABCDF");
-            }
+            attackState = AttackState.ATTACK;
         }
     }
 
@@ -65,7 +61,7 @@ public class MeleeEnemyController : Enemy
     {
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
-            // attackState = AttackState.IDLE;
+            attackState = AttackState.IDLE;
         }
     }
 }

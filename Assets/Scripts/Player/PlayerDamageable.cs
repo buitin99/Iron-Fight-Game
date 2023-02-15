@@ -49,6 +49,7 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     void Start()
     {
+        objectPooler.ResetObjectPooler();
         healthUI = FindObjectOfType<HealthUI>();
         setInit(200,0);
     }
@@ -89,10 +90,5 @@ public class PlayerDamageable : MonoBehaviour, IDamageable
     public void setInit(float health, float coinBonus) {
         _health = health;
         healthUI.CreateHealthBar(health);
-    }
-
-    private void OnDisable() 
-    {
-        objectPooler.ResetObjectPooler();
     }
 }
