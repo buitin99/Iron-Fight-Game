@@ -20,8 +20,12 @@ public class MuteButton : MonoBehaviour
 
     private void OnEnable() 
     {
-        // settingData = SettingData.LoadData();
-        // OnMute(settingData.mute);
+
+        //16-02
+        settingData = SettingData.LoadData();
+        OnMute(settingData.mute);
+
+        //
 
         audioManager.OnMute.AddListener(OnMute);
 

@@ -33,7 +33,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
     private int          laserHitHash;
     private int          deadHash;
     private float        standUpTimer = 2f;
-    private bool         knockBack;
+    public bool         knockBack;
     private NavMeshAgent agent;
     private GameManager gameManager;  
 
@@ -139,7 +139,7 @@ public class EnemyDamageable : MonoBehaviour, IDamageable
 
     public void KnockDown()
     {
-        // agent.ResetPath();
+        agent.ResetPath();
         isKnockDown = true;
         knockBack = true;
         Invoke("CancelKnockBack", 0.3f);

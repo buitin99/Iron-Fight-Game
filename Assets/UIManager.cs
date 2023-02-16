@@ -52,17 +52,20 @@ public class UIManager : MonoBehaviour
         spawnMap = FindObjectOfType<SpawnMap>();
 
         settingData = SettingData.LoadData();
-        audioManager = FindObjectOfType<AudioManager>();
+        audioManager = AudioManager.Instance;
     }
 
     private void OnEnable() 
     {
-
-        // audioManager.MuteGame(settingData.mute);
         gameManager.OnStartGame.AddListener(StartGame);
         gameManager.OnHit.AddListener(DisplayHit);
         gameManager.OnEndGame.AddListener(AlertEndGame);
         spawnMap.OnInforWave.AddListener(InforEndGame);
+    }
+
+    private void Start() 
+    {
+        audioManager.MuteGame(settingData.mute);
     }
 
     private void Update() 

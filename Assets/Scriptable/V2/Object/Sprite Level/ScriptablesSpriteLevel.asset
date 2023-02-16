@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ScriptablesSpriteLevel
   m_EditorClassIdentifier: 
   spriteLevels:
-  - {fileID: 11400000, guid: 389543f9856820c48962296c8abdd3fc, type: 2}
   - {fileID: 11400000, guid: 1d5f0371c9989ab46a37c6879f008dc5, type: 2}
   - {fileID: 11400000, guid: f26c23ba81ca4144f9643f0f078a718d, type: 2}
   - {fileID: 11400000, guid: b0fd8c693f3a6c845946c732d7f6a551, type: 2}

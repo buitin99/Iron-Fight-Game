@@ -38,6 +38,8 @@ public class MeleeEnemyController : Enemy
         {
             ComboAttack();
         }
+
+    
     }
     private void OnTriggerEnter(Collider other) 
     {
@@ -53,8 +55,12 @@ public class MeleeEnemyController : Enemy
         if ((playerLayer & (1 << other.gameObject.layer)) != 0)
         {
             gameManager.DetectedPlayer(other.transform);
+            if (Mathf.Abs(other.transform.rotation.y - transform.rotation.y) < 1.6f && Mathf.Abs(other.transform.rotation.y - transform.rotation.y) > 1.2f)
+            {
+                attackState = AttackState.ATTACK;
+            }
             attackState = AttackState.ATTACK;
-        }
+        } 
     }
 
     private void OnTriggerExit(Collider other) 

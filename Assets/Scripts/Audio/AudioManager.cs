@@ -29,7 +29,7 @@ public class AudioManager : Singleton<AudioManager>
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -40,6 +40,7 @@ public class AudioManager : Singleton<AudioManager>
 
     public void MuteGame(bool mute)
     {
+        //16-02
         settingData.mute = mute;
         settingData.SaveData();
         audioSource.mute = mute;

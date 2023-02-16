@@ -109,14 +109,17 @@ protected enum ComboState
 
     protected virtual void EnemyFollowPlayer()
     {
-        if (!isCanMove)
+        if (!isDeadPlayer)
         {
-            agent.ResetPath();
-        }
-        else
-        {
-            if(agent.remainingDistance <= agent.stoppingDistance && !ControlMap.isActive) {
-                agent.SetDestination(playerRotation.transform.position);
+            if (!isCanMove)
+            {
+                agent.ResetPath();
+            }
+            else
+            {
+                if(agent.remainingDistance <= agent.stoppingDistance && !ControlMap.isActive) {
+                    agent.SetDestination(playerRotation.transform.position);
+                }
             }
         }
     }
@@ -266,8 +269,9 @@ protected enum ComboState
 
     protected void PlayerDead(Transform playerPos)
     {
+        Debug.Log(playerPos.transform);
         isDeadPlayer = true;
-        Vector3 pos = RandomNavSphere(transform.position, 2, 7);
+        Vector3 pos = RandomNavSphere(transform.position, 20, 7);
         agent.SetDestination(pos);
     }
 
